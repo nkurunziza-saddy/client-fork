@@ -109,10 +109,10 @@ export class ErrorBoundary extends React.Component<
 										</div>
 
 										<h1 className="text-2xl font-bold font-heading uppercase text-foreground mb-4 tracking-wide">
-											System Encountered an Error
+											An Error Occurred
 										</h1>
 										<p className="text-background/80 font-medium uppercase text-xs tracking-widest">
-											An unhandled stream interruption occurred
+											The application encountered an unexpected error
 										</p>
 									</div>
 								</div>
@@ -121,7 +121,7 @@ export class ErrorBoundary extends React.Component<
 							<div className="p-8 space-y-6">
 								<div className="bg-destructive/5 border-l-4 border-destructive rounded-sm p-6">
 									<h2 className="text-[10px] font-black text-destructive uppercase tracking-[0.2em] mb-3">
-										Exception Identifier
+										Error Message
 									</h2>
 									<p className="font-mono text-sm text-destructive break-words bg-background rounded-sm p-4 border border-destructive/10">
 										{this.state.error?.toString() || "Unknown error"}
@@ -131,11 +131,12 @@ export class ErrorBoundary extends React.Component<
 								{this.state.error?.stack && (
 									<div className="bg-muted/30 rounded-sm border border-border overflow-hidden">
 										<button
+											type="button"
 											onClick={() => this.toggleSection("stackTrace")}
 											className="w-full px-6 py-4 flex items-center justify-between group hover:bg-muted/50 transition-colors"
 										>
 											<span className="font-heading font-bold text-foreground text-xs uppercase tracking-widest">
-												Transmission Stack Trace
+												Error Details (Stack Trace)
 											</span>
 											<RiArrowDownSLine
 												size={18}
@@ -157,7 +158,7 @@ export class ErrorBoundary extends React.Component<
 								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 									<div className="bg-muted/20 border border-border border-dashed rounded-sm p-4">
 										<p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-2">
-											Temporal Marker
+											Time of Error
 										</p>
 										<p className="font-mono text-[10px] text-foreground">
 											{new Date().toISOString()}
@@ -165,7 +166,7 @@ export class ErrorBoundary extends React.Component<
 									</div>
 									<div className="bg-muted/20 border border-border border-dashed rounded-sm p-4 md:col-span-2">
 										<p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-2">
-											Network Location
+											Page URL
 										</p>
 										<p className="font-mono text-[10px] text-foreground break-all">
 											{typeof window !== "undefined"
@@ -195,15 +196,17 @@ export class ErrorBoundary extends React.Component<
 									className="rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 shadow-none"
 								>
 									<RiRefreshLine size={16} className="mr-2" />
-									Reinitialize Stream
+									Try Again
 								</Button>
 								<Button
 									variant="outline"
-									onClick={() => (window.location.href = "/")}
+									onClick={() => {
+										window.location.href = "/";
+									}}
 									className="rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border border-border shadow-none ml-auto"
 								>
 									<RiHomeLine size={16} className="mr-2" />
-									Root Home
+									Go to Home
 								</Button>
 							</div>
 						</div>

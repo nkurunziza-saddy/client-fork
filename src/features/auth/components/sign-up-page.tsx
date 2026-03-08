@@ -9,19 +9,20 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { SignUpForm } from "@/features/forms/components/sign-up-form";
+import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useSignUpMutation } from "@/services/api/auth";
 
 export function SignUpPage() {
-	const [signUp, { isLoading }] = useSignUpMutation();
+	const [signUp, { isLoading, error }] = useSignUpMutation();
 
 	const [step, setStep] = useState<"role" | "details" | "success">("role");
-	const [role, setRole] = useState<"buyer" | "provider">("buyer");
+	const [role, setRole] = useState<"user" | "provider">("user");
 
 	const handleSignUp = async (data: {
 		name: string;
 		email: string;
 		password?: string;
-		role: "buyer" | "provider";
+		role: "user" | "provider";
 	}) => {
 		try {
 			await signUp({
@@ -38,10 +39,12 @@ export function SignUpPage() {
 		}
 	};
 
-	const handleRoleSelect = (selectedRole: "buyer" | "provider") => {
+	const handleRoleSelect = (selectedRole: "user" | "provider") => {
 		setRole(selectedRole);
 		setStep("details");
 	};
+
+	const serverError = getErrorFromRtkQuery(error);
 
 	return (
 		<>
@@ -82,7 +85,7 @@ export function SignUpPage() {
 					{step === "role"
 						? "Choose how you want to use AfrikaMarket."
 						: step === "details"
-							? `Completing registration as a ${role === "buyer" ? "Contractor / Customer" : "Supplier / Service Provider"}.`
+							? `Completing registration as a ${role === "user" ? "Contractor / Customer" : "Supplier / Service Provider"}.`
 							: "We've sent a verification link to your email address."}
 				</p>
 			</div>
@@ -91,7 +94,7 @@ export function SignUpPage() {
 				<div className="space-y-4">
 					<button
 						type="button"
-						onClick={() => handleRoleSelect("buyer")}
+						onClick={() => handleRoleSelect("user")}
 						className="w-full p-6 border border-muted hover:border-primary/50 bg-muted/10 hover:bg-muted/20 rounded-sm transition-all text-left group flex items-start space-x-4"
 					>
 						<div className="p-3 bg-background rounded-sm group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
@@ -127,7 +130,12 @@ export function SignUpPage() {
 					</button>
 				</div>
 			) : step === "details" ? (
-				<SignUpForm role={role} onSubmit={handleSignUp} isLoading={isLoading} />
+				<SignUpForm
+					role={role}
+					onSubmit={handleSignUp}
+					isLoading={isLoading}
+					serverError={serverError}
+				/>
 			) : (
 				<div className="space-y-6 text-center py-12 border border-dashed border-border rounded-none bg-muted/5 relative overflow-hidden">
 					<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />

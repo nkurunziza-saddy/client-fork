@@ -136,7 +136,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 							-
 						</span>
 						<span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">
-							({product.views || 0} VIEWS)
+							({product.views || 0} views)
 						</span>
 					</div>
 				)}

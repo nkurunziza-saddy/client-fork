@@ -1,4 +1,6 @@
 import type {
+	Auction,
+	AuctionStatus,
 	Company,
 	CompanyCategory,
 	Message,
@@ -85,6 +87,20 @@ export interface CompanyCategoriesListResult {
 	meta: { total: number; page: number; limit: number; totalPages: number };
 }
 
+export interface AuctionsQueryParams {
+	page?: number;
+	limit?: number;
+	status?: AuctionStatus;
+	companyId?: string;
+	sortBy?: string;
+	sortOrder?: "ASC" | "DESC";
+}
+
+export interface AuctionsListResult {
+	data: Auction[];
+	meta: { total: number; page: number; limit: number; totalPages: number };
+}
+
 export interface ReviewsResponse {
 	items: Review[];
 	total: number;
@@ -139,6 +155,16 @@ export interface CreateServiceInput {
 	images?: string[];
 }
 
+export interface CreateAuctionInput {
+	title: string;
+	description?: string;
+	startingPrice: number;
+	images?: string[];
+	startDate: string | Date;
+	endDate: string | Date;
+	companyId: string;
+}
+
 export interface CreateCompanyInput {
 	name: string;
 	description?: string;
@@ -180,9 +206,10 @@ export interface WishlistResponse {
 export type WishlistItem =
 	| (Product & { type: "product"; itemType: "PRODUCT" })
 	| (Service & { type: "service"; itemType: "SERVICE" })
+	| (Auction & { type: "auction"; itemType: "AUCTION" })
 	| {
 			id: string;
-			type: "product" | "service";
-			itemType?: "PRODUCT" | "SERVICE";
+			type: "product" | "service" | "auction";
+			itemType?: "PRODUCT" | "SERVICE" | "AUCTION";
 			createdAt?: string;
 	  };

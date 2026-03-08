@@ -7,6 +7,7 @@ import {
 	XIcon,
 } from "lucide-react";
 import type React from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,6 +38,7 @@ interface ServiceFormProps {
 	onCancel: () => void;
 	initialValues?: Partial<ServiceFormValues>;
 	isLoading?: boolean;
+	serverError?: string;
 }
 
 const MAX_IMAGES = 8;
@@ -47,6 +49,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 	onCancel,
 	initialValues,
 	isLoading,
+	serverError,
 }) => {
 	const { data: categoriesData } = useGetServiceCategoriesQuery({ limit: 100 });
 	const categories = categoriesData?.data ?? [];
@@ -94,6 +97,17 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 			}}
 			className="space-y-5"
 		>
+			{serverError && (
+				<Alert
+					variant="destructive"
+					className="rounded-none border-destructive/20 bg-destructive/5"
+				>
+					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
+						{serverError}
+					</AlertDescription>
+				</Alert>
+			)}
+
 			{/* Name */}
 			<form.Field name="name">
 				{(field) => (

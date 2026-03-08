@@ -191,7 +191,7 @@ export default function ProviderDashboard() {
 				/>
 			</div>
 
-			<AdminCard title="Inventory" subtitle="Active marketplace nodes" noPadding>
+			<AdminCard title="Inventory" subtitle="Active listings" noPadding>
 				{listLoading ? (
 					<div className="p-12 text-center">
 						<div className="mx-auto h-6 w-6 animate-spin rounded-full border-b-2 border-primary" />
@@ -290,10 +290,10 @@ export default function ProviderDashboard() {
 							<table className="w-full">
 								<thead>
 									<tr className="border-b border-border bg-muted/20 text-left text-[10px] uppercase tracking-widest text-muted-foreground">
-										<th className="px-6 py-4">Listing Node</th>
+										<th className="px-6 py-4">Listing Name</th>
 										<th className="px-6 py-4">Category</th>
 										<th className="px-6 py-4">Status</th>
-										<th className="px-6 py-4 text-right">Operations</th>
+										<th className="px-6 py-4 text-right">Actions</th>
 									</tr>
 								</thead>
 								<tbody className="divide-y divide-border">
@@ -329,7 +329,9 @@ export default function ProviderDashboard() {
 													<div
 														className={cn(
 															"h-2 w-2 rounded-full",
-															listing.isActive ? "bg-emerald-500" : "bg-amber-500",
+															listing.isActive
+																? "bg-emerald-500"
+																: "bg-amber-500",
 														)}
 													/>
 													<span className="text-[10px] font-black uppercase tracking-widest text-foreground">

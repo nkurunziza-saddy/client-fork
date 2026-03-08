@@ -1,13 +1,10 @@
 import { Loader2 } from "lucide-react";
 import { useAdminProfile } from "@/hooks/use-admin-profile";
 import { PageHeader } from "./page-header";
-import { BroadcastLogicCard } from "./settings/broadcast-logic-card";
+import { ActivityLogsCard } from "./settings/activity-logs-card";
+import { NotificationSettingsCard } from "./settings/notification-settings-card";
 import { ProfileInfoCard } from "./settings/profile-info-card";
-import {
-	EncryptionKeyCard,
-	HardenedProtocolCard,
-} from "./settings/security-cards";
-import { SignalLogsCard } from "./settings/signal-logs-card";
+import { AccountSecurityCard, PasswordCard } from "./settings/security-cards";
 
 export function AdminProfileSettingsPage() {
 	const {
@@ -61,7 +58,7 @@ export function AdminProfileSettingsPage() {
 			/>
 
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-				<EncryptionKeyCard
+				<PasswordCard
 					passwordData={passwordData}
 					showPassword={showPassword}
 					setShowPassword={setShowPassword}
@@ -70,16 +67,16 @@ export function AdminProfileSettingsPage() {
 					onPasswordChange={handlePasswordChange}
 				/>
 			</div>
-			<BroadcastLogicCard
+			<NotificationSettingsCard
 				notifications={notifications}
 				onToggle={handleNotificationToggle}
 			/>
-			<HardenedProtocolCard
+			<AccountSecurityCard
 				securitySettings={securitySettings}
 				onSecurityToggle={handleSecurityToggle}
 				onSessionTimeoutChange={handleSessionTimeoutChange}
 			/>
-			<SignalLogsCard />
+			<ActivityLogsCard />
 		</div>
 	);
 }

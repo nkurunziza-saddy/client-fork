@@ -16,7 +16,7 @@ const BENEFITS = [
 	{
 		icon: <RiCheckboxCircleLine className="w-6 h-6" />,
 		title: "Secure Transactions",
-		description: "Multi-layered payment protection for all your bulk orders.",
+		description: "Safe and secure payments for all your bulk orders.",
 	},
 	{
 		icon: <RiTruckLine className="w-6 h-6" />,

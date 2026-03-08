@@ -93,7 +93,7 @@ export default function ProductView({
 	if (!product)
 		return (
 			<div className="p-20 text-center uppercase font-black tracking-widest text-muted-foreground">
-				Protocol Error: Material Not Found
+				Product not found
 			</div>
 		);
 
@@ -164,7 +164,7 @@ export default function ProductView({
 							<div className="bg-background p-4 flex flex-col gap-1">
 								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
 									<RiPriceTag3Line size={12} className="text-primary" />
-									Classification
+									Category
 								</span>
 								<span className="text-[11px] font-bold uppercase truncate">
 									{product.category?.name || "General Material"}
@@ -173,16 +173,16 @@ export default function ProductView({
 							<div className="bg-background p-4 flex flex-col gap-1">
 								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
 									<RiHistoryLine size={12} className="text-primary" />
-									Analytics
+									Views
 								</span>
 								<span className="text-[11px] font-bold uppercase">
-									{product.views || 0} Platform Scans
+									{product.views || 0}
 								</span>
 							</div>
 							<div className="bg-background p-4 flex flex-col gap-1 col-span-2 md:col-span-1">
 								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
 									<RiBuilding4Line size={12} className="text-primary" />
-									Origin Node
+									Supplier
 								</span>
 								<span className="text-[11px] font-bold uppercase truncate">
 									{product.company?.name || "Verified Provider"}

@@ -9,7 +9,7 @@ export function ProductDetailsPage() {
 	return (
 		<ProductView
 			productId={productId || ""}
-			onBack={() => navigate({ to: ROUTES.MARKETPLACE })}
+			onBack={() => navigate({ to: ROUTES.PUBLIC.PRODUCTS })}
 			onSupplierClick={(supplierId: string) =>
 				navigate({ to: ROUTES.PUBLIC.SUPPLIER(supplierId) as any })
 			}

@@ -77,7 +77,7 @@ export default function SupplierServicesAndProducts() {
 						Your Assigned Services
 					</h2>
 					<p className="text-muted-foreground text-sm mt-1">
-						Services you are authorized to offer on the platform
+						Services you are allowed to offer on the platform
 					</p>
 				</div>
 

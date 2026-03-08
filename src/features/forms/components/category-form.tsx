@@ -1,5 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,6 +15,7 @@ interface CategoryFormProps {
 		icon?: string;
 	};
 	mode: "add" | "edit";
+	serverError?: string;
 }
 
 export const CategoryForm: React.FC<CategoryFormProps> = ({
@@ -25,6 +27,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 		icon: "",
 	},
 	mode,
+	serverError,
 }) => {
 	const form = useForm({
 		defaultValues: initialValues,
@@ -42,6 +45,16 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			}}
 			className="space-y-6 pt-4"
 		>
+			{serverError && (
+				<Alert
+					variant="destructive"
+					className="rounded-none border-destructive/20 bg-destructive/5"
+				>
+					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
+						{serverError}
+					</AlertDescription>
+				</Alert>
+			)}
 			<form.Field
 				name="name"
 				children={(field) => (

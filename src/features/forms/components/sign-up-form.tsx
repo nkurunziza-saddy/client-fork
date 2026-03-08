@@ -6,25 +6,28 @@ import {
 } from "@remixicon/react";
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/shared/components";
 
 interface SignUpFormProps {
-	role: "buyer" | "provider";
+	role: "user" | "provider";
 	onSubmit: (data: {
 		name: string;
 		email: string;
 		password?: string;
-		role: "buyer" | "provider";
+		role: "user" | "provider";
 	}) => void;
 	isLoading?: boolean;
+	serverError?: string;
 }
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({
 	role,
 	onSubmit,
 	isLoading = false,
+	serverError,
 }) => {
 	const form = useForm({
 		defaultValues: {
@@ -49,6 +52,16 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 			}}
 			className="w-full space-y-6"
 		>
+			{serverError && (
+				<Alert
+					variant="destructive"
+					className="rounded-none border-destructive/20 bg-destructive/5"
+				>
+					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
+						{serverError}
+					</AlertDescription>
+				</Alert>
+			)}
 			<div className="space-y-4">
 				<form.Field
 					name="name"
@@ -120,7 +133,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 				disabled={isLoading}
 				className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] rounded-none border-none bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
 			>
-				{isLoading ? "creating Account..." : "Create Account"}
+				{isLoading ? "Creating Account..." : "Create Account"}
 				{!isLoading && <RiArrowRightLine className="ml-2 w-5 h-5" />}
 			</Button>
 		</form>

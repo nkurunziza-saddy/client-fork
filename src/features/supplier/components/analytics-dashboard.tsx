@@ -30,16 +30,16 @@ const AnalyticsDashboard: React.FC = () => {
 
 		return [
 			{
-				label: "Total Visibility",
+				label: "Total Views",
 				value: overview.totalViews.toLocaleString(),
 				change: "Live",
 				trend: "up" as const,
 				icon: Eye,
 				color: "blue",
-				description: "Profile and inventory impressions",
+				description: "Profile and items views",
 			},
 			{
-				label: "Network Engagement",
+				label: "Interactions",
 				value: overview.totalInteractions.toLocaleString(),
 				change: "Live",
 				trend: "up" as const,
@@ -63,7 +63,7 @@ const AnalyticsDashboard: React.FC = () => {
 				trend: "up" as const,
 				icon: Star,
 				color: "purple",
-				description: "Average rating from network logs",
+				description: "Average rating from reviews",
 			},
 		];
 	}, [providerStats]);
@@ -125,7 +125,7 @@ const AnalyticsDashboard: React.FC = () => {
 	const recentActivities = [
 		{
 			type: "system",
-			message: "Supplier analytics active and monitoring live activities.",
+			message: "Supplier analytics active and monitoring live activity.",
 			time: "Real-time",
 			icon: Activity,
 			color: "text-primary bg-primary/10",
@@ -179,7 +179,7 @@ const AnalyticsDashboard: React.FC = () => {
 						Analytics Dashboard
 					</h2>
 					<p className="text-muted-foreground font-medium uppercase text-xs tracking-widest mt-1">
-						Direct performance metrics and business insights
+						Direct performance stats and business info
 					</p>
 				</div>
 				<div className="flex items-center space-x-4">

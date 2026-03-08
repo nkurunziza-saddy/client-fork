@@ -85,7 +85,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 				</div>
 			</AdminCard>
 
-			{/* Identity Stream Card */}
+			{/* Personal Information Card */}
 			<AdminCard
 				title="Personal Information"
 				subtitle="Basic account details"

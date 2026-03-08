@@ -8,8 +8,8 @@ export const RouteLoading: React.FC = () => {
 				<div className="absolute inset-0 blueprint-grid opacity-10 pointer-events-none w-20 h-20 -m-6" />
 				<Loader2 className="w-10 h-10 animate-spin text-primary relative z-10" />
 			</div>
-			<p className="mt-6 text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground animate-pulse">
-				Synchronizing Data Nodes...
+			<p className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground animate-pulse">
+				Loading...
 			</p>
 		</div>
 	);

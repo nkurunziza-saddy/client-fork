@@ -31,7 +31,7 @@ const FeaturedServices: React.FC = () => {
 					subtitle="Professional services available from verified providers."
 					label="Expert Services"
 					icon={<RiBriefcaseLine className="w-5 h-5" />}
-					viewAllHref="/products?type=SERVICE"
+					viewAllHref="/services"
 					viewAllLabel="View All Services"
 				/>
 
@@ -55,7 +55,7 @@ const FeaturedServices: React.FC = () => {
 									key={service.id}
 									className="group border border-border/40 hover:border-primary/40 transition-all duration-500 rounded-none overflow-hidden bg-card cursor-pointer flex flex-col relative"
 									onClick={() =>
-										navigate({ to: `/products/${service.id}` as any })
+										navigate({ to: `/services/${service.id}` as any })
 									}
 								>
 									{/* Technical Corner Accent */}
@@ -124,7 +124,7 @@ const FeaturedServices: React.FC = () => {
 						className="rounded-none h-14 px-10 font-black uppercase tracking-[0.3em] text-[10px] border-border/40 shadow-none"
 						onClick={() =>
 							navigate({
-								to: "/marketplace",
+								to: "/services",
 								search: { type: "SERVICE" } as any,
 							})
 						}

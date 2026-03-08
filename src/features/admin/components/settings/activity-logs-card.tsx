@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card as AdminCard } from "@/features/admin/components/card";
 import { AdminTable } from "@/features/admin/components/table";
 
-export const SignalLogsCard: React.FC = () => {
+export const ActivityLogsCard: React.FC = () => {
 	const activities = [
 		{
 			action: "LOGIN",

@@ -58,7 +58,7 @@ export function AdminAssignmentsPage() {
 			<PageHeader
 				title="Assignments"
 				subtitle="Manage service-to-supplier assignments"
-				badge="Live Nodes"
+				badge="Recent Assignments"
 			/>
 
 			<Card>

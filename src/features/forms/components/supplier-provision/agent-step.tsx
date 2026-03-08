@@ -14,11 +14,11 @@ interface AgentStepProps {
 export const AgentStep: React.FC<AgentStepProps> = ({ form, mode, onBack }) => {
 	return (
 		<AdminCard
-			title={mode === "add" ? "Authorized Agent" : "Agent Protocol"}
+			title={mode === "add" ? "Contact Person" : "Contact Details"}
 			subtitle={
 				mode === "add"
-					? "Entity contact protocol"
-					: "Update authorization details"
+					? "Details of the person managing this account"
+					: "Update contact information"
 			}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -59,7 +59,7 @@ export const AgentStep: React.FC<AgentStepProps> = ({ form, mode, onBack }) => {
 
 				<form.Field name="phoneNumber">
 					{(field: any) => (
-						<FormField label="Secure Phone" required>
+						<FormField label="Phone Number" required>
 							<Input
 								id="phoneNumber"
 								name={field.name}
@@ -77,7 +77,7 @@ export const AgentStep: React.FC<AgentStepProps> = ({ form, mode, onBack }) => {
 
 				<form.Field name="position">
 					{(field: any) => (
-						<FormField label="Corporate Position">
+						<FormField label="Job Title">
 							<Input
 								id="position"
 								name={field.name}
@@ -123,7 +123,7 @@ export const AgentStep: React.FC<AgentStepProps> = ({ form, mode, onBack }) => {
 						className="rounded-none h-12 px-8 font-heading font-black uppercase text-[10px] tracking-widest shadow-lg shadow-primary/20 border-none"
 					>
 						<RiSaveLine size={16} className="mr-2" />
-						Synchronize Changes
+						Save Changes
 					</Button>
 				</div>
 			)}

@@ -61,7 +61,7 @@ const BestSellers: React.FC = () => {
 				<Button
 					variant="outline"
 					size="lg"
-					onClick={() => navigate({ to: "/marketplace" })}
+					onClick={() => navigate({ to: "/products" })}
 				>
 					View all best sellers
 				</Button>

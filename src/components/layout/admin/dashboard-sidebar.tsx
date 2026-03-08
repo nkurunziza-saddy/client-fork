@@ -71,6 +71,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 					</div>
 				</div>
 				<button
+					type="button"
 					onClick={onClose}
 					className="lg:hidden p-2 rounded-sm text-muted-foreground hover:text-background transition-colors"
 				>
@@ -82,6 +83,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 				{navigationItems.map((item) => (
 					<button
 						key={item.id}
+						type="button"
 						onClick={() => {
 							onTabChange(item.id);
 							onClose();
@@ -126,6 +128,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 				</div>
 
 				<button
+					type="button"
 					onClick={onLogout}
 					className="w-full flex items-center justify-center px-4 py-3 text-xs font-heading font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10 rounded-sm transition-colors border border-transparent hover:border-destructive/20"
 				>

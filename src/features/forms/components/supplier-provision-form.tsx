@@ -92,7 +92,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
 							type="submit"
 							className="flex-[2] items-center gap-2 px-6 h-12 rounded-sm shadow-none bg-primary text-primary-foreground hover:bg-primary/90 font-heading font-bold uppercase text-xs tracking-widest"
 						>
-							Continue Stream
+							Next Step
 							<RiArrowRightLine size={16} />
 						</Button>
 					) : (
@@ -101,7 +101,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
 							className="flex-[2] items-center gap-2 px-6 h-12 bg-green-600 hover:bg-green-700 text-white border-none rounded-sm font-heading font-bold uppercase text-xs tracking-widest shadow-none"
 						>
 							<RiSaveLine size={16} />
-							Confirm Provision
+							Register Company
 						</Button>
 					)}
 				</div>

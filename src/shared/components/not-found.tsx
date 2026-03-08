@@ -2,6 +2,7 @@ import { RiArrowLeftLine, RiErrorWarningLine } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import type React from "react";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/shared/constants/routes";
 
 export const NotFound: React.FC = () => {
 	return (
@@ -21,29 +22,28 @@ export const NotFound: React.FC = () => {
 				<div className="flex items-center justify-center gap-3 mb-8">
 					<div className="w-10 h-px bg-primary" />
 					<p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">
-						Resource Node Not Found
+						Page Not Found
 					</p>
 					<div className="w-10 h-px bg-primary" />
 				</div>
 
 				<p className="text-muted-foreground text-xs font-bold uppercase tracking-widest leading-relaxed mb-12 max-w-sm mx-auto">
-					The transmission you're looking for has been disconnected or relocated
-					within the construction network.
+					The page you're looking for has been moved or doesn't exist.
 				</p>
 
 				<div className="flex flex-col gap-3">
 					<Link to="/">
 						<Button className="w-full h-14 rounded-none font-display font-black uppercase text-[10px] tracking-[0.3em] gap-2 border-none shadow-xl shadow-primary/20">
 							<RiArrowLeftLine size={16} />
-							Return to Nexus
+							Back to Home
 						</Button>
 					</Link>
-					<Link to="/marketplace">
+					<Link to={ROUTES.PUBLIC.PRODUCTS}>
 						<Button
 							variant="outline"
-							className="w-full h-14 rounded-none font-display font-black uppercase text-[10px] tracking-[0.3em] border-border/40 hover:bg-muted/5"
+							className="h-12 border-border/40 bg-background/50 px-8 px-10 font-heading text-[11px] font-black uppercase tracking-widest backdrop-blur-md transition-all hover:bg-muted/50 w-full"
 						>
-							Material Scan
+							Browse Products
 						</Button>
 					</Link>
 				</div>
@@ -51,7 +51,7 @@ export const NotFound: React.FC = () => {
 
 			<div className="absolute bottom-8 left-0 right-0 text-center">
 				<span className="text-[8px] font-black text-muted-foreground/30 uppercase tracking-[0.5em]">
-					AFRIKAMARKET // SYSTEM ERROR_PROTOCOL 404
+					AFRIKAMARKET // 404 ERROR
 				</span>
 			</div>
 		</div>

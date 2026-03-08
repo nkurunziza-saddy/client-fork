@@ -113,6 +113,22 @@ export interface Service {
 	updatedAt?: string;
 }
 
+export type AuctionStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+export interface Auction {
+	id: string;
+	title: string;
+	description?: string;
+	startingPrice: number;
+	images?: string[];
+	status: AuctionStatus;
+	startDate: string;
+	endDate: string;
+	company: CompanyRef;
+	createdAt?: string;
+	updatedAt?: string;
+}
+
 export interface Review {
 	id: string;
 	rating: number;
@@ -132,6 +148,9 @@ export interface Message {
 	createdAt: string;
 	sender: { id: string; name?: string; email: string };
 	receiver: { id: string; name?: string; email: string };
+	product?: { id: string; name: string };
+	service?: { id: string; name: string };
+	auction?: { id: string; title: string };
 }
 
 export interface ConversationPartner {

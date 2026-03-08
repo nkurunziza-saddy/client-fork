@@ -107,7 +107,7 @@ export function AdminServicesPage() {
 			<Card noPadding>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
-						Retrieving professional nodes...
+						Loading services...
 					</div>
 				) : (
 					<DataTable

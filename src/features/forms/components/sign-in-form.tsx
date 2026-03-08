@@ -1,11 +1,7 @@
-import {
-	RiAlertLine,
-	RiArrowRightLine,
-	RiLockLine,
-	RiMailLine,
-} from "@remixicon/react";
+import { RiArrowRightLine, RiLockLine, RiMailLine } from "@remixicon/react";
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/shared/components";
@@ -41,10 +37,14 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 			className="w-full space-y-6"
 		>
 			{serverError && (
-				<div className="p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-none text-sm flex items-center gap-3">
-					<RiAlertLine className="w-4 h-4 shrink-0" />
-					{serverError}
-				</div>
+				<Alert
+					variant="destructive"
+					className="rounded-none border-destructive/20 bg-destructive/5"
+				>
+					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
+						{serverError}
+					</AlertDescription>
+				</Alert>
 			)}
 
 			<form.Field
@@ -105,7 +105,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 				className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 border-none rounded-none"
 				disabled={isLoading}
 			>
-				{isLoading ? "Authenticating..." : "Initialize Session"}
+				{isLoading ? "Signing In..." : "Sign In"}
 				{!isLoading && <RiArrowRightLine className="ml-2 w-4 h-4" />}
 			</Button>
 		</form>

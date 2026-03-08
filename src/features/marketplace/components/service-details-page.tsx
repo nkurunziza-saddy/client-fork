@@ -30,7 +30,7 @@ export function ServiceDetailsPage() {
 		return (
 			<PageContainer className="flex h-[60vh] items-center justify-center">
 				<div className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground animate-pulse">
-					Scanning service nodes...
+					Loading service...
 				</div>
 			</PageContainer>
 		);
@@ -44,7 +44,7 @@ export function ServiceDetailsPage() {
 						Service Not Found
 					</h1>
 					<Button
-						onClick={() => navigate({ to: ROUTES.MARKETPLACE })}
+						onClick={() => navigate({ to: ROUTES.PUBLIC.SERVICES })}
 						className="rounded-none font-black uppercase tracking-[0.2em] text-[10px] h-12 px-8"
 					>
 						Back to Marketplace
@@ -71,7 +71,7 @@ export function ServiceDetailsPage() {
 	return (
 		<ServiceView
 			service={service as any}
-			onBack={() => navigate({ to: ROUTES.MARKETPLACE })}
+			onBack={() => navigate({ to: ROUTES.PUBLIC.SERVICES })}
 		/>
 	);
 }

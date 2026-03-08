@@ -1,5 +1,6 @@
 import {
 	RiApps2Line,
+	RiAuctionLine,
 	RiDashboardLine,
 	RiFolderLine,
 	RiPriceTag3Line,
@@ -11,6 +12,7 @@ import {
 import type React from "react";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
 import { BaseSidebar } from "@/shared/components";
+import { ROUTES } from "@/shared/constants/routes";
 import type { NavHeaderInfo } from "@/types";
 
 interface AdminSidebarProps {
@@ -31,38 +33,43 @@ const defaultCompany: NavHeaderInfo = {
 const navMain = [
 	{
 		title: "Dashboard",
-		url: "/admin",
+		url: ROUTES.ADMIN.INDEX,
 		icon: RiDashboardLine,
 		isActive: true,
 	},
 	{
 		title: "Suppliers",
-		url: "/admin/suppliers",
+		url: ROUTES.ADMIN.SUPPLIERS.INDEX,
 		icon: RiTeamLine,
 	},
 	{
 		title: "Customers",
-		url: "/admin/customers",
+		url: ROUTES.ADMIN.CUSTOMERS,
 		icon: RiUserLine,
 	},
 	{
 		title: "Products",
-		url: "/admin/products",
+		url: ROUTES.ADMIN.PRODUCTS,
 		icon: RiFolderLine,
 	},
 	{
 		title: "Categories",
-		url: "/admin/categories",
+		url: ROUTES.ADMIN.CATEGORIES,
 		icon: RiPriceTag3Line,
 	},
 	{
 		title: "Services",
-		url: "/admin/services",
+		url: ROUTES.ADMIN.SERVICES,
 		icon: RiServiceLine,
 	},
 	{
+		title: "Auctions",
+		url: ROUTES.ADMIN.AUCTIONS,
+		icon: RiAuctionLine,
+	},
+	{
 		title: "Profile Settings",
-		url: "/admin/profile",
+		url: ROUTES.ADMIN.PROFILE,
 		icon: RiSettings4Line,
 	},
 ];

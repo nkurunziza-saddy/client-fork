@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -15,8 +15,8 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
-import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 interface ResponsiveModalProps {
 	children: React.ReactNode;
@@ -67,7 +67,12 @@ export function ResponsiveModal({
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			{trigger && <DialogTrigger render={trigger} />}
-			<DialogContent className={cn("sm:max-w-[425px] rounded-none border-border industrial-grain", className)}>
+			<DialogContent
+				className={cn(
+					"sm:max-w-[425px] rounded-none border-border industrial-grain",
+					className,
+				)}
+			>
 				{(title || description) && (
 					<DialogHeader className="space-y-4 mb-4">
 						{title && (

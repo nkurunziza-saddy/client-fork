@@ -110,7 +110,7 @@ const ProductManagement: React.FC = () => {
 						Product Management
 					</h2>
 					<p className="text-muted-foreground font-medium uppercase text-xs tracking-widest mt-1">
-						Maintain inventory and catalog parameters
+						Manage your products and items
 					</p>
 				</div>
 				<Button
@@ -127,7 +127,7 @@ const ProductManagement: React.FC = () => {
 					<div className="flex-1 relative">
 						<RiSearchLine className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
 						<Input
-							placeholder="SEARCH CATALOG..."
+							placeholder="SEARCH PRODUCTS..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
 							className="pl-10 h-11 bg-background border border-border uppercase text-xs font-bold tracking-widest shadow-none"

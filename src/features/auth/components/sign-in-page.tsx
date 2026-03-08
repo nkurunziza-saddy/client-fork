@@ -2,6 +2,7 @@ import { RiArrowLeftLine } from "@remixicon/react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useDispatch } from "react-redux";
 import { SignInForm } from "@/features/forms/components/sign-in-form";
+import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useSignInMutation } from "@/services/api/auth";
 import { setToken, setUser } from "@/store/slices/auth-slice";
 
@@ -48,12 +49,7 @@ export function SignInPage() {
 		}
 	};
 
-	const serverError =
-		error && "data" in error
-			? (error.data as { message?: string })?.message || "Sign in failed"
-			: error
-				? "Network error. Please try again."
-				: undefined;
+	const serverError = getErrorFromRtkQuery(error);
 
 	return (
 		<>
@@ -72,7 +68,7 @@ export function SignInPage() {
 					Sign In
 				</h2>
 				<p className="text-muted-foreground">
-					Enter your credentials to access your account.
+					Enter your details to access your account.
 				</p>
 			</div>
 

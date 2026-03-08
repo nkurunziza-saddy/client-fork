@@ -48,7 +48,11 @@ function TabsList({
 			<TabsPrimitive.List
 				data-slot="tabs-list"
 				data-variant={variant}
-				className={cn(tabsListVariants({ variant }), "w-full min-w-max md:min-w-0", className)}
+				className={cn(
+					tabsListVariants({ variant }),
+					"w-full min-w-max md:min-w-0",
+					className,
+				)}
 				{...props}
 			/>
 		</div>

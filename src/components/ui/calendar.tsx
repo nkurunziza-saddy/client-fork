@@ -15,6 +15,60 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+function CalendarRoot({
+	className,
+	rootRef,
+	...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+	rootRef?: React.Ref<HTMLDivElement>;
+}) {
+	return (
+		<div
+			data-slot="calendar"
+			ref={rootRef}
+			className={cn(className)}
+			{...props}
+		/>
+	);
+}
+
+function CalendarChevron({
+	className,
+	orientation,
+	...props
+}: React.SVGAttributes<SVGElement> & {
+	orientation?: "left" | "right" | "up" | "down";
+}) {
+	const { children: _, ...rest } = props as any;
+
+	if (orientation === "left") {
+		return <RiArrowLeftSLine className={cn("size-4", className)} {...rest} />;
+	}
+
+	if (orientation === "right") {
+		return <RiArrowRightSLine className={cn("size-4", className)} {...rest} />;
+	}
+
+	return <RiArrowDownSLine className={cn("size-4", className)} {...rest} />;
+}
+
+function CalendarWeekNumber({
+	children,
+	...props
+}: React.TdHTMLAttributes<HTMLTableCellElement>) {
+	return (
+		<td {...props}>
+			<div className="flex size-(--cell-size) items-center justify-center text-center">
+				{children}
+			</div>
+		</td>
+	);
+}
+
+const CalendarDayButtonWithLocale = ({ locale, ...props }: any) => (
+	<CalendarDayButton locale={locale} {...props} />
+);
+
 function Calendar({
 	className,
 	classNames,
@@ -137,51 +191,10 @@ function Calendar({
 				...classNames,
 			}}
 			components={{
-				Root: ({ className, rootRef, ...props }) => {
-					return (
-						<div
-							data-slot="calendar"
-							ref={rootRef}
-							className={cn(className)}
-							{...props}
-						/>
-					);
-				},
-				Chevron: ({ className, orientation, ...props }) => {
-					if (orientation === "left") {
-						return (
-							<RiArrowLeftSLine
-								className={cn("size-4", className)}
-								{...props}
-							/>
-						);
-					}
-
-					if (orientation === "right") {
-						return (
-							<RiArrowRightSLine
-								className={cn("size-4", className)}
-								{...props}
-							/>
-						);
-					}
-
-					return (
-						<RiArrowDownSLine className={cn("size-4", className)} {...props} />
-					);
-				},
-				DayButton: ({ ...props }) => (
-					<CalendarDayButton locale={locale} {...props} />
-				),
-				WeekNumber: ({ children, ...props }) => {
-					return (
-						<td {...props}>
-							<div className="flex size-(--cell-size) items-center justify-center text-center">
-								{children}
-							</div>
-						</td>
-					);
-				},
+				Root: CalendarRoot,
+				Chevron: CalendarChevron,
+				DayButton: CalendarDayButtonWithLocale,
+				WeekNumber: CalendarWeekNumber,
 				...components,
 			}}
 			{...props}

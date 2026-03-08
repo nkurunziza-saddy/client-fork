@@ -8,7 +8,7 @@ import type React from "react";
 import { Button } from "@/components/ui/button";
 import { Card as AdminCard } from "@/features/admin/components/card";
 
-interface EncryptionKeyCardProps {
+interface PasswordCardProps {
 	passwordData: any;
 	showPassword: boolean;
 	setShowPassword: (show: boolean) => void;
@@ -17,7 +17,7 @@ interface EncryptionKeyCardProps {
 	onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
+export const PasswordCard: React.FC<PasswordCardProps> = ({
 	passwordData,
 	showPassword,
 	setShowPassword,
@@ -28,7 +28,7 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 	return (
 		<AdminCard
 			title="Change Password"
-			subtitle="Update your login credentials"
+			subtitle="Update your login details"
 			headerActions={<RiLockLine size={16} className="text-primary" />}
 		>
 			<div className="space-y-6">
@@ -42,7 +42,7 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 							name="currentPassword"
 							value={passwordData.currentPassword}
 							onChange={onPasswordChange}
-							placeholder="ENTER CURRENT..."
+							placeholder="CURRENT PASSWORD"
 							className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
 						/>
 						<button
@@ -68,7 +68,7 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 							name="newPassword"
 							value={passwordData.newPassword}
 							onChange={onPasswordChange}
-							placeholder="ENTER NEW..."
+							placeholder="NEW PASSWORD"
 							className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
 						/>
 						<button
@@ -93,7 +93,7 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 						name="confirmPassword"
 						value={passwordData.confirmPassword}
 						onChange={onPasswordChange}
-						placeholder="RE-ENTER NEW..."
+						placeholder="RE-ENTER NEW PASSWORD"
 						className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
 					/>
 				</div>
@@ -106,21 +106,21 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 	);
 };
 
-interface HardenedProtocolCardProps {
+interface AccountSecurityCardProps {
 	securitySettings: any;
 	onSecurityToggle: (key: string) => void;
 	onSessionTimeoutChange: (value: number) => void;
 }
 
-export const HardenedProtocolCard: React.FC<HardenedProtocolCardProps> = ({
+export const AccountSecurityCard: React.FC<AccountSecurityCardProps> = ({
 	securitySettings,
 	onSecurityToggle,
 	onSessionTimeoutChange,
 }) => {
 	return (
 		<AdminCard
-			title="Login Security"
-			subtitle="Fortify your account access"
+			title="Account Security"
+			subtitle="Security settings"
 			headerActions={<RiShieldLine size={16} className="text-primary" />}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">

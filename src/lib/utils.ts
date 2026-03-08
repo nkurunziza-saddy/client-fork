@@ -15,12 +15,25 @@ export function handleRtkQueryError(
 	if (!error) return;
 
 	console.error("RTK Query Error:", error);
+	const message = getErrorFromRtkQuery(error, fallbackMessage);
+	toast.error(message);
+}
+
+export function getErrorFromRtkQuery(
+	error: FetchBaseQueryError | SerializedError | undefined | unknown,
+	fallbackMessage = "An unexpected error occurred",
+): string {
+	if (!error) return "";
 
 	if (typeof error === "object" && error !== null && "data" in error) {
 		const errorData = error.data as Record<string, any>;
-		const message = errorData?.message || errorData?.error || fallbackMessage;
-		toast.error(Array.isArray(message) ? message[0] : message);
-		return;
+		// Handle the nested error structure from the user's example
+		const message =
+			errorData?.error?.message ||
+			errorData?.message ||
+			errorData?.error ||
+			fallbackMessage;
+		return Array.isArray(message) ? message[0] : message;
 	}
 
 	if (
@@ -29,9 +42,10 @@ export function handleRtkQueryError(
 		"message" in error &&
 		typeof error.message === "string"
 	) {
-		toast.error(error.message || fallbackMessage);
-		return;
+		return error.message || fallbackMessage;
 	}
+
+	return fallbackMessage;
 }
 
 export async function shareContent(data: {

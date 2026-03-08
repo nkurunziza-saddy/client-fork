@@ -14,18 +14,24 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ROUTES } from "@/shared/constants/routes";
+import type { AuthUser } from "@/types";
 
 interface AdminTopBarProps {
-	user: any;
+	user: AuthUser | null;
 }
 
 const menuItems = [
-	{ label: "Dashboard", path: "/admin", icon: RiDashboardLine },
-	{ label: "Suppliers", path: "/admin/suppliers", icon: RiUserLine },
-	{ label: "Customers", path: "/admin/customers", icon: RiShoppingCartLine },
-	{ label: "Categories", path: "/admin/categories", icon: Package },
-	{ label: "Services", path: "/admin/services", icon: RiFlashlightLine },
-	{ label: "Products", path: "/admin/products", icon: Package },
+	{ label: "Dashboard", path: ROUTES.ADMIN.INDEX, icon: RiDashboardLine },
+	{ label: "Suppliers", path: ROUTES.ADMIN.SUPPLIERS.INDEX, icon: RiUserLine },
+	{
+		label: "Customers",
+		path: ROUTES.ADMIN.CUSTOMERS,
+		icon: RiShoppingCartLine,
+	},
+	{ label: "Categories", path: ROUTES.ADMIN.CATEGORIES, icon: Package },
+	{ label: "Services", path: ROUTES.ADMIN.SERVICES, icon: RiFlashlightLine },
+	{ label: "Products", path: ROUTES.ADMIN.PRODUCTS, icon: Package },
 ];
 
 export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
@@ -35,7 +41,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
 	const isActive = (path: string) => pathname === path;
 
 	const currentLabel =
-		menuItems.find((item) => isActive(item.path))?.label || "Console";
+		menuItems.find((item) => isActive(item.path))?.label || "Admin";
 
 	return (
 		<header className="h-20 border-b border-border flex items-center px-8 bg-background/80 backdrop-blur-md sticky top-0 z-30 shrink-0">
@@ -43,12 +49,13 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
 				<SidebarTrigger className="border border-border rounded-sm hover:border-primary transition-colors h-10 w-10" />
 				<Separator orientation="vertical" className="h-8 bg-border w-[2px]" />
 				<div className="hidden md:flex items-center gap-2 text-[10px] font-heading font-bold uppercase tracking-[0.2em] text-muted-foreground">
-					<span
-						className="hover:text-foreground transition-colors cursor-pointer"
-						onClick={() => navigate({ to: "/admin" })}
+					<button
+						type="button"
+						className="hover:text-foreground transition-colors cursor-pointer bg-transparent border-none p-0 font-heading font-bold uppercase tracking-[0.2em] outline-none focus-visible:text-primary"
+						onClick={() => navigate({ to: ROUTES.ADMIN.INDEX })}
 					>
 						Root
-					</span>
+					</button>
 					<span>/</span>
 					<span className="text-primary">{currentLabel}</span>
 				</div>
@@ -62,7 +69,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
 						className="group-hover:text-primary transition-colors"
 					/>
 					<span className="text-[10px] font-heading font-bold uppercase tracking-widest flex-1">
-						Global Scan
+						Search
 					</span>
 					<Badge
 						variant="outline"
@@ -93,7 +100,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
 							{user?.name || "Admin"}
 						</span>
 						<span className="text-[8px] font-mono text-primary font-black uppercase tracking-tighter italic">
-							Authorized
+							Verified
 						</span>
 					</div>
 					<Avatar className="h-10 w-10 rounded-sm border border-border shadow-none">

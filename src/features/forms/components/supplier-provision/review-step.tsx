@@ -8,12 +8,15 @@ interface ReviewStepProps {
 
 export const ReviewStep: React.FC<ReviewStepProps> = ({ form }) => {
 	return (
-		<AdminCard title="Final Review" subtitle="Verify data stream integrity">
+		<AdminCard
+			title="Final Review"
+			subtitle="Review your information before submitting"
+		>
 			<div className="space-y-8">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					<div className="bg-muted/30 p-6 border border-border border-dashed rounded-sm">
 						<h3 className="text-[10px] font-heading font-bold uppercase tracking-widest text-primary mb-4 border-b border-primary/20 pb-2">
-							Entity Parameters
+							Company Information
 						</h3>
 						<div className="space-y-4">
 							<div>
@@ -26,7 +29,7 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({ form }) => {
 							</div>
 							<div>
 								<span className="text-muted-foreground text-[9px] uppercase font-black tracking-widest block mb-1">
-									Registry TIN
+									TIN Number
 								</span>
 								<span className="font-mono text-sm font-black">
 									{form.getFieldValue("registrationId")}
@@ -46,12 +49,12 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({ form }) => {
 
 					<div className="bg-muted/30 p-6 border border-border border-dashed rounded-sm">
 						<h3 className="text-[10px] font-heading font-bold uppercase tracking-widest text-primary mb-4 border-b border-primary/20 pb-2">
-							Agent Parameters
+							Contact Information
 						</h3>
 						<div className="space-y-4">
 							<div>
 								<span className="text-muted-foreground text-[9px] uppercase font-black tracking-widest block mb-1">
-									Primary Contact
+									Full Name
 								</span>
 								<span className="font-bold text-sm uppercase">
 									{form.getFieldValue("fullName")}
@@ -59,7 +62,7 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({ form }) => {
 							</div>
 							<div>
 								<span className="text-muted-foreground text-[9px] uppercase font-black tracking-widest block mb-1">
-									Secure Email
+									Email Address
 								</span>
 								<span className="font-mono text-sm font-black lowercase">
 									{form.getFieldValue("email")}
@@ -67,10 +70,10 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({ form }) => {
 							</div>
 							<div>
 								<span className="text-muted-foreground text-[9px] uppercase font-black tracking-widest block mb-1">
-									Authorized Role
+									Job Title
 								</span>
 								<span className="font-bold text-sm uppercase">
-									{form.getFieldValue("position") || "DEFAULT AGENT"}
+									{form.getFieldValue("position") || "NOT SPECIFIED"}
 								</span>
 							</div>
 						</div>
@@ -83,11 +86,11 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({ form }) => {
 					</div>
 					<div>
 						<p className="text-sm font-heading font-bold text-green-800 uppercase tracking-widest">
-							Stream Validated
+							Ready to Register
 						</p>
 						<p className="text-[10px] text-green-700 mt-1 uppercase font-bold tracking-wider leading-relaxed">
-							Entity is ready for platform provision. Final authorization will
-							create secure access credentials.
+							Your company is ready to be registered. Once submitted, you will
+							be able to manage your profile and listings.
 						</p>
 					</div>
 				</div>

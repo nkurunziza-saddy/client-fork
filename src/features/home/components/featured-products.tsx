@@ -67,9 +67,9 @@ const FeaturedProducts: React.FC = () => {
 				<SectionHeader
 					title="Featured Products"
 					subtitle="High-quality construction materials and specialized tools for your next project."
-					label="Marketplace"
+					label="Products"
 					icon={<RiPagesLine className="w-5 h-5" />}
-					viewAllHref="/products?type=PRODUCT"
+					viewAllHref="/products"
 					viewAllLabel="View all products"
 				/>
 
@@ -78,7 +78,7 @@ const FeaturedProducts: React.FC = () => {
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div
 								key={i}
-								className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20"
+								className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>
@@ -106,8 +106,7 @@ const FeaturedProducts: React.FC = () => {
 						size="lg"
 						onClick={() =>
 							navigate({
-								to: "/marketplace",
-								search: { type: "PRODUCT" } as any,
+								to: "/products",
 							})
 						}
 					>

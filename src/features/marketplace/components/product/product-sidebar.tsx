@@ -33,8 +33,8 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 }) => {
 	const handleShare = () => {
 		shareContent({
-			title: productName || "Industrial Material",
-			text: `Check out this material: ${productName}`,
+			title: productName || "Construction Material",
+			text: `Check out this product: ${productName}`,
 			url: window.location.href,
 		});
 	};
@@ -45,7 +45,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 			<div className="border border-border bg-background rounded-none relative overflow-hidden group">
 				<div className="p-8">
 					<h3 className="text-[9px] font-heading font-black uppercase text-muted-foreground mb-8 tracking-[0.4em] flex justify-between items-center">
-						<span>Verification Profile</span>
+						<span>Supplier Verification</span>
 						<span className="text-primary flex items-center gap-1.5">
 							<div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
 							LIVE
@@ -88,12 +88,12 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 						className="w-full rounded-none border-border h-12 font-heading font-black uppercase tracking-[0.3em] text-[9px] hover:bg-foreground hover:text-background transition-colors mb-8"
 						onClick={() => company?.id && onSupplierClick(company.id)}
 					>
-						View Professional Bio
+						View Supplier Profile
 					</Button>
 
 					<div className="space-y-4">
 						<span className="block text-[8px] uppercase font-black text-muted-foreground tracking-[0.4em] mb-4">
-							Direct Engagement
+							Contact Supplier
 						</span>
 						<div className="grid grid-cols-2 gap-3">
 							{company?.phone && (
@@ -148,7 +148,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 							>
 								<RiShareForwardLine className="w-4 h-4" />
 								<span className="text-[9px] font-black uppercase tracking-widest">
-									Share Protocol
+									Share
 								</span>
 							</Button>
 						</div>

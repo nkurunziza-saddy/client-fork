@@ -3,7 +3,6 @@
  */
 export const ROUTES = {
 	HOME: "/",
-	MARKETPLACE: "/marketplace",
 	ABOUT: "/about",
 	HELP: "/help",
 	AUTH: {
@@ -19,6 +18,10 @@ export const ROUTES = {
 	},
 	DASHBOARD: {
 		INDEX: "/dashboard",
+		AUCTIONS: {
+			INDEX: "/dashboard/auctions",
+			NEW: "/dashboard/auctions/new",
+		},
 		LISTINGS: {
 			INDEX: "/dashboard/listings",
 			NEW: "/dashboard/listings/new",
@@ -27,6 +30,7 @@ export const ROUTES = {
 	},
 	ADMIN: {
 		INDEX: "/admin",
+		AUCTIONS: "/admin/auctions",
 		SUPPLIERS: {
 			INDEX: "/admin/suppliers",
 			NEW: "/admin/suppliers/new",
@@ -44,6 +48,8 @@ export const ROUTES = {
 		PRODUCTS: "/products",
 		SERVICES: "/services",
 		SUPPLIERS: "/suppliers",
+		AUCTIONS: "/auctions",
+		CATEGORIES: "/categories",
 		PRODUCT: (id: string) => `/products/${id}` as const,
 		SERVICE: (id: string) => `/services/${id}` as const,
 		SUPPLIER: (id: string) => `/suppliers/${id}` as const,

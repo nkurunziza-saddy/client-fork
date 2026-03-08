@@ -68,10 +68,10 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 							<div className="grid sm:grid-cols-2 gap-4">
 								{[
 									"Direct Materials Sourcing",
-									"Quality Assurance Protocol",
-									"Regional Bulk Logistics",
-									"Industrial Asset Management",
-									"Procurement Consulting",
+									"Quality Control",
+									"Fast Delivery",
+									"Product Management",
+									"Buying Advice",
 									"Regulatory Compliance",
 								].map((item) => (
 									<div
@@ -258,7 +258,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 								))}
 							</div>{" "}
 							<div className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">
-								{company.reviewCount || 0} Network Reports
+								{company.reviewCount || 0} Reviews
 							</div>
 						</div>
 						<div className="flex-1 space-y-3 max-w-xs">
@@ -295,7 +295,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 									<div className="flex justify-between items-start mb-4">
 										<div>
 											<h4 className="font-black text-xs uppercase tracking-widest text-foreground">
-												Verified Partner
+												Verified Client
 											</h4>
 											<span className="text-[9px] text-muted-foreground uppercase font-bold tracking-[0.2em] mt-1 block">
 												FEB 2026 - SECURE LOG
@@ -308,9 +308,8 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 										</div>
 									</div>
 									<p className="text-sm text-foreground/70 font-medium leading-relaxed italic max-w-2xl">
-										"High-reliability performance from {company.name}. Supply
-										chain integrity remained consistent throughout the
-										procurement cycle."
+										"High-reliability performance from {company.name}. Service
+										quality remained consistent throughout the buying process."
 									</p>
 								</div>
 							))
@@ -375,7 +374,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 
 					<div className="space-y-8">
 						<h3 className="font-heading font-black uppercase text-xs tracking-[0.2em] text-foreground/40 border-b border-border/40 pb-4">
-							Operational Uptime
+							Business Hours
 						</h3>
 						<div className="border border-border/40 bg-muted/5 p-8 space-y-6">
 							<div className="flex justify-between items-center pb-4 border-b border-border/20">
@@ -404,11 +403,11 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 								<div className="flex items-center gap-3">
 									<Calendar className="w-4 h-4" />
 									<span className="font-black uppercase text-[10px] tracking-widest">
-										Sunday Shutdown
+										Sunday
 									</span>
 								</div>
 								<span className="text-[10px] font-mono font-bold uppercase">
-									Maintenance
+									Closed
 								</span>
 							</div>
 						</div>

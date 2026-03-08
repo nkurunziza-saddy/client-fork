@@ -103,7 +103,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 						{category.subcategories?.length || 0}
 					</p>
 					<p className="text-[9px] text-muted-foreground/50 font-bold uppercase tracking-widest">
-						Nodes
+						Items
 					</p>
 				</div>
 			</div>

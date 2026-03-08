@@ -27,11 +27,13 @@ import { ROLES } from "@/shared/constants";
 import { ROUTES } from "@/shared/constants/routes";
 import { logout } from "@/store/slices/auth-slice";
 
+import type { AuthUser } from "@/types";
+
 const PROVIDER_ROLES = [ROLES.PROVIDER, ROLES.ADMIN, ROLES.AGENT] as string[];
 
 interface HeaderUserNavProps {
 	isAuthenticated: boolean;
-	user: any;
+	user: AuthUser | null;
 }
 
 export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({

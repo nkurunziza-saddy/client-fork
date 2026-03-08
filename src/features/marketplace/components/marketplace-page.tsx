@@ -4,7 +4,11 @@ import MarketplaceGrid from "@/features/marketplace/components/marketplace-grid"
 import { ROUTES } from "@/shared/constants/routes";
 import type { MarketplaceItem } from "@/types";
 
-export function MarketplacePage() {
+export function MarketplacePage({
+	forcedType,
+}: {
+	forcedType?: "PRODUCT" | "SERVICE";
+}) {
 	const navigate = useNavigate();
 
 	const handleProductClick = useCallback(
@@ -36,6 +40,7 @@ export function MarketplacePage() {
 		<MarketplaceGrid
 			onSupplierClick={handleSupplierClick}
 			onProductClick={handleProductClick}
+			forcedType={forcedType}
 		/>
 	);
 }
