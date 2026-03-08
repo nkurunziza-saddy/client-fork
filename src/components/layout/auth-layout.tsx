@@ -36,7 +36,7 @@ export function AuthLayout() {
 					</h1>
 					<p className="text-lg text-muted-foreground leading-relaxed">
 						Join the largest network of verified suppliers and contractors.
-						Streamline your procurement and grow your business.
+						Simplify your buying and grow your business.
 					</p>
 
 					<div className="space-y-6 mt-10">
@@ -78,7 +78,7 @@ export function AuthLayout() {
 					<span>© 2026 AfrikaMarket Systems</span>
 					<span className="flex items-center gap-2">
 						<div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-						System Operational
+						Online
 					</span>
 				</div>
 			</div>

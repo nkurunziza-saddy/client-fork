@@ -103,7 +103,7 @@ const HotDeals: React.FC = () => {
 					variant="outline"
 					size="lg"
 					onClick={() =>
-						navigate({ to: "/marketplace", search: { sort: "deals" } as any })
+						navigate({ to: "/products", search: { sort: "deals" } as any })
 					}
 					className="rounded-none border-primary/40 text-primary hover:bg-primary hover:text-white font-bold uppercase tracking-[0.3em] text-[10px] px-10 h-14"
 				>

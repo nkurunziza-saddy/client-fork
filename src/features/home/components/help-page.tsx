@@ -90,9 +90,9 @@ export function HelpPage() {
 				</div>
 
 				<PageHeader
-					title="Support Center"
-					subtitle="Operational assistance and knowledge base"
-					badge="Help & Documentation"
+					title="Help Center"
+					subtitle="How can we help you today?"
+					badge="Support"
 					showPattern
 				/>
 
@@ -103,19 +103,19 @@ export function HelpPage() {
 					<div className="max-w-3xl mx-auto px-4 text-center relative z-10">
 						<div className="inline-flex items-center px-4 py-1.5 bg-primary/10 text-primary rounded-none font-bold text-[10px] uppercase tracking-[0.3em] mb-8 border border-primary/30">
 							<RiQuestionLine className="w-3.5 h-3.5 mr-2" />
-							24/7 TECHNICAL PROTOCOL
+							24/7 SUPPORT
 						</div>
 						<h1 className="text-4xl md:text-5xl font-display font-extrabold uppercase text-white mb-8 leading-[0.9] tracking-tighter">
 							HOW CAN WE SUPPORT <br />
 							<span className="text-primary italic -skew-x-12 inline-block">
-								YOUR OPERATIONS?
+								YOUR BUSINESS?
 							</span>
 						</h1>
 						<div className="relative max-w-2xl mx-auto group">
 							<RiSearchLine className="absolute left-5 top-1/2 transform -translate-y-1/2 text-primary/40 group-focus-within:text-primary w-5 h-5 transition-colors" />
 							<Input
 								type="text"
-								placeholder="SEARCH KNOWLEDGE BASE..."
+								placeholder="SEARCH FOR HELP..."
 								value={searchQuery}
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 									setSearchQuery(e.target.value)
@@ -165,7 +165,7 @@ export function HelpPage() {
 						<section>
 							<div className="flex items-center justify-between mb-8">
 								<h2 className="text-2xl font-display font-extrabold uppercase text-foreground tracking-tight">
-									Common Inquiries
+									Frequently Asked Questions
 								</h2>
 								<div className="h-px bg-border/40 flex-1 ml-8"></div>
 							</div>
@@ -221,11 +221,10 @@ export function HelpPage() {
 							<div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 -mr-16 -mt-16 rounded-full pointer-events-none" />
 							<h3 className="text-lg font-display font-extrabold uppercase text-foreground mb-4 flex items-center tracking-tight">
 								<RiPhoneLine className="w-4 h-4 mr-2.5 text-primary" />
-								Direct Protocol
+								Contact Us
 							</h3>
 							<p className="text-xs text-muted-foreground/60 mb-8 leading-relaxed font-medium uppercase tracking-widest">
-								Our support engineers are standing by for operational
-								assistance.
+								Our support team is standing by to help you.
 							</p>
 							<div className="space-y-3">
 								<Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display font-extrabold uppercase tracking-widest rounded-none justify-start px-6 h-14 border border-primary/20 shadow-none">
@@ -245,10 +244,10 @@ export function HelpPage() {
 						<div className="bg-card border border-border/20 p-8 relative overflow-hidden group rounded-none">
 							<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-[100%] -mr-12 -mt-12 pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
 							<h3 className="text-lg font-display font-extrabold uppercase text-foreground mb-4 tracking-tight">
-								Documentation
+								Guides
 							</h3>
 							<p className="text-xs text-muted-foreground/60 mb-8 leading-relaxed font-medium uppercase tracking-widest">
-								Standardized guides for marketplace integration.
+								Helpful guides for using the platform.
 							</p>
 							<ul className="space-y-4">
 								{[

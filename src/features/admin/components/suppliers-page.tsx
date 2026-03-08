@@ -133,7 +133,7 @@ export function AdminSuppliersPage() {
 					icon={RiBuilding2Line}
 				/>
 				<StatCard
-					label="Active Nodes"
+					label="Active Suppliers"
 					value={suppliers
 						.filter((s) => s.status === "active")
 						.length.toString()}
@@ -158,7 +158,7 @@ export function AdminSuppliersPage() {
 			<Card noPadding>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
-						Syncing supplier network...
+						Loading suppliers...
 					</div>
 				) : (
 					<DataTable

@@ -62,7 +62,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 		return (
 			<div className="min-h-screen bg-background flex items-center justify-center">
 				<div className="animate-pulse text-muted-foreground uppercase text-[10px] font-bold tracking-[0.2em]">
-					Scanning Provider Node...
+					Loading supplier...
 				</div>
 			</div>
 		);
@@ -122,7 +122,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 						onClick={onBack}
 						className="pl-0 gap-2 text-muted-foreground hover:text-primary font-heading uppercase text-xs tracking-wider hover:bg-transparent"
 					>
-						<RiArrowLeftLine className="w-4 h-4" /> Back to Network
+						<RiArrowLeftLine className="w-4 h-4" /> Back to directory
 					</Button>
 				</div>
 
@@ -156,7 +156,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 							<div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-border/40 border border-border/40 shadow-sm">
 								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
 									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
-										Active Nodes
+										Active items
 									</div>
 									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
 										{listings.length}
@@ -164,7 +164,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 								</div>
 								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
 									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
-										Sync Rate
+										Views
 									</div>
 									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
 										{company.visits || 0}
@@ -172,7 +172,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 								</div>
 								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
 									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
-										Node Age
+										Member since
 									</div>
 									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
 										{joinedYear}
@@ -193,7 +193,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 									value={tab}
 									className="uppercase text-[10px] font-black tracking-[0.2em]"
 								>
-									{tab === "overview" ? "Operational Overview" : tab}
+									{tab === "overview" ? "Company overview" : tab}
 								</TabsTrigger>
 							))}
 						</TabsList>

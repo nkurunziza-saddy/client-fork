@@ -2,15 +2,14 @@ import { RiNotification3Line } from "@remixicon/react";
 import type React from "react";
 import { Card as AdminCard } from "@/features/admin/components/card";
 
-interface BroadcastLogicCardProps {
+interface NotificationSettingsCardProps {
 	notifications: any;
 	onToggle: (key: string) => void;
 }
 
-export const BroadcastLogicCard: React.FC<BroadcastLogicCardProps> = ({
-	notifications,
-	onToggle,
-}) => {
+export const NotificationSettingsCard: React.FC<
+	NotificationSettingsCardProps
+> = ({ notifications, onToggle }) => {
 	const settings = [
 		{
 			key: "emailNotifications",

@@ -27,7 +27,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 					/>
 				) : (
 					<div className="flex h-full items-center justify-center text-[10px] uppercase font-bold tracking-widest text-muted-foreground">
-						Asset Unavailable
+						Image not available
 					</div>
 				)}
 				<div className="absolute bottom-6 right-6">

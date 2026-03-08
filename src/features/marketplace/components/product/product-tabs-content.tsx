@@ -22,18 +22,18 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 			<TabsContent value="overview" className="mt-12 space-y-12">
 				<div className="space-y-6">
 					<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40 pb-4 border-b border-border/40">
-						Material Information
+						Product Information
 					</h3>
 					<p className="text-xs leading-relaxed text-muted-foreground max-w-2xl">
 						{description ||
-							"Comprehensive technical details and description for this industrial asset are currently being finalized."}
+							"Details and description for this product are currently being finalized."}
 					</p>
 				</div>
 
 				<div className="grid md:grid-cols-2 gap-16">
 					<div className="space-y-8">
 						<h3 className="font-heading font-bold uppercase text-xs tracking-[0.4em] text-foreground/40 pb-4 border-b border-border/40">
-							Product Specification Matrix
+							Product Details
 						</h3>
 						<div className="grid gap-6">
 							{keyFacts.map((fact) => (
@@ -70,13 +70,12 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 							variant="outline"
 							className="rounded-none border-primary text-primary font-bold text-[9px] tracking-widest uppercase"
 						>
-							FACTORY READY
+							IN STOCK
 						</Badge>
 					</div>
 					<p className="text-xs text-muted-foreground leading-relaxed">
-						Specifications for this hardware component are calibrated for
-						standard industrial environments. For custom modifications or
-						high-stress certifications, please contact the supplier directly.
+						Specifications for this product are based on standard information.
+						For custom orders, please contact the supplier directly.
 					</p>
 				</div>
 			</TabsContent>
@@ -85,10 +84,10 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 border-b border-border/40">
 					<div className="space-y-1">
 						<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
-							Industrial Feedback
+							Customer Reviews
 						</h3>
 						<p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
-							Performance metrics from verified partners
+							Feedback from verified customers
 						</p>
 					</div>
 					<div className="w-full sm:w-auto">

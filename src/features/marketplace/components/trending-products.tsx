@@ -26,11 +26,11 @@ const TrendingProducts: React.FC = () => {
 		>
 			<div className="space-y-16">
 				<SectionHeader
-					title="Trending Materials"
-					subtitle="High-demand industrial assets live now based on real-time marketplace analytics."
-					label="Market Velocity"
-					viewAllHref="/marketplace?sort=trending"
-					viewAllLabel="Analyze Trends"
+					title="Trending Products"
+					subtitle="Most viewed products currently available on the marketplace."
+					label="Popular"
+					viewAllHref="/products?sort=trending"
+					viewAllLabel="View Trending"
 					icon={<TrendingUp className="w-5 h-5" />}
 				/>
 
@@ -39,7 +39,7 @@ const TrendingProducts: React.FC = () => {
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div
 								key={`trending-skeleton-${i}`}
-								className="aspect-4/3 rounded-lg border border-border/40 bg-muted/20"
+								className="aspect-4/3 rounded-lg border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>

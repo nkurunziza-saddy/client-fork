@@ -106,7 +106,7 @@ export function AdminProductsPage() {
 			<Card noPadding>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
-						Scanning material catalog...
+						Loading products...
 					</div>
 				) : (
 					<DataTable

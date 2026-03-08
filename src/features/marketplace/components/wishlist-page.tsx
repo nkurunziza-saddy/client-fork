@@ -5,7 +5,7 @@ export function WishlistPage() {
 	const navigate = useNavigate();
 
 	const handleBack = () => {
-		navigate({ to: "/marketplace" });
+		navigate({ to: "/products" });
 	};
 
 	const handleProductClick = (item: any) => {

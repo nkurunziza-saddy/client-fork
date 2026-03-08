@@ -148,10 +148,10 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 border-b border-border/40">
 					<div className="space-y-1">
 						<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
-							Service Feedback
+							Customer Reviews
 						</h3>
 						<p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
-							Performance metrics from verified clients
+							Feedback from verified customers
 						</p>
 					</div>
 					<div className="w-full sm:w-auto">

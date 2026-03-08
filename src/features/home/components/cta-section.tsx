@@ -3,7 +3,7 @@ import {
 	RiBriefcaseLine,
 	RiPagesLine,
 } from "@remixicon/react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import type React from "react";
 import { Button } from "@/components/ui/button";
 
@@ -39,11 +39,13 @@ const CTASection: React.FC = () => {
 						<div className="flex gap-4">
 							<Button
 								size="lg"
-								onClick={() => navigate({ to: "/marketplace" })}
 								className="bg-primary text-white hover:bg-primary/90 rounded-none h-14 px-10 font-heading font-black uppercase tracking-widest text-xs"
-							>
-								Enter Marketplace
-							</Button>
+								render={(props) => (
+									<Link {...props} to="/products">
+										Enter Marketplace
+									</Link>
+								)}
+							/>
 						</div>
 					</div>
 
@@ -53,8 +55,7 @@ const CTASection: React.FC = () => {
 						<div
 							onClick={() =>
 								navigate({
-									to: "/marketplace",
-									search: { type: "PRODUCT" } as any,
+									to: "/products",
 								})
 							}
 							className="group cursor-pointer bg-muted/20 border border-border/40 hover:border-primary/50 p-10 rounded-none transition-all duration-500 hover:bg-background relative overflow-hidden"
@@ -85,8 +86,7 @@ const CTASection: React.FC = () => {
 						<div
 							onClick={() =>
 								navigate({
-									to: "/marketplace",
-									search: { type: "SERVICE" } as any,
+									to: "/services",
 								})
 							}
 							className="group cursor-pointer bg-muted/20 border border-border/40 hover:border-primary/50 p-10 rounded-none transition-all duration-500 hover:bg-background relative overflow-hidden"

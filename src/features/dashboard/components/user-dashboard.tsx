@@ -59,16 +59,16 @@ export default function UserDashboard() {
 						Muraho, {user?.name?.split(" ")[0] || "Partner"}
 					</h1>
 					<p className="mt-3 text-[10px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
-						Identity node active · Tracking {wishlist.length} supply links
+						Active account · Tracking {wishlist.length} saved items
 					</p>
 				</div>
 				<div className="flex gap-2 sm:gap-3">
-					<Link to="/marketplace" className="flex-1 sm:flex-none">
+					<Link to="/products" className="flex-1 sm:flex-none">
 						<Button
 							size="lg"
 							className="h-12 md:h-14 w-full sm:w-auto rounded-none font-display font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 md:px-8 shadow-lg shadow-primary/20"
 						>
-							<RiFileTextLine className="mr-2 h-4 w-4" /> Material Scan
+							<RiFileTextLine className="mr-2 h-4 w-4" /> Browse Products
 						</Button>
 					</Link>
 					<Link to="/profile">
@@ -92,7 +92,7 @@ export default function UserDashboard() {
 							className="text-primary opacity-40 group-hover:opacity-100 transition-opacity"
 						/>
 						<span className="text-[9px] md:text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
-							Saved Nodes
+							Saved Items
 						</span>
 					</div>
 					<p className="text-4xl md:text-5xl font-display font-black text-foreground tracking-tighter">
@@ -106,7 +106,7 @@ export default function UserDashboard() {
 							className="text-primary opacity-40 group-hover:opacity-100 transition-opacity"
 						/>
 						<span className="text-[9px] md:text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
-							Active Links
+							Active Chats
 						</span>
 					</div>
 					<p className="text-4xl md:text-5xl font-display font-black text-foreground tracking-tighter">
@@ -117,7 +117,7 @@ export default function UserDashboard() {
 					<div className="flex items-center gap-2 mb-3 md:mb-4">
 						<div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
 						<span className="text-[9px] md:text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
-							Unread Streams
+							Unread Messages
 						</span>
 					</div>
 					<p className="text-4xl md:text-5xl font-display font-black text-primary tracking-tighter">
@@ -131,7 +131,7 @@ export default function UserDashboard() {
 				<div className="space-y-6 md:space-y-8 lg:col-span-8">
 					<div className="flex items-center gap-4">
 						<h2 className="text-lg md:text-xl font-display font-black text-foreground uppercase tracking-tight">
-							Operational Inventory
+							My Saved Items
 						</h2>
 						<div className="flex-1 h-px bg-border/40" />
 					</div>
@@ -145,7 +145,7 @@ export default function UserDashboard() {
 							<div className="py-24 text-center border border-dashed border-border/40 bg-muted/5 flex flex-col items-center justify-center">
 								<RiHeartLine className="w-12 h-12 text-muted-foreground/20 mb-4" />
 								<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-									No Saved Procurement Nodes
+									No Saved Items
 								</p>
 							</div>
 						) : (
@@ -216,7 +216,7 @@ export default function UserDashboard() {
 														setReviewModalOpen(true);
 													}}
 												>
-													<RiStarLine className="mr-1.5 h-3 w-3" /> Report
+													<RiStarLine className="mr-1.5 h-3 w-3" /> Review
 												</Button>
 											</div>
 										</div>
@@ -231,7 +231,7 @@ export default function UserDashboard() {
 				<div className="space-y-10 lg:col-span-4">
 					<div className="space-y-6">
 						<h2 className="text-xl font-display font-black text-foreground uppercase tracking-tight">
-							Direct Transmissions
+							Recent Messages
 						</h2>
 						<div className="rounded-none border border-border/40 bg-background overflow-hidden">
 							{loadingConversations ? (
@@ -240,7 +240,7 @@ export default function UserDashboard() {
 								</div>
 							) : conversations.length === 0 ? (
 								<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest">
-									No Active Channels
+									No Active Chats
 								</div>
 							) : (
 								<div className="divide-y divide-border/40">
@@ -270,12 +270,11 @@ export default function UserDashboard() {
 						<div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
 						<RiChat1Line className="mb-6 h-8 w-8 text-primary opacity-40" />
 						<h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground mb-3">
-							Transmission Protocol
+							Messaging Guidelines
 						</h4>
 						<p className="text-[11px] text-muted-foreground font-medium uppercase leading-relaxed tracking-wider">
-							Ensure all material negotiations and delivery parameters are
-							logged within platform channels for network traceability and
-							secure escrow.
+							Please keep all negotiations and delivery discussions within this
+							platform to ensure safety and transparency.
 						</p>
 					</div>
 				</div>
@@ -302,12 +301,12 @@ export default function UserDashboard() {
 							productId: selectedItem?.productId,
 							companyId: selectedItem?.companyId,
 						}).unwrap();
-						toast.success("Field report broadcasted successfully.");
+						toast.success("Review submitted successfully.");
 					} catch (err) {
-						handleRtkQueryError(err, "Failed to broadcast report");
+						handleRtkQueryError(err, "Failed to submit review");
 					}
 				}}
-				itemName={selectedItem?.item || "Asset"}
+				itemName={selectedItem?.item || "Item"}
 				providerName={selectedItem?.provider || "Supplier"}
 			/>
 		</div>

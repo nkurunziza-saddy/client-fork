@@ -32,15 +32,15 @@ export function AdminAddSupplierPage() {
 			navigate({
 				to: "/admin/suppliers/$supplierId",
 				params: { supplierId: created.id },
-			} as any);
+			});
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
 	const steps = [
-		{ step: 1, label: "Identity", icon: RiBuildingLine },
-		{ step: 2, label: "Authorized", icon: RiUserLine },
+		{ step: 1, label: "Company", icon: RiBuildingLine },
+		{ step: 2, label: "Contact", icon: RiUserLine },
 		{ step: 3, label: "Confirm", icon: RiCheckboxCircleLine },
 	];
 

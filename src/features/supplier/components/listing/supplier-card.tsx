@@ -75,7 +75,7 @@ export const SupplierCard = memo(
 						<div className="flex items-center gap-1.5 opacity-60">
 							<RiBuilding4Line className="w-3 h-3" />
 							<span className="text-[9px] font-bold uppercase tracking-widest whitespace-nowrap">
-								{company.type?.replace("_", " ") || "Entity"}
+								{company.type?.replace("_", " ") || "Company"}
 							</span>
 						</div>
 					</div>

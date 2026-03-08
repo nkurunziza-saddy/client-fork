@@ -83,7 +83,7 @@ export const ServiceListingView: React.FC<ServiceViewGridProps> = ({
 					Try adjusting your filters
 				</p>
 				<Button onClick={resetFilters} className="rounded-none">
-					Reset Protocol
+					Reset Filters
 				</Button>
 			</div>
 		);

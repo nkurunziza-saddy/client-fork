@@ -1,10 +1,11 @@
 import { RiArrowLeftLine, RiPagesLine, RiSearchLine } from "@remixicon/react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
+import { ROUTES } from "@/shared/constants/routes";
 
 interface CategoriesPageProps {
 	onBack: () => void;
@@ -12,7 +13,6 @@ interface CategoriesPageProps {
 }
 
 const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
-	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState("");
 
 	const { data: categoriesResult, isLoading } = useGetProductCategoriesQuery({
@@ -82,18 +82,10 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
 				) : (
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 						{filtered.map((category) => (
-							<button
+							<Link
 								key={category.id}
-								type="button"
-								onClick={() =>
-									navigate({
-										to: "/marketplace",
-										search: { categoryId: category.id } as Record<
-											string,
-											string
-										>,
-									})
-								}
+								to={ROUTES.PUBLIC.PRODUCTS}
+								search={{ category: category.id }}
 								className="group text-left p-8 rounded-none border border-border/10 bg-card hover:border-primary/40 transition-all duration-500 relative overflow-hidden hover:shadow-2xl hover:shadow-primary/5"
 							>
 								<div className="absolute top-0 left-0 w-[1px] h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
@@ -108,7 +100,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
 									{category.description ||
 										"Explore products and services in this category."}
 								</p>
-							</button>
+							</Link>
 						))}
 					</div>
 				)}

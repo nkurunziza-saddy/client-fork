@@ -49,7 +49,7 @@ export function ReviewModal({
 			open={isOpen}
 			onOpenChange={onClose}
 			title="Rate Experience"
-			description={`Reviewing node: ${providerName}`}
+			description={`Reviewing: ${providerName}`}
 		>
 			<div className="space-y-8">
 				<div className="flex flex-col items-center gap-4">
@@ -78,20 +78,20 @@ export function ReviewModal({
 					</div>
 					<p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
 						{rating === 5
-							? "Optimal Performance"
+							? "Excellent"
 							: rating === 4
-								? "Standard Verified"
+								? "Good"
 								: rating === 3
-									? "Average Stream"
+									? "Average"
 									: rating > 0
-										? "Sub-Optimal"
-										: "Initialize Rating"}
+										? "Poor"
+										: "Select Rating"}
 					</p>
 				</div>
 
 				<div className="space-y-2">
 					<label className="text-[10px] font-black text-foreground uppercase tracking-widest ml-1">
-						Transmission Feedback
+						Your Feedback
 					</label>
 					<Textarea
 						value={comment}
@@ -114,7 +114,7 @@ export function ReviewModal({
 						disabled={rating === 0 || submitting}
 						className="flex-1 rounded-none h-12 font-heading font-bold uppercase tracking-widest shadow-xl shadow-primary/20 bg-primary text-white"
 					>
-						{submitting ? "Submitting..." : "Send Report"}
+						{submitting ? "Submitting..." : "Submit Review"}
 					</Button>
 				</div>
 			</div>

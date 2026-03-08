@@ -50,7 +50,7 @@ export const wishlistApi = apiSlice.injectEndpoints({
 
 		addToWishlist: builder.mutation<
 			unknown,
-			{ id: string; type: "product" | "service" }
+			{ id: string; type: "product" | "service" | "auction" }
 		>({
 			query: ({ id, type }) => ({
 				url: `/wishlists/${type}s`,
@@ -85,7 +85,7 @@ export const wishlistApi = apiSlice.injectEndpoints({
 
 		removeFromWishlist: builder.mutation<
 			void,
-			{ id: string; type: "product" | "service" }
+			{ id: string; type: "product" | "service" | "auction" }
 		>({
 			query: ({ id, type }) => ({
 				url: `/wishlists/${type}s/${id}`,

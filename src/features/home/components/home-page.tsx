@@ -65,7 +65,7 @@ export function HomePage() {
 									title="Verified Suppliers"
 									subtitle="Connect directly with verified local and international manufacturers."
 									ctaText="Explore Suppliers"
-									ctaLink={ROUTES.ADMIN.SUPPLIERS.INDEX} // Using admin for now as public index isn't defined clearly in ROUTES yet, or I can add it
+									ctaLink={ROUTES.PUBLIC.SUPPLIERS}
 									variant="primary"
 								/>
 							)}
@@ -84,7 +84,7 @@ export function HomePage() {
 				title="Heavy Equipment"
 				subtitle="Browse construction machinery and heavy equipment from verified suppliers."
 				ctaText="Explore Machinery"
-				ctaLink={`${ROUTES.MARKETPLACE}?category=heavy-equipment`}
+				ctaLink={`${ROUTES.PUBLIC.PRODUCTS}?category=heavy-equipment`}
 				variant="dark"
 			/>
 

@@ -37,17 +37,17 @@ interface IdentityStepProps {
 export const IdentityStep: React.FC<IdentityStepProps> = ({ form, mode }) => {
 	return (
 		<AdminCard
-			title="Identity Parameters"
+			title="Company Details"
 			subtitle={
 				mode === "add"
-					? "Primary company identifiers"
-					: "Override corporate data"
+					? "Basic information about your company"
+					: "Update company information"
 			}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 				<form.Field name="companyName">
 					{(field: any) => (
-						<FormField label="Legal Company Name" required>
+						<FormField label="Company Name" required>
 							<Input
 								id="companyName"
 								name={field.name}
@@ -63,7 +63,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({ form, mode }) => {
 				</form.Field>
 				<form.Field name="industry">
 					{(field: any) => (
-						<FormField label="Primary Industry" required>
+						<FormField label="Industry" required>
 							<select
 								id="industry"
 								name={field.name}
@@ -73,7 +73,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({ form, mode }) => {
 								className="w-full px-4 py-3 border border-border/40 rounded-none focus:outline-none focus:border-primary/40 h-12 text-sm bg-background font-bold uppercase tracking-widest"
 								required
 							>
-								<option value="">SELECT STREAM...</option>
+								<option value="">SELECT INDUSTRY...</option>
 								{industries.map((ind) => (
 									<option key={ind} value={ind}>
 										{ind.toUpperCase()}
@@ -101,7 +101,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({ form, mode }) => {
 				</form.Field>
 				<form.Field name="location">
 					{(field: any) => (
-						<FormField label="Operational Province" required>
+						<FormField label="Province" required>
 							<select
 								id="location"
 								name={field.name}
@@ -111,7 +111,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({ form, mode }) => {
 								className="w-full px-4 py-3 border border-border/40 rounded-none focus:outline-none focus:border-primary/40 h-12 text-sm bg-background font-bold uppercase tracking-widest"
 								required
 							>
-								<option value="">SELECT REGION...</option>
+								<option value="">SELECT PROVINCE...</option>
 								{rwandaLocations.map((loc) => (
 									<option key={loc} value={loc}>
 										{loc.toUpperCase()}
@@ -160,7 +160,7 @@ export const IdentityStep: React.FC<IdentityStepProps> = ({ form, mode }) => {
 						type="submit"
 						className="rounded-none h-12 px-8 font-heading font-black uppercase text-[10px] tracking-widest shadow-lg shadow-primary/20 border-none"
 					>
-						Continue To Agent
+						Next: Contact Person
 						<RiArrowRightLine size={16} className="ml-2" />
 					</Button>
 				</div>

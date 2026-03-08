@@ -45,7 +45,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 					subtitle={subtitle}
 					label="Curated Selection"
 					icon={icon || <Package className="w-5 h-5" />}
-					viewAllHref="/marketplace"
+					viewAllHref="/products"
 				/>
 
 				{listings.length === 0 ? (
@@ -53,7 +53,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div
 								key={i}
-								className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20"
+								className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>
@@ -77,7 +77,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 						size="lg"
 						onClick={() => {
 							navigate({
-								to: "/marketplace",
+								to: "/products",
 								search: {
 									type: "PRODUCT",
 									category: categoryId || undefined,

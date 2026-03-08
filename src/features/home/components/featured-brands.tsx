@@ -23,9 +23,9 @@ export const FeaturedBrands: React.FC = () => {
 		>
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
 				<SectionHeader
-					title="Industry Leaders"
-					subtitle="Direct partnerships with global manufacturers ensuring structural integrity and performance."
-					label="Strategic Alliances"
+					title="Top Brands"
+					subtitle="Reliable tools and materials from world-leading construction brands."
+					label="Our Partners"
 					icon={<RiBuilding2Line className="w-5 h-5" />}
 				/>
 
@@ -39,7 +39,7 @@ export const FeaturedBrands: React.FC = () => {
 								{brand.logo}
 							</span>
 							<div className="mt-4 text-[9px] font-bold text-muted-foreground/0 group-hover:text-muted-foreground/100 transition-all duration-500 uppercase tracking-widest translate-y-2 group-hover:translate-y-0">
-								Verified OEM
+								Verified Brand
 							</div>
 						</div>
 					))}

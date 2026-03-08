@@ -159,7 +159,7 @@ export function AboutPage() {
 					<div className="flex flex-col sm:flex-row justify-center gap-4 px-4">
 						<Button
 							size="lg"
-							onClick={() => navigate({ to: "/marketplace" })}
+							onClick={() => navigate({ to: "/products" })}
 							className="bg-primary hover:bg-primary/90 text-primary-foreground font-display font-black uppercase tracking-[0.2em] px-10 h-16 rounded-none shadow-2xl shadow-primary/10 border-none"
 						>
 							Browse Marketplace

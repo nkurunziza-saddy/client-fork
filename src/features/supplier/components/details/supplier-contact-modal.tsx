@@ -1,8 +1,8 @@
 import { Mail, MessageSquare, Phone } from "lucide-react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
-import type { Company } from "@/types";
 import { ResponsiveModal } from "@/shared/components/responsive-modal";
+import type { Company } from "@/types";
 
 interface SupplierContactModalProps {
 	company: Company;

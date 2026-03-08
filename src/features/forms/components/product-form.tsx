@@ -1,6 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
 import type React from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,6 +32,7 @@ interface ProductFormProps {
 	onCancel: () => void;
 	initialValues?: Partial<ProductFormValues>;
 	isLoading?: boolean;
+	serverError?: string;
 }
 
 const MAX_IMAGES = 8;
@@ -41,6 +43,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 	onCancel,
 	initialValues,
 	isLoading,
+	serverError,
 }) => {
 	const { data: categoriesData } = useGetProductCategoriesQuery({ limit: 100 });
 	const categories = categoriesData?.data ?? [];
@@ -89,6 +92,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			}}
 			className="space-y-5"
 		>
+			{serverError && (
+				<Alert
+					variant="destructive"
+					className="rounded-none border-destructive/20 bg-destructive/5"
+				>
+					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
+						{serverError}
+					</AlertDescription>
+				</Alert>
+			)}
+
 			<form.Field name="name">
 				{(field) => (
 					<FormField label="Product Name" required>

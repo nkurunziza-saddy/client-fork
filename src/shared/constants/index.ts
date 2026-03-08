@@ -2,7 +2,7 @@ export const ROLES = {
 	ADMIN: "admin",
 	AGENT: "agent",
 	PROVIDER: "provider",
-	BUYER: "buyer",
+	USER: "user",
 } as const;
 
 export const LISTING_TYPES = {

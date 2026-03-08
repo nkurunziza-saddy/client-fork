@@ -8,13 +8,10 @@ import { Card as AdminCard } from "@/features/admin/components/card";
 export const SystemActions: React.FC = () => (
 	<div className="space-y-8">
 		<h2 className="text-2xl font-heading font-bold text-foreground uppercase tracking-tight border-b border-border pb-6">
-			System Control
+			Admin Controls
 		</h2>
 
-		<AdminCard
-			title="Moderation Protocols"
-			subtitle="Automated enforcement logic"
-		>
+		<AdminCard title="Moderation Rules" subtitle="Automatic account actions">
 			<div className="space-y-8 mt-4">
 				<div className="flex gap-5">
 					<div className="w-12 h-12 rounded-sm bg-amber-50 flex items-center justify-center shrink-0 border border-amber-100/50">
@@ -22,10 +19,10 @@ export const SystemActions: React.FC = () => (
 					</div>
 					<div>
 						<p className="text-sm font-heading font-bold text-foreground uppercase tracking-wider">
-							Auto-Isolation
+							Auto Suspend
 						</p>
 						<p className="text-[10px] text-muted-foreground font-mono font-bold uppercase tracking-[0.1em] mt-1.5 leading-none">
-							3 Reports / 7 Cycle Window
+							3 Reports in 7 days
 						</p>
 					</div>
 				</div>
@@ -35,10 +32,10 @@ export const SystemActions: React.FC = () => (
 					</div>
 					<div>
 						<p className="text-sm font-heading font-bold text-foreground uppercase tracking-wider">
-							Node Termination
+							Delete Account
 						</p>
 						<p className="text-[10px] text-muted-foreground font-mono font-bold uppercase tracking-[0.1em] mt-1.5 leading-none">
-							5 Reports or Protocol Breach
+							5 Reports or Rule Breach
 						</p>
 					</div>
 				</div>
@@ -47,7 +44,7 @@ export const SystemActions: React.FC = () => (
 					variant="outline"
 					className="w-full rounded-sm border border-border font-heading font-bold uppercase tracking-widest h-12 hover:bg-muted text-[10px] shadow-none transition-all"
 				>
-					Configure Logic Matrix
+					Configure Rules
 				</Button>
 			</div>
 		</AdminCard>
@@ -62,10 +59,10 @@ export const SystemActions: React.FC = () => (
 					Verification
 				</h3>
 				<p className="text-muted-foreground text-[10px] font-bold mb-8 uppercase tracking-[0.2em] leading-none">
-					8 Entities Awaiting Audit
+					8 Companies Awaiting Review
 				</p>
 				<Button className="w-full h-14 rounded-sm font-heading font-bold uppercase tracking-widest bg-primary hover:bg-primary/90 text-primary-foreground shadow-none transition-all active:scale-95">
-					Access Audit Center
+					Review Companies
 				</Button>
 			</div>
 		</div>

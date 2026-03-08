@@ -3,6 +3,8 @@ export interface AuthUser {
 	email: string;
 	name: string;
 	role: string;
+	avatar?: string;
+	image?: string;
 	needsOnboarding?: boolean;
 }
 
@@ -23,7 +25,7 @@ export interface SignUpRequest {
 	name: string;
 	email: string;
 	password?: string;
-	role: "buyer" | "provider";
+	role: "user" | "provider";
 }
 
 export interface SessionUser {
@@ -31,6 +33,8 @@ export interface SessionUser {
 	email: string;
 	name: string;
 	role: string;
+	avatar?: string;
+	image?: string;
 	needsOnboarding?: boolean;
 }
 

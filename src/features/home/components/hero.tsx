@@ -1,9 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import {
-	ArrowRight,
-	Search,
-	Star,
-} from "lucide-react";
+import { ArrowRight, Search, Star } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -207,7 +203,7 @@ const FeaturedProductCard: React.FC<{
 						)}
 					</div>
 					<Button
-						onClick={() => navigate({ to: "/marketplace" })}
+						onClick={() => navigate({ to: "/products" })}
 						className="bg-white hover:bg-slate-100 text-slate-950 rounded-none h-10 px-6 text-[9px] font-black tracking-[0.2em] uppercase gap-2 group border-none"
 					>
 						VIEW{" "}
@@ -346,7 +342,7 @@ const Hero: React.FC = () => {
 	const handleSearch = (e: React.FormEvent) => {
 		e.preventDefault();
 		navigate({
-			to: "/marketplace",
+			to: "/products",
 			search: {
 				q: query,
 				category: activeCategory,
@@ -373,7 +369,7 @@ const Hero: React.FC = () => {
 						<div className="flex items-center gap-4 mb-4 md:mb-4 relative">
 							<span className="inline-flex items-center gap-3 text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">
 								<div className="w-8 md:w-12 h-px bg-primary" />
-								Industrial Marketplace
+								Construction Marketplace
 							</span>
 						</div>
 
@@ -476,7 +472,7 @@ const Hero: React.FC = () => {
 							/>
 						))}
 
-						{/* Carousel Indicators */}
+						{/* Slides */}
 						<div className="absolute bottom-4 left-6 z-20 flex gap-2">
 							{featuredProducts.map(
 								(product: HeroFeaturedProduct, i: number) => (

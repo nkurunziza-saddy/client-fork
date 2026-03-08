@@ -2,6 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { CompanySetupForm } from "@/features/forms/components/company-setup-form";
+import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useCreateCompanyMutation } from "@/services/api/companies";
 import { useGetCompanyCategoriesQuery } from "@/services/api/company-categories";
 import { useGetProfileQuery } from "@/services/api/users";
@@ -10,7 +11,7 @@ import { setUser } from "@/store/slices/auth-slice";
 export function OnboardingPage() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const [createCompany, { isLoading }] = useCreateCompanyMutation();
+	const [createCompany, { isLoading, error }] = useCreateCompanyMutation();
 	const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 100 });
 	const { refetch: refetchProfile } = useGetProfileQuery();
 
@@ -47,9 +48,10 @@ export function OnboardingPage() {
 			navigate({ to: "/dashboard", replace: true });
 		} catch (err) {
 			console.error("Onboarding failed", err);
-			toast.error("Failed to complete business profile setup.");
 		}
 	};
+
+	const serverError = getErrorFromRtkQuery(error);
 
 	return (
 		<div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-8 industrial-grain">
@@ -77,6 +79,7 @@ export function OnboardingPage() {
 						isLoading={isLoading}
 						categories={categoriesData?.data}
 						onSkip={() => navigate({ to: "/" })}
+						serverError={serverError}
 					/>
 				</div>
 			</div>

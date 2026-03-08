@@ -43,7 +43,7 @@ export const MarketplaceStats: React.FC = () => {
 			icon: <RiGlobeLine className="w-8 h-8" />,
 			value: stats?.districtsCovered ? String(stats.districtsCovered) : "...",
 			label: "Districts Covered",
-			description: "Full national logistics network",
+			description: "Full service coverage across Rwanda",
 		},
 	];
 	return (
@@ -57,11 +57,11 @@ export const MarketplaceStats: React.FC = () => {
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
 				<div className="text-center max-w-3xl mx-auto mb-20">
 					<h2 className="text-4xl md:text-6xl font-heading font-bold mb-6 tracking-tight">
-						The Digital Backbone of{" "}
+						The Platform for{" "}
 						<span className="text-primary">Rwanda's Construction</span>
 					</h2>
 					<p className="text-lg text-white/60 leading-relaxed font-normal">
-						AfrikaMarket connects the entire construction ecosystem, from local
+						AfrikaMarket connects the entire construction industry, from local
 						manufacturers to large-scale infrastructure projects.
 					</p>
 				</div>

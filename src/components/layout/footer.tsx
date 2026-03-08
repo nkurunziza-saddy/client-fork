@@ -9,28 +9,36 @@ import type React from "react";
 interface FooterProps {
 	onAboutClick?: () => void;
 	onHelpClick?: () => void;
+	onProductsClick?: () => void;
+	onServicesClick?: () => void;
+	onSuppliersClick?: () => void;
+	onDashboardClick?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
 	onAboutClick,
 	onHelpClick,
+	onProductsClick,
+	onServicesClick,
+	onSuppliersClick,
+	onDashboardClick,
 }) => {
 	const footerSections = [
 		{
 			title: "Marketplace",
 			links: [
-				"Browse Suppliers",
-				"Construction Materials",
-				"Heavy Equipment",
-				"Labor Services",
+				{ label: "Browse Suppliers", onClick: onSuppliersClick },
+				{ label: "Construction Materials", onClick: onProductsClick },
+				{ label: "Heavy Equipment", onClick: onProductsClick },
+				{ label: "Labor Services", onClick: onServicesClick },
 			],
 		},
 		{
 			title: "For Suppliers",
 			links: [
-				"Join as Supplier",
-				"Supplier Dashboard",
-				"List Products",
+				{ label: "Join as Supplier", onClick: onDashboardClick },
+				{ label: "Supplier Dashboard", onClick: onDashboardClick },
+				{ label: "List Products", onClick: onDashboardClick },
 				"Verify Identity",
 			],
 		},
@@ -141,7 +149,7 @@ export const Footer: React.FC<FooterProps> = ({
 														</button>
 													) : (
 														<a
-															href="#"
+															href="/"
 															className="text-muted-foreground/60 hover:text-primary transition-all text-[11px] font-black uppercase tracking-widest"
 														>
 															{label}
@@ -164,13 +172,13 @@ export const Footer: React.FC<FooterProps> = ({
 					</div>
 					<div className="flex gap-12">
 						<a
-							href="#"
+							href="/"
 							className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 hover:text-primary transition-colors"
 						>
 							Privacy Policy
 						</a>
 						<a
-							href="#"
+							href="/"
 							className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 hover:text-primary transition-colors"
 						>
 							Terms of Service

@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductForm } from "@/features/forms/components/product-form";
 import { ServiceForm } from "@/features/forms/components/service-form";
+import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
 import { useCreateProductMutation } from "@/services/api/products";
 import { useCreateServiceMutation } from "@/services/api/services";
@@ -10,9 +11,9 @@ import { useCreateServiceMutation } from "@/services/api/services";
 export function ProviderListingFormPage() {
 	const navigate = useNavigate();
 	const { data: company } = useGetMyCompanyQuery();
-	const [createProduct, { isLoading: isProductLoading }] =
+	const [createProduct, { isLoading: isProductLoading, error: productError }] =
 		useCreateProductMutation();
-	const [createService, { isLoading: isServiceLoading }] =
+	const [createService, { isLoading: isServiceLoading, error: serviceError }] =
 		useCreateServiceMutation();
 
 	const companyId = (company as { id?: string })?.id ?? "";
@@ -54,7 +55,6 @@ export function ProviderListingFormPage() {
 			toast.success("Product created successfully");
 			navigate({ to: "/dashboard" });
 		} catch (err: any) {
-			toast.error("Failed to create product");
 			console.error("Product creation error:", err);
 		}
 	};
@@ -77,10 +77,12 @@ export function ProviderListingFormPage() {
 			toast.success("Service created successfully");
 			navigate({ to: "/dashboard" });
 		} catch (err) {
-			toast.error("Failed to create service");
 			console.error(err);
 		}
 	};
+
+	const serverProductError = getErrorFromRtkQuery(productError);
+	const serverServiceError = getErrorFromRtkQuery(serviceError);
 
 	return (
 		<div className="p-8 max-w-2xl mx-auto">
@@ -105,6 +107,7 @@ export function ProviderListingFormPage() {
 							onSubmit={handleProductSubmit}
 							onCancel={() => navigate({ to: "/dashboard" })}
 							isLoading={isProductLoading}
+							serverError={serverProductError}
 						/>
 					</div>
 				</TabsContent>
@@ -115,6 +118,7 @@ export function ProviderListingFormPage() {
 							onSubmit={handleServiceSubmit}
 							onCancel={() => navigate({ to: "/dashboard" })}
 							isLoading={isServiceLoading}
+							serverError={serverServiceError}
 						/>
 					</div>
 				</TabsContent>

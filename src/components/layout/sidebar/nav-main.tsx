@@ -123,9 +123,7 @@ export function NavMain({
 													className={cn(
 														isCurrentSubActive && "text-primary font-bold",
 													)}
-													render={
-														<Link to={subItem.url as any} preload="intent" />
-													}
+													render={<Link to={subItem.url} preload="intent" />}
 												>
 													<span>{subItem.title}</span>
 												</SidebarMenuSubButton>

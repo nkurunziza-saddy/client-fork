@@ -1,45 +1,52 @@
 import {
 	RiAddCircleLine,
-	RiApps2Line,
+	RiAuctionLine,
 	RiDashboardLine,
 	RiFileList3Line,
 	RiSettings4Line,
+	RiStore2Line,
 } from "@remixicon/react";
 import type React from "react";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
 import { BaseSidebar } from "@/shared/components";
-import type { NavHeaderInfo } from "@/types";
+import { ROUTES } from "@/shared/constants/routes";
+import type { AuthUser, NavHeaderInfo } from "@/types";
 
 interface DashboardSidebarProps {
-	user: any;
+	user: AuthUser | null;
 }
 
 const defaultInfo: NavHeaderInfo = {
 	name: "AfrikaMarket",
-	logo: RiApps2Line,
+	logo: RiStore2Line,
 	plan: "Supplier",
 };
 
 const navMain = [
 	{
 		title: "Dashboard",
-		url: "/dashboard",
+		url: ROUTES.DASHBOARD.INDEX,
 		icon: RiDashboardLine,
 		isActive: true,
 	},
 	{
 		title: "My Listings",
-		url: "/dashboard/listings",
+		url: ROUTES.DASHBOARD.LISTINGS.INDEX,
 		icon: RiFileList3Line,
 	},
 	{
 		title: "Add New Listing",
-		url: "/dashboard/listings/new",
+		url: ROUTES.DASHBOARD.LISTINGS.NEW,
 		icon: RiAddCircleLine,
 	},
 	{
+		title: "Auctions",
+		url: ROUTES.DASHBOARD.AUCTIONS.INDEX,
+		icon: RiAuctionLine,
+	},
+	{
 		title: "Settings",
-		url: "/profile",
+		url: ROUTES.PROTECTED.PROFILE,
 		icon: RiSettings4Line,
 	},
 ];

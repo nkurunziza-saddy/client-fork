@@ -80,7 +80,7 @@ const FeaturedSuppliers: React.FC = () => {
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6">
 				<SectionHeader
 					title="Verified Suppliers"
-					subtitle="Trusted industrial manufacturers and strategic supply partners."
+					subtitle="Trusted construction companies and reliable partners."
 					label="Supplier Directory"
 					icon={<RiCheckboxCircleLine className="w-5 h-5" />}
 					viewAllHref="/suppliers"
@@ -141,7 +141,10 @@ const FeaturedSuppliers: React.FC = () => {
 											</div>
 											<div className="text-right shrink-0">
 												<div className="flex items-center gap-1 text-primary justify-end mb-0.5 sm:mb-1">
-													<RiStarFill size={8} className="fill-current sm:size-[10px]" />
+													<RiStarFill
+														size={8}
+														className="fill-current sm:size-[10px]"
+													/>
 													<span className="text-[9px] sm:text-[10px] font-black font-display uppercase tracking-widest">
 														{rating.toFixed(1)}
 													</span>
@@ -175,14 +178,14 @@ const FeaturedSuppliers: React.FC = () => {
 											</div>
 										</div>
 
-										{/* Operational Preview */}
+										{/* Company items */}
 										<div className="mt-auto pt-4 sm:pt-6 border-t border-border/20">
 											<div className="flex items-center justify-between mb-3 sm:mb-4">
 												<div className="text-[7px] sm:text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] sm:tracking-[0.5em]">
 													Latest Products
 												</div>
 												<div className="text-[7px] sm:text-[8px] font-black text-primary uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">
-													VIEW_ALL
+													VIEW MORE
 												</div>
 											</div>
 											<CompanyAssetsPreview companyId={company.id} />

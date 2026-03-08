@@ -25,10 +25,10 @@ import {
 import type { RootState } from "@/store";
 
 interface MessageCenterProps {
-	role: "buyer" | "provider";
+	role: "user" | "provider";
 }
 
-const MessageCenter: React.FC<MessageCenterProps> = () => {
+const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 	const user = useSelector((state: RootState) => state.auth.user);
 	const [activeChatId, setActiveChatId] = useState<string | null>(null);
 	const [messageText, setMessageText] = useState("");
@@ -79,18 +79,18 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 			{/* Sidebar */}
 			<div
 				className={cn(
-					"w-full md:w-80 lg:w-96 border-r-2 border-border flex flex-col bg-muted/10",
+					"w-full md:w-80 lg:w-96 border-r-2 border-border flex flex-col bg-muted/10 shrink-0",
 					activeChatId && "hidden md:flex",
 				)}
 			>
-				<div className="p-6 border-b-2 border-border bg-background">
+				<div className="p-6 border-b-2 border-border bg-background shrink-0">
 					<h2 className="text-xl font-heading font-bold uppercase tracking-widest text-foreground mb-4">
-						Message Hub
+						Messages
 					</h2>
 					<div className="relative">
 						<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
 						<Input
-							placeholder="SEARCH CHATS..."
+							placeholder="Search chats..."
 							className="pl-10 h-11 bg-muted/20 border border-border uppercase text-[10px] font-bold tracking-widest shadow-none"
 						/>
 					</div>
@@ -152,7 +152,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 			{/* Main Chat Area */}
 			<div
 				className={cn(
-					"flex-1 flex flex-col bg-background relative",
+					"flex-1 flex flex-col bg-background relative min-w-0",
 					!activeChatId && "hidden md:flex",
 				)}
 			>
@@ -182,7 +182,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 										</div>
 										<div className="flex items-center text-success text-[10px] font-black uppercase tracking-[0.2em]">
 											<div className="w-1.5 h-1.5 bg-success rounded-full mr-1.5 animate-pulse" />
-											Active Connection
+											Online
 										</div>
 									</div>
 								</div>
@@ -280,7 +280,13 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 									<Input
 										value={messageText}
 										onChange={(e) => setMessageText(e.target.value)}
-										placeholder="TYPE A MESSAGE..."
+										onKeyDown={(e) => {
+											if (e.key === "Enter" && !e.shiftKey) {
+												e.preventDefault();
+												handleSendMessage(e);
+											}
+										}}
+										placeholder="Write a message..."
 										className="h-12 bg-muted/10 border border-border rounded-sm px-4 pr-12 font-bold uppercase text-xs tracking-wider shadow-none focus:bg-background"
 										disabled={isSending}
 									/>
@@ -312,10 +318,10 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 							<MessageSquare className="w-10 h-10 text-muted-foreground/40" />
 						</div>
 						<h3 className="text-2xl font-heading font-bold text-foreground uppercase tracking-widest mb-2 relative z-10">
-							Messaging Standby
+							No Chat Selected
 						</h3>
 						<p className="text-muted-foreground text-xs font-black uppercase tracking-[0.2em] max-w-xs leading-loose relative z-10">
-							Select a profile from the sidebar to start a conversation
+							Select a person from the sidebar to start a conversation
 						</p>
 					</div>
 				)}

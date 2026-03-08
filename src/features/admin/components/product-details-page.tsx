@@ -179,7 +179,7 @@ export function AdminProductDetailsPage() {
 						</p>
 					</Card>
 
-					<Card title="Specifications" subtitle="API-synced product fields">
+					<Card title="Details" subtitle="Product information">
 						<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
 							{specs.map((spec) => (
 								<div

@@ -96,7 +96,7 @@ export function AdminDashboard() {
 		<PageContainer>
 			<PageHeader
 				title="Admin Panel"
-				subtitle="Marketplace operational hub"
+				subtitle="Admin dashboard"
 				badge="System Administrator"
 			/>
 
@@ -134,7 +134,7 @@ export function AdminDashboard() {
 			<div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
 				<Card
 					title="Quick Operations"
-					subtitle="Management nodes"
+					subtitle="Manage sections"
 					className="xl:col-span-1"
 				>
 					<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
@@ -171,14 +171,14 @@ export function AdminDashboard() {
 
 				<Card
 					title="Network Activity"
-					subtitle="Latest sync logs"
+					subtitle="Recent activity"
 					className="xl:col-span-2"
 					noPadding
 				>
 					{recentActivity.length === 0 ? (
 						<div className="py-16 text-center">
 							<p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">
-								Protocol: No Activity Logged
+								No activity yet
 							</p>
 						</div>
 					) : (

@@ -65,7 +65,7 @@ export function ProfilePage() {
 			<div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
 				<Loader2 className="w-8 h-8 animate-spin text-primary" />
 				<p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-					Loading Identity Node...
+					Loading profile...
 				</p>
 			</div>
 		);
@@ -118,12 +118,12 @@ export function ProfilePage() {
 						<div className="flex items-center gap-2 text-primary">
 							<CheckCircle2 className="w-4 h-4" />
 							<span className="text-[10px] font-black uppercase tracking-widest">
-								Trust Metrics
+								Profile Verification
 							</span>
 						</div>
 						<p className="text-[10px] text-muted-foreground font-medium uppercase leading-relaxed tracking-wider">
-							Your profile information is used across the network to facilitate
-							secure material procurement and professional service engagement.
+							Your profile information is used across the platform to help you
+							buy materials and find professional services.
 						</p>
 					</div>
 				</div>
@@ -132,10 +132,10 @@ export function ProfilePage() {
 				<div className="md:col-span-8 space-y-8">
 					<div>
 						<h1 className="text-3xl font-display font-black uppercase text-foreground tracking-tighter leading-none mb-2">
-							Account Config
+							Account Settings
 						</h1>
 						<p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">
-							Manage identity parameters and communication nodes
+							Manage your profile information and contact details
 						</p>
 					</div>
 
@@ -143,19 +143,19 @@ export function ProfilePage() {
 						<div className="grid gap-6">
 							<div className="space-y-2">
 								<label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-									<User className="w-3 h-3 text-primary" /> Full Identification
+									<User className="w-3 h-3 text-primary" /> Full Name
 								</label>
 								<Input
 									value={name}
 									onChange={(e) => setName(e.target.value)}
 									className="h-12 bg-muted/5 border-border/40 focus:border-primary/40 rounded-none font-bold uppercase tracking-wide text-xs"
-									placeholder="Agent Name"
+									placeholder="Your Name"
 								/>
 							</div>
 
 							<div className="space-y-2 opacity-60">
 								<label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-									<Mail className="w-3 h-3" /> Registered Email Node
+									<Mail className="w-3 h-3" /> Email Address
 								</label>
 								<Input
 									value={email ?? ""}
@@ -163,13 +163,13 @@ export function ProfilePage() {
 									className="h-12 bg-muted/20 border-border/40 rounded-none font-mono text-xs font-bold cursor-not-allowed"
 								/>
 								<p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest ml-1">
-									System anchor cannot be modified directly
+									Email cannot be changed directly
 								</p>
 							</div>
 
 							<div className="space-y-2">
 								<label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-									<Phone className="w-3 h-3 text-primary" /> Contact Link
+									<Phone className="w-3 h-3 text-primary" /> Phone Number
 								</label>
 								<Input
 									value={phoneNumber}
@@ -181,8 +181,8 @@ export function ProfilePage() {
 
 							<div className="space-y-2">
 								<label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-									<ImageIcon className="w-3 h-3 text-primary" /> Avatar Asset
-									Link
+									<ImageIcon className="w-3 h-3 text-primary" /> Profile Photo
+									URL
 								</label>
 								<Input
 									value={image}
@@ -202,10 +202,10 @@ export function ProfilePage() {
 								{updating ? (
 									<>
 										<Loader2 className="w-4 h-4 mr-2 animate-spin" />
-										Synchronizing...
+										Saving...
 									</>
 								) : (
-									"Update Identity"
+									"Update Profile"
 								)}
 							</Button>
 						</div>

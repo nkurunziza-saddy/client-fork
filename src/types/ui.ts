@@ -92,7 +92,7 @@ export type DashboardTab =
 
 export interface NavHeaderInfo {
 	name: string;
-	logo?: any;
+	logo?: React.ElementType;
 	logoUrl?: string;
 	plan: string;
 }
@@ -101,7 +101,7 @@ export interface PageHeaderProps {
 	title: string;
 	subtitle?: string;
 	badge?: string;
-	actions?: any;
+	actions?: React.ReactNode;
 	showPattern?: boolean;
 	dark?: boolean;
 	className?: string;
@@ -156,11 +156,13 @@ export type FileUploadActions = {
 	removeFile: (id: string) => void;
 	clearFiles: () => void;
 	clearErrors: () => void;
-	handleDragEnter: (e: any) => void;
-	handleDragLeave: (e: any) => void;
-	handleDragOver: (e: any) => void;
-	handleDrop: (e: any) => void;
-	handleFileChange: (e: any) => void;
+	handleDragEnter: (e: React.DragEvent<HTMLElement>) => void;
+	handleDragLeave: (e: React.DragEvent<HTMLElement>) => void;
+	handleDragOver: (e: React.DragEvent<HTMLElement>) => void;
+	handleDrop: (e: React.DragEvent<HTMLElement>) => void;
+	handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	openFileDialog: () => void;
-	getInputProps: (props?: any) => any;
+	getInputProps: (
+		props?: React.InputHTMLAttributes<HTMLInputElement>,
+	) => React.InputHTMLAttributes<HTMLInputElement>;
 };

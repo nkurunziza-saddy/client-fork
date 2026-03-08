@@ -65,6 +65,7 @@ export const messagesApi = apiSlice.injectEndpoints({
 				content: string;
 				productId?: string;
 				serviceId?: string;
+				auctionId?: string;
 			}
 		>({
 			query: (body) => ({
@@ -150,6 +151,19 @@ export const messagesApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: [{ type: "Messages", id: "LIST" }],
 		}),
+
+		// context-aware for auctions
+		startAuctionChat: builder.mutation<
+			unknown,
+			{ auctionId: string; content: string }
+		>({
+			query: ({ auctionId, content }) => ({
+				url: `/messages/auction/${auctionId}`,
+				method: "POST",
+				body: { content },
+			}),
+			invalidatesTags: [{ type: "Messages", id: "LIST" }],
+		}),
 	}),
 });
 
@@ -159,4 +173,5 @@ export const {
 	useSendMessageMutation,
 	useStartProductChatMutation,
 	useStartServiceChatMutation,
+	useStartAuctionChatMutation,
 } = messagesApi;

@@ -5,26 +5,29 @@ import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Portal, PortalBackdrop } from "@/components/ui/portal";
 import { cn } from "@/lib/utils";
+import { ROUTES } from "@/shared/constants/routes";
 import { useScroll } from "@/shared/hooks/use-scroll";
 import type { RootState } from "@/store";
 import { HeaderLogo } from "./header/header-logo";
 import { HeaderUserNav } from "./header/header-user-nav";
 
 const navLinks = [
-	{ label: "Marketplace", href: "/marketplace" },
-	{ label: "Suppliers", href: "/suppliers" },
-	{ label: "Categories", href: "/categories" },
-	{ label: "About", href: "/about" },
+	{ label: "Products", href: ROUTES.PUBLIC.PRODUCTS },
+	{ label: "Services", href: ROUTES.PUBLIC.SERVICES },
+	{ label: "Auctions", href: ROUTES.PUBLIC.AUCTIONS },
+	{ label: "Suppliers", href: ROUTES.PUBLIC.SUPPLIERS },
+	{ label: "About", href: ROUTES.ABOUT },
 ];
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
 	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+	const mobileMenuId = React.useId();
 
 	return (
 		<div className="md:hidden">
 			<Button
-				aria-controls="mobile-menu"
+				aria-controls={mobileMenuId}
 				aria-expanded={open}
 				aria-label="Toggle menu"
 				className="md:hidden h-10 w-10 p-0"
@@ -39,7 +42,7 @@ export function MobileNav() {
 				)}
 			</Button>
 			{open && (
-				<Portal className="top-14" id="mobile-menu">
+				<Portal className="top-14" id={mobileMenuId}>
 					<PortalBackdrop />
 					<div
 						className={cn(
@@ -53,7 +56,7 @@ export function MobileNav() {
 								<Link
 									className="flex items-center justify-between text-lg font-black uppercase tracking-[0.2em] px-4 py-3 hover:bg-muted transition-colors group"
 									key={link.label}
-									to={link.href as any}
+									to={link.href}
 									onClick={() => setOpen(false)}
 									activeProps={{
 										className:
@@ -67,7 +70,7 @@ export function MobileNav() {
 						</div>
 						{!isAuthenticated && (
 							<div className="mt-8 flex flex-col gap-3">
-								<Link to="/auth/signin" onClick={() => setOpen(false)}>
+								<Link to={ROUTES.AUTH.SIGNIN} onClick={() => setOpen(false)}>
 									<Button
 										className="w-full h-11 text-base font-bold"
 										variant="outline"
@@ -75,7 +78,7 @@ export function MobileNav() {
 										Sign In
 									</Button>
 								</Link>
-								<Link to="/auth/signup" onClick={() => setOpen(false)}>
+								<Link to={ROUTES.AUTH.SIGNUP} onClick={() => setOpen(false)}>
 									<Button className="w-full h-11 text-base font-bold">
 										Get Started
 									</Button>
@@ -112,7 +115,7 @@ export const Header: React.FC = () => {
 					{navLinks.map((link) => (
 						<Link
 							key={link.label}
-							to={link.href as any}
+							to={link.href}
 							className="font-heading font-black text-[10px] tracking-[0.2em] text-foreground/80 hover:text-primary px-4 py-2 uppercase transition-all relative group"
 							activeProps={{
 								className: "text-primary",
@@ -126,7 +129,7 @@ export const Header: React.FC = () => {
 					<div className="ml-2 pl-2 border-l border-border/40 flex items-center gap-2">
 						{!isAuthenticated ? (
 							<>
-								<Link to="/auth/signin">
+								<Link to={ROUTES.AUTH.SIGNIN}>
 									<Button
 										size="sm"
 										variant="ghost"
@@ -135,7 +138,7 @@ export const Header: React.FC = () => {
 										Sign In
 									</Button>
 								</Link>
-								<Link to="/auth/signup">
+								<Link to={ROUTES.AUTH.SIGNUP}>
 									<Button
 										size="sm"
 										className="font-heading font-black text-[9px] uppercase tracking-[0.2em] px-6 bg-primary text-white hover:bg-primary/90 rounded-none h-9 shadow-sm shadow-primary/20 transition-all"

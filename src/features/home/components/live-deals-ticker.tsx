@@ -10,37 +10,37 @@ import { useEffect, useState } from "react";
 const LIVE_NETWORK_FEED = [
 	{
 		id: 1,
-		entity: "KGL_Logistics",
-		action: "transmitted",
+		company: "KGL_Logistics",
+		action: "added",
 		detail: "New Bulk Cement Inventory (5000+ Units)",
 		time: "1m ago",
 	},
 	{
 		id: 2,
-		entity: "Eng_Mutesa",
+		company: "Eng_Mutesa",
 		action: "connected with",
-		detail: "Heavy Machinery Provider [Gasabo Node]",
+		detail: "Heavy Machinery Provider [Gasabo]",
 		time: "4m ago",
 	},
 	{
 		id: 3,
-		entity: "BuildRwanda_Corp",
-		action: "broadcasted",
+		company: "BuildRwanda_Corp",
+		action: "posted",
 		detail: "RFQ: Reinforcement Steel (12mm)",
 		time: "Just now",
 	},
 	{
 		id: 4,
-		entity: "Infra_Systems",
+		company: "Infra_Systems",
 		action: "secured",
 		detail: "Logistics Contract for Regional Transit",
 		time: "10m ago",
 	},
 	{
 		id: 5,
-		entity: "System_Core",
+		company: "System_Core",
 		action: "verified",
-		detail: "3 New Supplier Nodes Synchronized",
+		detail: "3 New Suppliers Added",
 		time: "Live",
 	},
 ];
@@ -63,10 +63,13 @@ export const LiveDealsTicker: React.FC = () => {
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 flex items-center justify-between gap-4">
 				<div className="flex items-center gap-3 md:gap-4 overflow-hidden">
 					<div className="flex items-center gap-1.5 md:gap-2 text-white shrink-0">
-						<RiBroadcastLine size={12} className="md:size-[14px] animate-pulse" />
+						<RiBroadcastLine
+							size={12}
+							className="md:size-[14px] animate-pulse"
+						/>
 						<span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] font-heading whitespace-nowrap">
 							<span className="sm:hidden">LIVE</span>
-							<span className="hidden sm:inline">Live Network Feed</span>
+							<span className="hidden sm:inline">Recent Activity</span>
 						</span>
 					</div>
 
@@ -74,14 +77,14 @@ export const LiveDealsTicker: React.FC = () => {
 
 					<div className="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-[11px] text-white/90 font-sans tracking-tight overflow-hidden">
 						<span className="font-black uppercase text-[9px] md:text-[10px] shrink-0 truncate max-w-[60px] sm:max-w-none">
-							{feed.entity}
+							{feed.company}
 						</span>
 						<span className="text-white/60 lowercase italic font-medium shrink-0 hidden xs:inline">
 							{feed.action}
 						</span>
 						<span
 							className="font-bold hover:underline cursor-pointer truncate"
-							onClick={() => navigate({ to: "/marketplace" as any })}
+							onClick={() => navigate({ to: "/products" as any })}
 						>
 							<span className="truncate max-w-[120px] sm:max-w-[180px] md:max-w-none inline-block align-bottom uppercase">
 								{feed.detail}
@@ -96,11 +99,11 @@ export const LiveDealsTicker: React.FC = () => {
 				<div className="hidden lg:flex items-center gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-white/70 shrink-0">
 					<div className="flex items-center gap-2">
 						<RiShieldFlashLine size={14} className="text-white" />
-						<span>99.9% Nodes Active</span>
+						<span>Suppliers Online</span>
 					</div>
 					<div className="flex items-center gap-2">
 						<RiPulseLine size={14} className="text-white" />
-						<span>RWF 1.2B Secured Flow</span>
+						<span>Secure Transactions</span>
 					</div>
 				</div>
 			</div>

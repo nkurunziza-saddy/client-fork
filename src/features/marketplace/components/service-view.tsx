@@ -105,7 +105,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 								/>
 							) : (
 								<div className="flex h-full items-center justify-center text-[10px] uppercase font-black tracking-[0.3em] text-muted-foreground">
-									Media Link Offline
+									No Image Available
 								</div>
 							)}
 						</div>
@@ -123,7 +123,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 							<div className="bg-background p-4 flex flex-col gap-1">
 								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
 									<RiPriceTag3Line size={12} className="text-primary" />
-									Classification
+									Category
 								</span>
 								<span className="text-[11px] font-bold uppercase truncate">
 									{service.category?.name || "Professional Service"}
@@ -132,7 +132,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 							<div className="bg-background p-4 flex flex-col gap-1">
 								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
 									<RiHistoryLine size={12} className="text-primary" />
-									Analytics
+									Activity
 								</span>
 								<span className="text-[11px] font-bold uppercase">
 									{service.totalRequests || 0} Total Inquiries
@@ -141,7 +141,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 							<div className="bg-background p-4 flex flex-col gap-1 col-span-2 md:col-span-1">
 								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
 									<RiBuilding4Line size={12} className="text-primary" />
-									Origin Node
+									Supplier
 								</span>
 								<span className="text-[11px] font-bold uppercase truncate">
 									{service.company?.name || "Verified Provider"}

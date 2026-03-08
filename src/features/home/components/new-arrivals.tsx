@@ -79,7 +79,7 @@ const NewArrivals: React.FC = () => {
 					{Array.from({ length: 5 }).map((_, i) => (
 						<div
 							key={`new-arrival-skeleton-${i}`}
-							className="aspect-4/5 rounded-lg border border-border/40 bg-muted/20"
+							className="aspect-4/5 rounded-lg border border-border/40 bg-muted/20 animate-pulse"
 						/>
 					))}
 				</div>
@@ -108,7 +108,7 @@ const NewArrivals: React.FC = () => {
 						navigate({ to: "/products", search: { sort: "newest" } } as any)
 					}
 				>
-					View all new listings
+					View all new products
 				</Button>
 			</div>
 		</HomeSection>

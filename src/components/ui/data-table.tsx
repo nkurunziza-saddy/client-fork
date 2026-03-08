@@ -8,6 +8,7 @@ import {
 import type {
 	ColumnDef,
 	ColumnFiltersState,
+	OnChangeFn,
 	PaginationState,
 	SortingState,
 	VisibilityState,
@@ -55,7 +56,7 @@ interface DataTableProps<TData, TValue> {
 	filterPlaceholder?: string;
 	pageCount?: number;
 	manualPagination?: boolean;
-	onPaginationChange?: (pagination: any) => void;
+	onPaginationChange?: OnChangeFn<PaginationState>;
 	state?: {
 		pagination?: PaginationState;
 	};
@@ -221,7 +222,7 @@ export function DataTable<TData, TValue>({
 										colSpan={columns.length}
 										className="h-24 text-center text-[10px] uppercase font-bold text-muted-foreground tracking-widest"
 									>
-										Protocol Error: No Data Found
+										No results found
 									</TableCell>
 								</TableRow>
 							)}
@@ -265,7 +266,7 @@ export function DataTable<TData, TValue>({
 					</div>
 					<div className="flex items-center gap-4">
 						<div className="flex items-center justify-center text-[10px] font-black uppercase tracking-widest min-w-[80px]">
-							Node {table.getState().pagination.pageIndex + 1} /{" "}
+							Page {table.getState().pagination.pageIndex + 1} /{" "}
 							{table.getPageCount()}
 						</div>
 						<div className="flex items-center space-x-1">

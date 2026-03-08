@@ -95,7 +95,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 					)}
 				</div>
 				<Link
-					to={href as "/marketplace"}
+					to={href as "/products"}
 					className="text-muted-foreground/40 hover:text-primary transition-all p-1 group/link border border-border/10 hover:border-primary/40 rounded-none bg-muted/5"
 				>
 					<RiArrowRightLine className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
@@ -111,7 +111,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 								className="group/item flex flex-col relative"
 							>
 								<div className="absolute -left-2 top-2 text-[8px] font-bold text-muted-foreground/5 uppercase tracking-widest transform -rotate-90 pointer-events-none">
-									N_{["01", "02", "03", "04"][idx]}
+									{["01", "02", "03", "04"][idx]}
 								</div>
 								<div className="h-20 bg-muted/10 border border-border/10 rounded-none animate-pulse" />
 							</div>
@@ -137,11 +137,11 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 					return (
 						<div key={item.id} className="group/item flex flex-col relative">
 							<div className="absolute -left-2 top-2 text-[8px] font-bold text-muted-foreground/5 uppercase tracking-widest transform -rotate-90 pointer-events-none group-hover/item:text-primary/15 transition-colors">
-								N_{["01", "02", "03", "04"][idx]}
+								{["01", "02", "03", "04"][idx]}
 							</div>
 							{item.type === "stat" ? (
 								<Link
-									to={href as "/marketplace"}
+									to={href as "/products"}
 									className="h-20 bg-muted/15 rounded-none p-4 border border-border/10 hover:border-primary/40 transition-all flex flex-col justify-center items-start relative overflow-hidden group-hover/widget:bg-muted/25"
 								>
 									<div className="absolute right-[-5%] top-[-10%] text-5xl font-extrabold text-foreground/2 italic pointer-events-none">

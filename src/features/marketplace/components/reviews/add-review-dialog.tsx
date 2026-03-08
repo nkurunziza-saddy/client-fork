@@ -33,13 +33,13 @@ export const AddReviewDialog: React.FC<AddReviewDialogProps> = ({
 				serviceId,
 				companyId,
 			}).unwrap();
-			toast.success("Performance review broadcasted.");
+			toast.success("Review submitted successfully.");
 			setOpen(false);
 			setComment("");
 			setRating(5);
 		} catch (err) {
 			console.error("Failed to submit review:", err);
-			toast.error("Review transmission failed.");
+			toast.error("Failed to submit review.");
 		}
 	};
 
@@ -48,7 +48,7 @@ export const AddReviewDialog: React.FC<AddReviewDialogProps> = ({
 			open={open}
 			onOpenChange={setOpen}
 			title="Submit Review"
-			description="Rate your industrial experience"
+			description="Rate your experience"
 			trigger={
 				trigger || (
 					<Button
@@ -63,7 +63,7 @@ export const AddReviewDialog: React.FC<AddReviewDialogProps> = ({
 			<div className="space-y-6">
 				<div className="space-y-4">
 					<span className="block text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-						Performance Rating
+						Rating
 					</span>
 					<div className="flex gap-2">
 						{[1, 2, 3, 4, 5].map((star) => (
@@ -85,7 +85,7 @@ export const AddReviewDialog: React.FC<AddReviewDialogProps> = ({
 
 				<div className="space-y-4">
 					<span className="block text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-						Detailed Assessment
+						Your Review
 					</span>
 					<Textarea
 						value={comment}
@@ -100,7 +100,7 @@ export const AddReviewDialog: React.FC<AddReviewDialogProps> = ({
 					disabled={isLoading}
 					className="w-full h-12 rounded-none bg-primary text-primary-foreground font-heading font-black uppercase tracking-widest text-[11px] shadow-lg shadow-primary/20"
 				>
-					{isLoading ? "Broadcasting..." : "Submit Performance Review"}
+					{isLoading ? "Submitting..." : "Submit Review"}
 				</Button>
 			</div>
 		</ResponsiveModal>

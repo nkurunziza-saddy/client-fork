@@ -82,7 +82,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 					Overview
 				</h1>
 				<p className="text-muted-foreground font-medium uppercase text-xs tracking-widest">
-					Consolidated performance metrics & operations
+					Your business summary
 				</p>
 			</div>
 			<Button
@@ -132,7 +132,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 		<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 			<AdminCard
 				title="Recent Activity"
-				subtitle="Live operation stream"
+				subtitle="Recent updates"
 				headerActions={
 					<Button
 						variant="ghost"
@@ -204,7 +204,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 						</p>
 					</div>
 					<Button className="w-full bg-background text-foreground hover:bg-muted font-heading font-bold uppercase tracking-widest h-12 rounded-sm border-none shadow-none">
-						Optimize Response
+						Respond Faster
 						<RiArrowRightUpLine className="ml-2 w-4 h-4" />
 					</Button>
 				</CardContent>
