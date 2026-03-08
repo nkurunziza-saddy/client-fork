@@ -108,7 +108,7 @@ export const Header: React.FC = () => {
 				},
 			)}
 		>
-			<div className="mx-auto flex h-12 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6">
+			<div className="mx-auto flex h-12 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
 				<HeaderLogo />
 
 				<div className="hidden items-center gap-1 md:flex">

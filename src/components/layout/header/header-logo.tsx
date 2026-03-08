@@ -6,7 +6,7 @@ export const HeaderLogo: React.FC = () => (
 		<img
 			src="/enhanced_gpt.png"
 			alt="AfrikaMarket Logo"
-			className="h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
+			className="h-42 w-auto object-contain group-hover:opacity-90 transition-opacity"
 		/>
 	</Link>
 );
