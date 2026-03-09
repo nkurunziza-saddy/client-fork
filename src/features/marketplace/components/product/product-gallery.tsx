@@ -17,7 +17,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 }) => {
 	return (
 		<div className="md:col-span-7 space-y-4">
-			<div className="aspect-[4/5] overflow-hidden rounded-none border border-border bg-muted/5 relative group">
+			<div className="aspect-4/5 overflow-hidden rounded-none border border-border bg-muted/5 relative group">
 				<div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
 				{images[selectedImageIndex] ? (
 					<ImageWithFallback

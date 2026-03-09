@@ -19,17 +19,18 @@ import { Route as MainIndexRouteImport } from './routes/_main.index'
 import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
 import { Route as AuthSignupRouteImport } from './routes/auth.signup'
 import { Route as AuthSigninRouteImport } from './routes/auth.signin'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminProfileRouteImport } from './routes/admin.profile'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
-import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminBuyersRouteImport } from './routes/admin.buyers'
 import { Route as AdminAuctionsRouteImport } from './routes/admin.auctions'
 import { Route as AdminAssignmentsRouteImport } from './routes/admin.assignments'
 import { Route as MainOnboardingRouteImport } from './routes/_main.onboarding'
 import { Route as MainHelpRouteImport } from './routes/_main.help'
 import { Route as MainCategoriesRouteImport } from './routes/_main.categories'
-import { Route as MainAuctionsRouteImport } from './routes/_main.auctions'
 import { Route as MainAboutRouteImport } from './routes/_main.about'
 import { Route as MainProtectedRouteImport } from './routes/_main._protected'
 import { Route as DashboardListingsIndexRouteImport } from './routes/dashboard.listings.index'
@@ -38,12 +39,14 @@ import { Route as AdminSuppliersIndexRouteImport } from './routes/admin.supplier
 import { Route as MainSuppliersIndexRouteImport } from './routes/_main.suppliers.index'
 import { Route as MainServicesIndexRouteImport } from './routes/_main.services.index'
 import { Route as MainProductsIndexRouteImport } from './routes/_main.products.index'
+import { Route as MainAuctionsIndexRouteImport } from './routes/_main.auctions.index'
 import { Route as DashboardListingsNewRouteImport } from './routes/dashboard.listings.new'
 import { Route as DashboardAuctionsNewRouteImport } from './routes/dashboard.auctions.new'
 import { Route as AdminSuppliersNewRouteImport } from './routes/admin.suppliers.new'
 import { Route as MainSuppliersSupplierIdRouteImport } from './routes/_main.suppliers.$supplierId'
 import { Route as MainServicesServiceIdRouteImport } from './routes/_main.services.$serviceId'
 import { Route as MainProductsProductIdRouteImport } from './routes/_main.products.$productId'
+import { Route as MainAuctionsAuctionIdRouteImport } from './routes/_main.auctions.$auctionId'
 import { Route as MainProtectedWishlistRouteImport } from './routes/_main._protected.wishlist'
 import { Route as MainProtectedProfileRouteImport } from './routes/_main._protected.profile'
 import { Route as MainProtectedMessagesRouteImport } from './routes/_main._protected.messages'
@@ -102,6 +105,16 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -117,14 +130,14 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminCustomersRoute = AdminCustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBuyersRoute = AdminBuyersRouteImport.update({
+  id: '/buyers',
+  path: '/buyers',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAuctionsRoute = AdminAuctionsRouteImport.update({
@@ -150,11 +163,6 @@ const MainHelpRoute = MainHelpRouteImport.update({
 const MainCategoriesRoute = MainCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainAuctionsRoute = MainAuctionsRouteImport.update({
-  id: '/auctions',
-  path: '/auctions',
   getParentRoute: () => MainRoute,
 } as any)
 const MainAboutRoute = MainAboutRouteImport.update({
@@ -196,6 +204,11 @@ const MainProductsIndexRoute = MainProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => MainRoute,
 } as any)
+const MainAuctionsIndexRoute = MainAuctionsIndexRouteImport.update({
+  id: '/auctions/',
+  path: '/auctions/',
+  getParentRoute: () => MainRoute,
+} as any)
 const DashboardListingsNewRoute = DashboardListingsNewRouteImport.update({
   id: '/listings/new',
   path: '/listings/new',
@@ -224,6 +237,11 @@ const MainServicesServiceIdRoute = MainServicesServiceIdRouteImport.update({
 const MainProductsProductIdRoute = MainProductsProductIdRouteImport.update({
   id: '/products/$productId',
   path: '/products/$productId',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainAuctionsAuctionIdRoute = MainAuctionsAuctionIdRouteImport.update({
+  id: '/auctions/$auctionId',
+  path: '/auctions/$auctionId',
   getParentRoute: () => MainRoute,
 } as any)
 const MainProtectedWishlistRoute = MainProtectedWishlistRouteImport.update({
@@ -278,17 +296,18 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/about': typeof MainAboutRoute
-  '/auctions': typeof MainAuctionsRoute
   '/categories': typeof MainCategoriesRoute
   '/help': typeof MainHelpRoute
   '/onboarding': typeof MainOnboardingRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/auctions': typeof AdminAuctionsRoute
+  '/admin/buyers': typeof AdminBuyersRoute
   '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/customers': typeof AdminCustomersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/services': typeof AdminServicesRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
@@ -297,12 +316,14 @@ export interface FileRoutesByFullPath {
   '/messages': typeof MainProtectedMessagesRoute
   '/profile': typeof MainProtectedProfileRoute
   '/wishlist': typeof MainProtectedWishlistRoute
+  '/auctions/$auctionId': typeof MainAuctionsAuctionIdRoute
   '/products/$productId': typeof MainProductsProductIdRoute
   '/services/$serviceId': typeof MainServicesServiceIdRoute
   '/suppliers/$supplierId': typeof MainSuppliersSupplierIdRoute
   '/admin/suppliers/new': typeof AdminSuppliersNewRoute
   '/dashboard/auctions/new': typeof DashboardAuctionsNewRoute
   '/dashboard/listings/new': typeof DashboardListingsNewRoute
+  '/auctions/': typeof MainAuctionsIndexRoute
   '/products/': typeof MainProductsIndexRoute
   '/services/': typeof MainServicesIndexRoute
   '/suppliers/': typeof MainSuppliersIndexRoute
@@ -319,17 +340,18 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteWithChildren
   '/': typeof MainIndexRoute
   '/about': typeof MainAboutRoute
-  '/auctions': typeof MainAuctionsRoute
   '/categories': typeof MainCategoriesRoute
   '/help': typeof MainHelpRoute
   '/onboarding': typeof MainOnboardingRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/auctions': typeof AdminAuctionsRoute
+  '/admin/buyers': typeof AdminBuyersRoute
   '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/customers': typeof AdminCustomersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/services': typeof AdminServicesRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
@@ -338,12 +360,14 @@ export interface FileRoutesByTo {
   '/messages': typeof MainProtectedMessagesRoute
   '/profile': typeof MainProtectedProfileRoute
   '/wishlist': typeof MainProtectedWishlistRoute
+  '/auctions/$auctionId': typeof MainAuctionsAuctionIdRoute
   '/products/$productId': typeof MainProductsProductIdRoute
   '/services/$serviceId': typeof MainServicesServiceIdRoute
   '/suppliers/$supplierId': typeof MainSuppliersSupplierIdRoute
   '/admin/suppliers/new': typeof AdminSuppliersNewRoute
   '/dashboard/auctions/new': typeof DashboardAuctionsNewRoute
   '/dashboard/listings/new': typeof DashboardListingsNewRoute
+  '/auctions': typeof MainAuctionsIndexRoute
   '/products': typeof MainProductsIndexRoute
   '/services': typeof MainServicesIndexRoute
   '/suppliers': typeof MainSuppliersIndexRoute
@@ -364,17 +388,18 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteWithChildren
   '/_main/_protected': typeof MainProtectedRouteWithChildren
   '/_main/about': typeof MainAboutRoute
-  '/_main/auctions': typeof MainAuctionsRoute
   '/_main/categories': typeof MainCategoriesRoute
   '/_main/help': typeof MainHelpRoute
   '/_main/onboarding': typeof MainOnboardingRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/auctions': typeof AdminAuctionsRoute
+  '/admin/buyers': typeof AdminBuyersRoute
   '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/customers': typeof AdminCustomersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/services': typeof AdminServicesRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
@@ -384,12 +409,14 @@ export interface FileRoutesById {
   '/_main/_protected/messages': typeof MainProtectedMessagesRoute
   '/_main/_protected/profile': typeof MainProtectedProfileRoute
   '/_main/_protected/wishlist': typeof MainProtectedWishlistRoute
+  '/_main/auctions/$auctionId': typeof MainAuctionsAuctionIdRoute
   '/_main/products/$productId': typeof MainProductsProductIdRoute
   '/_main/services/$serviceId': typeof MainServicesServiceIdRoute
   '/_main/suppliers/$supplierId': typeof MainSuppliersSupplierIdRoute
   '/admin/suppliers/new': typeof AdminSuppliersNewRoute
   '/dashboard/auctions/new': typeof DashboardAuctionsNewRoute
   '/dashboard/listings/new': typeof DashboardListingsNewRoute
+  '/_main/auctions/': typeof MainAuctionsIndexRoute
   '/_main/products/': typeof MainProductsIndexRoute
   '/_main/services/': typeof MainServicesIndexRoute
   '/_main/suppliers/': typeof MainSuppliersIndexRoute
@@ -410,17 +437,18 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/about'
-    | '/auctions'
     | '/categories'
     | '/help'
     | '/onboarding'
     | '/admin/assignments'
     | '/admin/auctions'
+    | '/admin/buyers'
     | '/admin/categories'
-    | '/admin/customers'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/services'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/auth/signin'
     | '/auth/signup'
     | '/auth/verify-email'
@@ -429,12 +457,14 @@ export interface FileRouteTypes {
     | '/messages'
     | '/profile'
     | '/wishlist'
+    | '/auctions/$auctionId'
     | '/products/$productId'
     | '/services/$serviceId'
     | '/suppliers/$supplierId'
     | '/admin/suppliers/new'
     | '/dashboard/auctions/new'
     | '/dashboard/listings/new'
+    | '/auctions/'
     | '/products/'
     | '/services/'
     | '/suppliers/'
@@ -451,17 +481,18 @@ export interface FileRouteTypes {
     | '/auth'
     | '/'
     | '/about'
-    | '/auctions'
     | '/categories'
     | '/help'
     | '/onboarding'
     | '/admin/assignments'
     | '/admin/auctions'
+    | '/admin/buyers'
     | '/admin/categories'
-    | '/admin/customers'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/services'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/auth/signin'
     | '/auth/signup'
     | '/auth/verify-email'
@@ -470,12 +501,14 @@ export interface FileRouteTypes {
     | '/messages'
     | '/profile'
     | '/wishlist'
+    | '/auctions/$auctionId'
     | '/products/$productId'
     | '/services/$serviceId'
     | '/suppliers/$supplierId'
     | '/admin/suppliers/new'
     | '/dashboard/auctions/new'
     | '/dashboard/listings/new'
+    | '/auctions'
     | '/products'
     | '/services'
     | '/suppliers'
@@ -495,17 +528,18 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/_main/_protected'
     | '/_main/about'
-    | '/_main/auctions'
     | '/_main/categories'
     | '/_main/help'
     | '/_main/onboarding'
     | '/admin/assignments'
     | '/admin/auctions'
+    | '/admin/buyers'
     | '/admin/categories'
-    | '/admin/customers'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/services'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/auth/signin'
     | '/auth/signup'
     | '/auth/verify-email'
@@ -515,12 +549,14 @@ export interface FileRouteTypes {
     | '/_main/_protected/messages'
     | '/_main/_protected/profile'
     | '/_main/_protected/wishlist'
+    | '/_main/auctions/$auctionId'
     | '/_main/products/$productId'
     | '/_main/services/$serviceId'
     | '/_main/suppliers/$supplierId'
     | '/admin/suppliers/new'
     | '/dashboard/auctions/new'
     | '/dashboard/listings/new'
+    | '/_main/auctions/'
     | '/_main/products/'
     | '/_main/services/'
     | '/_main/suppliers/'
@@ -613,6 +649,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/admin/services': {
       id: '/admin/services'
       path: '/services'
@@ -634,18 +684,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/customers': {
-      id: '/admin/customers'
-      path: '/customers'
-      fullPath: '/admin/customers'
-      preLoaderRoute: typeof AdminCustomersRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/buyers': {
+      id: '/admin/buyers'
+      path: '/buyers'
+      fullPath: '/admin/buyers'
+      preLoaderRoute: typeof AdminBuyersRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/auctions': {
@@ -681,13 +731,6 @@ declare module '@tanstack/react-router' {
       path: '/categories'
       fullPath: '/categories'
       preLoaderRoute: typeof MainCategoriesRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/auctions': {
-      id: '/_main/auctions'
-      path: '/auctions'
-      fullPath: '/auctions'
-      preLoaderRoute: typeof MainAuctionsRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/about': {
@@ -746,6 +789,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainProductsIndexRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/auctions/': {
+      id: '/_main/auctions/'
+      path: '/auctions'
+      fullPath: '/auctions/'
+      preLoaderRoute: typeof MainAuctionsIndexRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/dashboard/listings/new': {
       id: '/dashboard/listings/new'
       path: '/listings/new'
@@ -786,6 +836,13 @@ declare module '@tanstack/react-router' {
       path: '/products/$productId'
       fullPath: '/products/$productId'
       preLoaderRoute: typeof MainProductsProductIdRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/auctions/$auctionId': {
+      id: '/_main/auctions/$auctionId'
+      path: '/auctions/$auctionId'
+      fullPath: '/auctions/$auctionId'
+      preLoaderRoute: typeof MainAuctionsAuctionIdRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/_protected/wishlist': {
@@ -866,14 +923,15 @@ const MainProtectedRouteWithChildren = MainProtectedRoute._addFileChildren(
 interface MainRouteChildren {
   MainProtectedRoute: typeof MainProtectedRouteWithChildren
   MainAboutRoute: typeof MainAboutRoute
-  MainAuctionsRoute: typeof MainAuctionsRoute
   MainCategoriesRoute: typeof MainCategoriesRoute
   MainHelpRoute: typeof MainHelpRoute
   MainOnboardingRoute: typeof MainOnboardingRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainAuctionsAuctionIdRoute: typeof MainAuctionsAuctionIdRoute
   MainProductsProductIdRoute: typeof MainProductsProductIdRoute
   MainServicesServiceIdRoute: typeof MainServicesServiceIdRoute
   MainSuppliersSupplierIdRoute: typeof MainSuppliersSupplierIdRoute
+  MainAuctionsIndexRoute: typeof MainAuctionsIndexRoute
   MainProductsIndexRoute: typeof MainProductsIndexRoute
   MainServicesIndexRoute: typeof MainServicesIndexRoute
   MainSuppliersIndexRoute: typeof MainSuppliersIndexRoute
@@ -882,14 +940,15 @@ interface MainRouteChildren {
 const MainRouteChildren: MainRouteChildren = {
   MainProtectedRoute: MainProtectedRouteWithChildren,
   MainAboutRoute: MainAboutRoute,
-  MainAuctionsRoute: MainAuctionsRoute,
   MainCategoriesRoute: MainCategoriesRoute,
   MainHelpRoute: MainHelpRoute,
   MainOnboardingRoute: MainOnboardingRoute,
   MainIndexRoute: MainIndexRoute,
+  MainAuctionsAuctionIdRoute: MainAuctionsAuctionIdRoute,
   MainProductsProductIdRoute: MainProductsProductIdRoute,
   MainServicesServiceIdRoute: MainServicesServiceIdRoute,
   MainSuppliersSupplierIdRoute: MainSuppliersSupplierIdRoute,
+  MainAuctionsIndexRoute: MainAuctionsIndexRoute,
   MainProductsIndexRoute: MainProductsIndexRoute,
   MainServicesIndexRoute: MainServicesIndexRoute,
   MainSuppliersIndexRoute: MainSuppliersIndexRoute,
@@ -900,8 +959,8 @@ const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 interface AdminRouteChildren {
   AdminAssignmentsRoute: typeof AdminAssignmentsRoute
   AdminAuctionsRoute: typeof AdminAuctionsRoute
+  AdminBuyersRoute: typeof AdminBuyersRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminCustomersRoute: typeof AdminCustomersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminProfileRoute: typeof AdminProfileRoute
   AdminServicesRoute: typeof AdminServicesRoute
@@ -917,8 +976,8 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAssignmentsRoute: AdminAssignmentsRoute,
   AdminAuctionsRoute: AdminAuctionsRoute,
+  AdminBuyersRoute: AdminBuyersRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
-  AdminCustomersRoute: AdminCustomersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminProfileRoute: AdminProfileRoute,
   AdminServicesRoute: AdminServicesRoute,
@@ -936,12 +995,16 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AuthRouteChildren {
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthSigninRoute: typeof AuthSigninRoute
   AuthSignupRoute: typeof AuthSignupRoute
   AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSigninRoute: AuthSigninRoute,
   AuthSignupRoute: AuthSignupRoute,
   AuthVerifyEmailRoute: AuthVerifyEmailRoute,
