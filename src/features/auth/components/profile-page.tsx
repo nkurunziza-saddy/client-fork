@@ -257,12 +257,10 @@ export function ProfilePage() {
                       {company.district}
                     </p>
                     <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-[0.2em] text-primary">
+                      <span>{company.followersCount || 0} Followers</span>
                       <span>
-                        {(company as any).followersCount || 0} Followers
-                      </span>
-                      <span>
-                        {(company as any).rating
-                          ? `${(company as any).rating} Rating`
+                        {company.averageRating
+                          ? `${company.averageRating} Rating`
                           : "No Ratings"}
                       </span>
                     </div>

@@ -17,7 +17,7 @@ import { useGetProductCategoriesQuery } from "@/services/api/product-categories"
 import { FormField } from "@/shared/components/form-field";
 import { useFileUpload } from "@/shared/hooks/use-file-upload";
 
-interface ProductFormValues {
+export interface ProductFormValues {
   name: string;
   categoryId: string;
   description: string;
@@ -86,12 +86,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         .filter((f): f is File => f instanceof File);
       if (filesToUpload.length > 0) {
         const formData = new FormData();
-        filesToUpload.forEach((f) => formData.append("files", f));
+        for (const f of filesToUpload) {
+          formData.append("files", f);
+        }
         formData.append("folder", "products");
         try {
-          const res = (await uploadMedia(formData).unwrap()) as any;
-          const mediaArray = Array.isArray(res) ? res : res?.data || [];
-          newUploadedUrls = mediaArray.map((r: any) => r.url);
+          const res = await uploadMedia(formData).unwrap();
+          newUploadedUrls = res.map((r) => r.url);
         } catch (uploadErr) {
           console.error("Upload failed", uploadErr);
           return;
@@ -173,8 +174,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             <FormField label="Pricing Type" required>
               <Select
                 value={field.state.value}
-                onValueChange={(val: any) => {
-                  if (val) field.handleChange(val);
+                onValueChange={(val) => {
+                  if (val)
+                    field.handleChange(
+                      val as "FIXED" | "NEGOTIABLE" | "STARTS_AT",
+                    );
                 }}
                 required
               >

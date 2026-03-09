@@ -84,12 +84,13 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
         .filter((f): f is File => f instanceof File);
       if (filesToUpload.length > 0) {
         const formData = new FormData();
-        filesToUpload.forEach((f) => formData.append("files", f));
+        for (const f of filesToUpload) {
+          formData.append("files", f);
+        }
         formData.append("folder", "auctions");
         try {
-          const res = (await uploadMedia(formData).unwrap()) as any;
-          const mediaArray = Array.isArray(res) ? res : res?.data || [];
-          newUploadedUrls = mediaArray.map((r: any) => r.url);
+          const res = await uploadMedia(formData).unwrap();
+          newUploadedUrls = res.map((r) => r.url);
         } catch (uploadErr) {
           console.error("Upload failed", uploadErr);
           return;

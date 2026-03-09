@@ -204,6 +204,8 @@ export interface UpdateProfileInput {
 export interface WishlistResponse {
   products: Product[];
   services: Service[];
+  companies?: Company[];
+  auctions?: Auction[];
 }
 
 export type WishlistItem =

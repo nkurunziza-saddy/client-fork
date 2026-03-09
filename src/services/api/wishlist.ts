@@ -1,5 +1,13 @@
 import { apiSlice } from "@/services/api/api-entry";
-import type { ApiResponse, WishlistItem, WishlistResponse } from "@/types";
+import type {
+  ApiResponse,
+  Auction,
+  Company,
+  Product,
+  Service,
+  WishlistItem,
+  WishlistResponse,
+} from "@/types";
 
 export const wishlistApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,23 +19,28 @@ export const wishlistApi = apiSlice.injectEndpoints({
         const data = response.data;
         if (!data) return [];
 
-        const products = (data.products || []).map((p) => ({
+        const products = (data.products || []).map((p: Product) => ({
           ...p,
           type: "product" as const,
           itemType: "PRODUCT" as const,
         })) as WishlistItem[];
-        const services = (data.services || []).map((s) => ({
+        const services = (data.services || []).map((s: Service) => ({
           ...s,
           type: "service" as const,
           itemType: "SERVICE" as const,
         })) as WishlistItem[];
-        const companies = ((data as any).companies || []).map((c: any) => ({
+        const companies = (data.companies || []).map((c: Company) => ({
           ...c,
           type: "company" as const,
           itemType: "COMPANY" as const,
         })) as WishlistItem[];
+        const auctions = (data.auctions || []).map((a: Auction) => ({
+          ...a,
+          type: "auction" as const,
+          itemType: "AUCTION" as const,
+        })) as WishlistItem[];
 
-        return ([...products, ...services, ...companies] as any[]).sort(
+        return [...products, ...services, ...companies, ...auctions].sort(
           (a, b) => {
             return (
               new Date(b.createdAt || 0).getTime() -

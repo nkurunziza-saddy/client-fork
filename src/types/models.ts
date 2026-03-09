@@ -16,6 +16,7 @@ export interface Company {
   isVerified: boolean;
   averageRating: number;
   reviewCount: number;
+  followersCount?: number;
   visits: number;
   province: string;
   district: string;
@@ -27,6 +28,7 @@ export interface Company {
   phone?: string;
   email?: string;
   address?: string;
+  capabilities?: string[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -80,6 +82,8 @@ export interface CompanyRef {
   description?: string;
   logo?: string;
   rating?: number;
+  followersCount?: number;
+  country?: string;
   joinedAt?: string;
   ownerId?: string;
   createdAt?: string;
@@ -113,7 +117,12 @@ export interface Service {
   updatedAt?: string;
 }
 
-export type AuctionStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type AuctionStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "ACTIVE"
+  | "ENDED";
 
 export interface Auction {
   id: string;
@@ -237,6 +246,7 @@ export interface UserProfile {
   emailVerified?: boolean;
   phoneNumber?: string;
   company?: { id: string; name: string };
+  createdAt?: string;
 }
 
 export interface AdminDashboardStats {

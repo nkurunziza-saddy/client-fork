@@ -15,9 +15,10 @@ import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
 import { ImageWithFallback } from "@/shared/components/image-with-fallback";
 import type { Product } from "@/types";
+import type { Company } from "@/types";
 
 interface SupplierTabsContentProps {
-  company: any;
+  company: Company;
   listings: Product[];
   featuredListings: Product[];
   onProductClick: (item: Product) => void;
@@ -61,14 +62,14 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
           <div className="md:col-span-2 space-y-12">
             {/* Services & Capabilities */}
             <div>
-              {company?.capabilities?.length > 0 && (
+              {(company?.capabilities ?? []).length > 0 && (
                 <>
                   <h3 className="font-heading font-bold uppercase text-xs tracking-[0.2em] mb-6 flex items-center gap-2 text-foreground/40">
                     <CheckCircle className="w-3.5 h-3.5 text-primary" /> Our
                     Capabilities
                   </h3>
                   <div className="grid sm:grid-cols-2 gap-4">
-                    {company.capabilities.map((item: string) => (
+                    {(company?.capabilities ?? []).map((item: string) => (
                       <div
                         key={item}
                         className="flex items-center gap-3 p-3 border border-border/40 bg-muted/5"

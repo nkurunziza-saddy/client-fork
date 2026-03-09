@@ -54,6 +54,7 @@ export function AuctionDetailsPage() {
     <div className="container mx-auto px-4 py-8 lg:py-12 max-w-6xl">
       {/* Breadcrumb / Back */}
       <button
+        type="button"
         onClick={() => navigate({ to: "/auctions" })}
         className="flex items-center text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary mb-8 transition-colors group"
       >
@@ -101,11 +102,7 @@ export function AuctionDetailsPage() {
           <div className="space-y-4 border-b border-border/40 pb-6 text-foreground">
             <div className="flex flex-wrap gap-2 items-center">
               <Badge
-                variant={
-                  (auction.status as string) === "ACTIVE"
-                    ? "success"
-                    : "secondary"
-                }
+                variant={auction.status === "ACTIVE" ? "success" : "secondary"}
                 className="rounded-none text-[9px] font-black uppercase tracking-[0.2em] px-2 py-1"
               >
                 {auction.status || "Listed"}
@@ -152,13 +149,10 @@ export function AuctionDetailsPage() {
             <div className="flex items-center gap-6 pt-4 border-t border-border/20">
               <div className="flex flex-col">
                 <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-                  Active Bidders
+                  Active Bids
                 </span>
                 <span className="text-xl font-bold font-mono text-foreground">
-                  {Math.max(
-                    2,
-                    Math.floor(parseInt(auction.id.slice(0, 4), 16) / 1000),
-                  )}
+                  {auction.bidsCount || 0}
                 </span>
               </div>
               <div className="w-px h-8 bg-border/40" />
@@ -167,7 +161,7 @@ export function AuctionDetailsPage() {
                   Total Views
                 </span>
                 <span className="text-xl font-bold font-mono text-foreground">
-                  {Math.floor(parseInt(auction.id.slice(4, 8), 16))}
+                  {auction.views || 0}
                 </span>
               </div>
             </div>
@@ -197,7 +191,7 @@ export function AuctionDetailsPage() {
                       {auction.company.name}
                     </p>
                     <p className="text-xs text-muted-foreground mb-2">
-                      Vendor • {(auction.company as any).country || "RW"}
+                      Vendor • {auction.company.district || "RW"}
                     </p>
                     <ContactActions
                       phone={auction.company.phone}
@@ -214,7 +208,8 @@ export function AuctionDetailsPage() {
                     className="h-9 px-4 rounded-none text-[10px] font-black uppercase tracking-widest border-border/40 shrink-0"
                     onClick={() =>
                       navigate({
-                        to: `/suppliers/${auction.company.id}` as any,
+                        to: "/suppliers/$supplierId",
+                        params: { supplierId: auction.company.id },
                       })
                     }
                   >

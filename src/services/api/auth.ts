@@ -1,5 +1,10 @@
 import { apiSlice } from "@/services/api/api-entry";
-import type { AuthResponse, SignInRequest, SignUpRequest } from "@/types";
+import type {
+  AuthResponse,
+  SessionUser,
+  SignInRequest,
+  SignUpRequest,
+} from "@/types";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,8 +24,13 @@ export const authApi = apiSlice.injectEndpoints({
         }
 
         const res = (result.meta as { response?: Response })?.response;
+        type RawPayload = {
+          user?: SessionUser;
+          token?: string;
+          session?: { token?: string };
+        };
         const envelope = result.data as Record<string, unknown>;
-        const payload = (envelope?.data ?? envelope) as any;
+        const payload = (envelope?.data ?? envelope) as RawPayload;
         const token =
           res?.headers.get("set-auth-token") ??
           payload?.token ??
@@ -29,7 +39,7 @@ export const authApi = apiSlice.injectEndpoints({
 
         return {
           data: {
-            user: payload?.user ?? payload,
+            user: (payload?.user ?? payload) as SessionUser,
             token: token ?? "",
           },
         };
@@ -50,8 +60,13 @@ export const authApi = apiSlice.injectEndpoints({
         }
 
         const res = (result.meta as { response?: Response })?.response;
+        type RawPayload = {
+          user?: SessionUser;
+          token?: string;
+          session?: { token?: string };
+        };
         const envelope = result.data as Record<string, unknown>;
-        const payload = (envelope?.data ?? envelope) as any;
+        const payload = (envelope?.data ?? envelope) as RawPayload;
         const token =
           res?.headers.get("set-auth-token") ??
           payload?.token ??
@@ -60,26 +75,27 @@ export const authApi = apiSlice.injectEndpoints({
 
         return {
           data: {
-            user: payload?.user ?? payload,
+            user: (payload?.user ?? payload) as SessionUser,
             token: token ?? "",
           },
         };
       },
     }),
 
-    getSession: builder.query<any, void>({
+    getSession: builder.query<{ user?: Record<string, unknown> }, void>({
       query: () => "/auth/get-session",
       providesTags: ["Session"],
     }),
 
-    verifyEmail: builder.mutation<any, { token: string; callbackURL?: string }>(
-      {
-        query: ({ token, callbackURL }) => ({
-          url: `/auth/verify-email?token=${token}${callbackURL ? `&callbackURL=${encodeURIComponent(callbackURL)}` : ""}`,
-          method: "GET",
-        }),
-      },
-    ),
+    verifyEmail: builder.mutation<
+      { status?: string },
+      { token: string; callbackURL?: string }
+    >({
+      query: ({ token, callbackURL }) => ({
+        url: `/auth/verify-email?token=${token}${callbackURL ? `&callbackURL=${encodeURIComponent(callbackURL)}` : ""}`,
+        method: "GET",
+      }),
+    }),
 
     signOut: builder.mutation<void, void>({
       query: () => ({

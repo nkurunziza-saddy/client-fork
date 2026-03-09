@@ -15,9 +15,10 @@ import {
   useRemoveFromWishlistMutation,
 } from "@/services/api/wishlist";
 import type { RootState } from "@/store";
+import type { CompanyRef } from "@/types";
 
 interface SupplierActionsProps {
-  company?: any;
+  company?: CompanyRef;
   onContactClick: () => void;
   isMobile?: boolean;
 }

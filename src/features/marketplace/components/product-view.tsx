@@ -75,7 +75,7 @@ export default function ProductView({
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-12 space-y-8">
         <Skeleton className="h-8 w-48" />
         <div className="grid md:grid-cols-12 gap-12">
-          <div className="md:col-span-5 aspect-[4/5] bg-muted animate-pulse" />
+          <div className="md:col-span-5 aspect-4/5 bg-muted animate-pulse" />
           <div className="md:col-span-7 space-y-6">
             <Skeleton className="h-12 w-3/4" />
             <Skeleton className="h-24 w-full" />

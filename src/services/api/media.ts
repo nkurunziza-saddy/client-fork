@@ -15,7 +15,8 @@ export const mediaApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
-      transformResponse: (response: any) => response?.data ?? response,
+      transformResponse: (response: { data: UploadMediaResponse[] }) =>
+        response?.data ?? response,
     }),
   }),
 });

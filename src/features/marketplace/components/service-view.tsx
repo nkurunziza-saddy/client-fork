@@ -95,7 +95,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start pt-4 md:pt-8">
           {/* Left Column: Visuals */}
           <div className="lg:col-span-6 xl:col-span-5">
-            <div className="aspect-[4/5] overflow-hidden border border-border bg-muted/5 relative group">
+            <div className="aspect-4/5 overflow-hidden border border-border bg-muted/5 relative group">
               <div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
               {mainImage ? (
                 <ImageWithFallback

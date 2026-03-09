@@ -42,7 +42,7 @@ export function AdminBuyersPage() {
       email: user.email,
       role: user.role,
       phone: user.phoneNumber || "-",
-      joinDate: formatDate((user as any).createdAt),
+      joinDate: formatDate(user.createdAt),
       status: user.emailVerified ? "verified" : "unverified",
     }));
   }, [usersResult]);

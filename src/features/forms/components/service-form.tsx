@@ -23,7 +23,7 @@ import { useUploadMediaMutation } from "@/services/api/media";
 import { useFileUpload } from "@/shared/hooks/use-file-upload";
 import { Textarea } from "@/components/ui/textarea";
 
-interface ServiceFormValues {
+export interface ServiceFormValues {
   name: string;
   categoryId: string;
   description: string;
@@ -91,12 +91,13 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
         .filter((f): f is File => f instanceof File);
       if (filesToUpload.length > 0) {
         const formData = new FormData();
-        filesToUpload.forEach((f) => formData.append("files", f));
+        for (const f of filesToUpload) {
+          formData.append("files", f);
+        }
         formData.append("folder", "services");
         try {
-          const res = (await uploadMedia(formData).unwrap()) as any;
-          const mediaArray = Array.isArray(res) ? res : res?.data || [];
-          newUploadedUrls = mediaArray.map((r: any) => r.url);
+          const res = await uploadMedia(formData).unwrap();
+          newUploadedUrls = res.map((r) => r.url);
         } catch (uploadErr) {
           console.error("Upload failed", uploadErr);
           return;
@@ -190,8 +191,11 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
               </Label>
               <Select
                 value={field.state.value}
-                onValueChange={(val: any) => {
-                  if (val) field.handleChange(val);
+                onValueChange={(val) => {
+                  if (val)
+                    field.handleChange(
+                      val as "FIXED" | "NEGOTIABLE" | "STARTS_AT",
+                    );
                 }}
                 required
               >
@@ -354,6 +358,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                   </Label>
                   <div
                     className="relative flex min-h-36 flex-col items-center not-data-files:justify-center overflow-hidden rounded-none border border-dashed border-border/40 p-3 transition-colors data-[dragging=true]:bg-accent/50"
+                    role="region"
+                    aria-label="File upload dropzone"
                     data-dragging={isDragging || undefined}
                     data-files={files.length > 0 || undefined}
                     onDragLeave={handleDragLeave}
