@@ -142,6 +142,9 @@ export function AdminProductDetailsPage() {
 									src={images[selectedImageIndex]}
 									alt={product.name}
 									className="h-full w-full object-cover"
+									onError={(e) => {
+										e.currentTarget.src = "/image-fallback.svg";
+									}}
 								/>
 							) : (
 								<div className="flex h-full items-center justify-center text-sm text-muted-foreground">
@@ -166,6 +169,9 @@ export function AdminProductDetailsPage() {
 											src={image}
 											alt=""
 											className="h-full w-full object-cover"
+											onError={(e) => {
+												e.currentTarget.src = "/image-fallback.svg";
+											}}
 										/>
 									</button>
 								))}
@@ -280,7 +286,7 @@ export function AdminProductDetailsPage() {
 						<Button
 							variant="outline"
 							onClick={() => setShowDeleteModal(true)}
-							className="h-12 w-full rounded-sm border-red-200 bg-red-50/60 text-red-600 hover:bg-red-50"
+							className="h-12 w-full rounded-sm border-destructive/20 bg-destructive/60 text-destructive hover:bg-destructive/5"
 						>
 							<RiDeleteBinLine size={16} className="mr-2" /> Delete Product
 						</Button>

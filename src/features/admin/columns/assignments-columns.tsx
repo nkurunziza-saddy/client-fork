@@ -35,8 +35,8 @@ export const getAssignmentColumns = ({
 		header: "Service",
 		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
-				<div className="rounded-sm border border-blue-100 bg-blue-50 p-1.5">
-					<RiLinkM size={12} className="text-blue-600" />
+				<div className="rounded-sm border border-info/20 bg-info/5 p-1.5">
+					<RiLinkM size={12} className="text-info" />
 				</div>
 				<span className="text-xs font-semibold text-foreground">
 					{row.original.service}

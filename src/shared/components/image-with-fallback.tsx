@@ -11,7 +11,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
 	src,
 	alt,
 	className,
-	fallbackSrc = "/logo.svg",
+	fallbackSrc = "/image-fallback.svg",
 	...props
 }) => {
 	const [error, setError] = useState(false);

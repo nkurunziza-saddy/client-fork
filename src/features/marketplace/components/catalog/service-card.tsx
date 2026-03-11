@@ -35,7 +35,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 	const company = service.company;
 
 	const badges = service.priceType && (
-		<div className="bg-white/90 backdrop-blur-md border border-border/20 text-[9px] font-black uppercase tracking-widest px-2 py-1 shadow-2xl">
+		<div className="bg-background/90 backdrop-blur-md border border-border/20 text-[9px] font-black uppercase tracking-widest px-2 py-1 shadow-2xl">
 			{service.priceType.replace("_", " ")}
 		</div>
 	);
@@ -61,7 +61,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 					}}
 				>
 					<div className="w-6 h-6 rounded-none border border-border/40 flex items-center justify-center group-hover/comp:bg-primary group-hover/comp:border-primary transition-all duration-500">
-						<span className="text-[10px] font-bold group-hover/comp:text-white">
+						<span className="text-[10px] font-bold group-hover/comp:text-primary-foreground">
 							{company.name?.charAt(0)}
 						</span>
 					</div>
@@ -87,7 +87,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 				{viewMode === "grid" && (
 					<div className="flex items-center justify-end mb-1">
 						<div className="flex items-center gap-1 opacity-60">
-							<RiStarFill className="w-3 h-3 text-amber-500" />
+							<RiStarFill className="w-3 h-3 text-warning" />
 							<span className="text-[10px] font-bold">
 								{company?.rating || 5.0}
 							</span>

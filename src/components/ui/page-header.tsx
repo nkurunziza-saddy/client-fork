@@ -14,8 +14,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 	return (
 		<div
 			className={cn(
-				"rounded-none p-6 md:p-10 relative overflow-hidden border border-border/20 shadow-none transition-all duration-500 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
-				dark ? "bg-slate-950 text-white" : "bg-card text-foreground",
+				"rounded-none p-4 sm:p-6 md:p-10 relative overflow-hidden border border-border/20 shadow-none transition-all duration-500 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
+				dark ? "bg-foreground text-background" : "bg-card text-foreground",
 				className,
 			)}
 		>
@@ -30,13 +30,13 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 							{badge}
 						</Badge>
 					)}
-					<h1 className="text-2xl md:text-5xl font-display font-black uppercase tracking-tighter leading-[0.9] mb-3 md:mb-4 truncate md:whitespace-normal">
+					<h1 className="text-xl sm:text-2xl md:text-5xl font-display font-black uppercase tracking-tighter leading-[0.9] mb-3 md:mb-4 truncate md:whitespace-normal">
 						{title}
 					</h1>
 					{subtitle && (
 						<p
 							className={cn(
-								"text-[10px] md:text-sm font-bold max-w-xl uppercase tracking-[0.15em] md:tracking-[0.2em] leading-relaxed",
+								"text-[9px] sm:text-[10px] md:text-sm font-bold max-w-xl uppercase tracking-[0.15em] md:tracking-[0.2em] leading-relaxed",
 								dark ? "text-muted-foreground/50" : "text-muted-foreground/60",
 							)}
 						>

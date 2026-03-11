@@ -32,6 +32,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -218,11 +219,14 @@ export function DataTable<TData, TValue>({
 								))
 							) : (
 								<TableRow>
-									<TableCell
-										colSpan={columns.length}
-										className="h-24 text-center text-[10px] uppercase font-bold text-muted-foreground tracking-widest"
-									>
-										No results found
+									<TableCell colSpan={columns.length} className="h-48">
+										<Empty className="border-none bg-transparent gap-2">
+											<EmptyHeader>
+												<EmptyTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+													No results found
+												</EmptyTitle>
+											</EmptyHeader>
+										</Empty>
 									</TableCell>
 								</TableRow>
 							)}

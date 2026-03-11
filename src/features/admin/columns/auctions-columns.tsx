@@ -34,8 +34,8 @@ export const getAuctionColumns = ({
 		header: "Auction",
 		cell: ({ row }) => (
 			<div className="flex items-center gap-3">
-				<div className="rounded-sm border border-orange-100 bg-orange-50 p-2">
-					<RiAuctionLine size={16} className="text-orange-600" />
+				<div className="rounded-sm border border-warning/20 bg-warning/5 p-2">
+					<RiAuctionLine size={16} className="text-warning" />
 				</div>
 				<div>
 					<p className="font-heading font-bold text-foreground">
@@ -124,7 +124,7 @@ export const getAuctionColumns = ({
 							{isPending && (
 								<>
 									<DropdownMenuItem
-										className="text-emerald-600 focus:text-emerald-600"
+										className="text-success focus:text-success"
 										onClick={() => onApprove(row.original)}
 									>
 										<RiCheckLine className="mr-2 h-4 w-4" /> Approve

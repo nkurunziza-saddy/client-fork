@@ -55,10 +55,10 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 			<div className="p-5 border-b border-border/40 bg-muted/5">
 				<div className="flex items-start justify-between">
 					<div className="flex items-center gap-4">
-						<div className="p-3 bg-primary/5 rounded-none border border-primary/10 group-hover/card:bg-primary group-hover/card:text-white transition-all duration-500">
+						<div className="p-3 bg-primary/5 rounded-none border border-primary/10 group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-all duration-500">
 							<IconComponent
 								size={20}
-								className="text-primary group-hover/card:text-white transition-colors"
+								className="text-primary group-hover/card:text-primary-foreground transition-colors"
 							/>
 						</div>
 						<div>
@@ -74,8 +74,8 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 						variant="outline"
 						className={`rounded-none border font-bold text-[9px] uppercase tracking-widest px-2.5 py-0.5 ${
 							category.status === "active"
-								? "bg-emerald-50 text-emerald-700 border-emerald-100"
-								: "bg-red-50 text-red-700 border-red-100"
+								? "bg-success/5 text-success border-success/10"
+								: "bg-destructive/5 text-destructive border-destructive/10"
 						}`}
 					>
 						{category.status}
@@ -108,7 +108,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 				</div>
 			</div>
 
-			<div className="px-5 py-4 flex items-center justify-between mt-auto bg-white/50">
+			<div className="px-5 py-4 flex items-center justify-between mt-auto bg-background/50">
 				<div className="flex items-center gap-2">
 					<button
 						onClick={() => onEdit(category)}
@@ -131,7 +131,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 						/>
 					</button>
 				</div>
-				<button className="h-9 px-4 hover:bg-primary hover:text-white rounded-none transition-all text-primary font-bold text-[10px] uppercase tracking-widest border border-primary/20 hover:border-primary flex items-center gap-2 group/view">
+				<button className="h-9 px-4 hover:bg-primary hover:text-primary-foreground rounded-none transition-all text-primary font-bold text-[10px] uppercase tracking-widest border border-primary/20 hover:border-primary flex items-center gap-2 group/view">
 					<RiEyeLine
 						size={14}
 						className="group-hover/view:scale-110 transition-transform"

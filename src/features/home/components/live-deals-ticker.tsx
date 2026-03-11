@@ -59,24 +59,24 @@ export const LiveDealsTicker: React.FC = () => {
 	const feed = LIVE_NETWORK_FEED[currentIndex];
 
 	return (
-		<div className="w-full bg-primary border-b border-primary/20 py-1.5 md:py-2.5 overflow-hidden shadow-lg shadow-primary/10">
-			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 flex items-center justify-between gap-4">
-				<div className="flex items-center gap-3 md:gap-4 overflow-hidden">
-					<div className="flex items-center gap-1.5 md:gap-2 text-white shrink-0">
+		<div className="w-full bg-primary border-b border-primary/20 py-1 md:py-2 overflow-hidden shadow-lg shadow-primary/10">
+			<div className="max-w-[1800px] mx-auto px-2 md:px-6 flex items-center justify-between gap-4">
+				<div className="flex items-center gap-2.5 md:gap-4 overflow-hidden">
+					<div className="flex items-center gap-1 md:gap-2 text-white shrink-0">
 						<RiBroadcastLine
-							size={12}
-							className="md:size-[14px] animate-pulse"
+							size={11}
+							className="md:size-[13px] animate-pulse"
 						/>
-						<span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] font-heading whitespace-nowrap">
+						<span className="text-[7.5px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] font-heading whitespace-nowrap">
 							<span className="sm:hidden">LIVE</span>
 							<span className="hidden sm:inline">Recent Activity</span>
 						</span>
 					</div>
 
-					<div className="h-3 md:h-4 w-[1px] bg-white/20 shrink-0" />
+					<div className="h-2.5 md:h-3.5 w-[1px] bg-white/20 shrink-0" />
 
-					<div className="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-[11px] text-white/90 font-sans tracking-tight overflow-hidden">
-						<span className="font-black uppercase text-[9px] md:text-[10px] shrink-0 truncate max-w-[60px] sm:max-w-none">
+					<div className="flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] text-white/90 font-sans tracking-tight overflow-hidden">
+						<span className="font-black uppercase text-[8.5px] md:text-[9.5px] shrink-0 truncate max-w-[50px] sm:max-w-none">
 							{feed.company}
 						</span>
 						<span className="text-white/60 lowercase italic font-medium shrink-0 hidden xs:inline">

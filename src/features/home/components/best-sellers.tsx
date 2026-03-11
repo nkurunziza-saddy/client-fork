@@ -32,16 +32,16 @@ const BestSellers: React.FC = () => {
 			/>
 
 			{isLoading || listings.length === 0 ? (
-				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6">
 					{Array.from({ length: 5 }).map((_, i) => (
 						<div
 							key={`best-seller-skeleton-${i}`}
-							className="aspect-4/5 rounded-lg border border-border/40 bg-muted/20 animate-pulse"
+							className="aspect-4/5 rounded-none border border-border/40 bg-muted/20 animate-pulse"
 						/>
 					))}
 				</div>
 			) : (
-				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1.5 md:gap-4 lg:gap-6">
+				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4 lg:gap-6">
 					{listings.map((prod) => (
 						<ProductCard
 							key={prod.id}
@@ -60,7 +60,7 @@ const BestSellers: React.FC = () => {
 			<div className="mt-8 md:hidden">
 				<Button
 					variant="outline"
-					size="lg"
+					className="w-full rounded-none h-12 text-[10px] font-black uppercase tracking-widest border-border/40 shadow-none"
 					onClick={() => navigate({ to: "/products" })}
 				>
 					View all best sellers

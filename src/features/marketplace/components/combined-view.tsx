@@ -2,6 +2,14 @@ import { Package } from "lucide-react";
 import type React from "react";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters";
 import { cn } from "@/lib/utils";
 import {
@@ -100,17 +108,29 @@ export const CombinedView: React.FC<CombinedViewProps> = ({
 
 	if (items.length === 0) {
 		return (
-			<div className="flex flex-col items-center justify-center py-32 text-center bg-muted/5">
-				<Package className="w-12 h-12 text-primary/20 mb-6" />
-				<h3 className="text-2xl font-display font-bold uppercase tracking-tight mb-2">
-					No Results Found
-				</h3>
-				<p className="text-xs text-muted-foreground uppercase tracking-widest mb-8">
-					Try adjusting your filters
-				</p>
-				<Button onClick={resetFilters} className="rounded-none">
-					Reset Filters
-				</Button>
+			<div className="py-20 flex justify-center">
+				<Empty className="max-w-md">
+					<EmptyHeader>
+						<EmptyMedia variant="icon">
+							<Package className="w-4 h-4 text-primary" />
+						</EmptyMedia>
+						<EmptyTitle className="text-xl font-display font-black uppercase">
+							No Results Found
+						</EmptyTitle>
+						<EmptyDescription className="uppercase tracking-widest text-[10px]">
+							We couldn't find any items matching your current filters. Try
+							adjusting your search.
+						</EmptyDescription>
+					</EmptyHeader>
+					<EmptyContent>
+						<Button
+							onClick={resetFilters}
+							className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+						>
+							Reset Filters
+						</Button>
+					</EmptyContent>
+				</Empty>
 			</div>
 		);
 	}

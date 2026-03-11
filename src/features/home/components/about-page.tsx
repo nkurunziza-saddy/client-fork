@@ -31,9 +31,8 @@ export function AboutPage() {
 					</Link>
 				</div>
 
-				<section className="text-center py-20 px-4 relative overflow-hidden bg-slate-950 border border-primary/20 rounded-none shadow-2xl shadow-primary/5">
-					<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-
+				<section className="text-center py-20 px-4 relative overflow-hidden bg-industrial border border-primary/20 rounded-none shadow-2xl shadow-primary/5">
+					<div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
 					<div className="relative z-10">
 						<div className="inline-flex items-center px-4 py-1.5 border border-primary/30 rounded-none bg-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-[0.3em] mb-10">
 							<RiGlobeLine className="w-3.5 h-3.5 mr-2.5" />

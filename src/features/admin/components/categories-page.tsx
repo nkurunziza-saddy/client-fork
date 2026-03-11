@@ -1,6 +1,13 @@
 import { RiAddLine, RiLoader2Line, RiSearchLine } from "@remixicon/react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { CategoryForm } from "@/features/forms/components/category-form";
 import {
 	useCreateCompanyCategoryMutation,
@@ -270,8 +277,21 @@ export function AdminCategoriesPage() {
 						<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
 					</div>
 				) : filteredCategories.length === 0 ? (
-					<div className="col-span-full rounded-sm border border-dashed border-border py-12 text-center text-muted-foreground">
-						No categories found.
+					<div className="col-span-full py-12">
+						<Empty className="max-w-md mx-auto">
+							<EmptyHeader>
+								<EmptyMedia variant="icon">
+									<RiSearchLine className="w-4 h-4 text-muted-foreground/40" />
+								</EmptyMedia>
+								<EmptyTitle className="text-xl font-display font-black uppercase">
+									No categories found
+								</EmptyTitle>
+								<EmptyDescription className="uppercase tracking-widest text-[10px]">
+									We couldn't find any {categoryType} categories matching your
+									search.
+								</EmptyDescription>
+							</EmptyHeader>
+						</Empty>
 					</div>
 				) : (
 					filteredCategories.map((category) => (

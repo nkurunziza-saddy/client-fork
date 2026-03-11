@@ -39,7 +39,7 @@ export const MobileActions: React.FC<MobileActionsProps> = ({
 	};
 
 	return (
-		<div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border px-4 py-2.5 z-50 flex flex-col gap-2 safe-area-bottom shadow-[0_-8px_30px_rgb(0,0,0,0.12)]">
+		<div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border px-4 py-2.5 z-50 flex flex-col gap-2 safe-area-bottom shadow-[0_-8px_30px] shadow-foreground/10">
 			<div className="flex items-center gap-2 w-full">
 				<div className="flex items-center gap-1.5 flex-1 overflow-hidden">
 					{phone && (
@@ -60,7 +60,7 @@ export const MobileActions: React.FC<MobileActionsProps> = ({
 									`https://wa.me/${phone.replace(/\D/g, "")}`,
 								)
 							}
-							className="flex-none w-11 h-11 flex items-center justify-center rounded-none bg-emerald-500 text-white active:bg-emerald-600 transition-colors"
+							className="flex-none w-11 h-11 flex items-center justify-center rounded-none bg-success text-success-foreground active:bg-success/90 transition-colors"
 						>
 							<RiWhatsappLine size={20} />
 						</button>
@@ -88,7 +88,7 @@ export const MobileActions: React.FC<MobileActionsProps> = ({
 				</div>
 				<Button
 					size="lg"
-					className="flex-none font-heading font-black uppercase tracking-widest text-[10px] h-11 px-6 rounded-none bg-primary text-white hover:bg-primary/90 shadow-md shadow-primary/20 transition-all duration-300"
+					className="flex-none font-heading font-black uppercase tracking-widest text-[10px] h-11 px-6 rounded-none bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20 transition-all duration-300"
 					onClick={onContactClick}
 				>
 					Inquire

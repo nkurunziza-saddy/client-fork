@@ -233,29 +233,29 @@ export function AdminSupplierDetailsPage() {
 					label="Products"
 					value={supplierStats.productCount}
 					icon={RiStore2Line}
-					bgColor="bg-blue-50"
-					color="text-blue-600"
+					bgColor="bg-info/5"
+					color="text-info"
 				/>
 				<StatCard
 					label="Services"
 					value={supplierStats.serviceCount}
 					icon={RiUserLine}
-					bgColor="bg-violet-50"
-					color="text-violet-600"
+					bgColor="bg-info/5"
+					color="text-info"
 				/>
 				<StatCard
 					label="Visits"
 					value={supplierStats.visits}
 					icon={RiUserLine}
-					bgColor="bg-amber-50"
-					color="text-amber-600"
+					bgColor="bg-warning/5"
+					color="text-warning"
 				/>
 				<StatCard
 					label="Member Since"
 					value={supplierStats.memberSince}
 					icon={RiShieldCheckLine}
-					bgColor="bg-emerald-50"
-					color="text-emerald-600"
+					bgColor="bg-success/5"
+					color="text-success"
 				/>
 			</div>
 

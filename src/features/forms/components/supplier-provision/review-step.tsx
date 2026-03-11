@@ -80,15 +80,15 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({ form }) => {
 					</div>
 				</div>
 
-				<div className="bg-green-50 border border-green-200 p-6 rounded-sm flex items-start gap-4">
-					<div className="p-2 bg-green-100 rounded-sm">
-						<RiCheckboxCircleLine className="h-6 w-6 text-green-600" />
+				<div className="bg-success/5 border border-success/20 p-6 rounded-sm flex items-start gap-4">
+					<div className="p-2 bg-success/10 rounded-sm">
+						<RiCheckboxCircleLine className="h-6 w-6 text-success" />
 					</div>
 					<div>
-						<p className="text-sm font-heading font-bold text-green-800 uppercase tracking-widest">
+						<p className="text-sm font-heading font-bold text-success uppercase tracking-widest">
 							Ready to Register
 						</p>
-						<p className="text-[10px] text-green-700 mt-1 uppercase font-bold tracking-wider leading-relaxed">
+						<p className="text-[10px] text-success/80 mt-1 uppercase font-bold tracking-wider leading-relaxed">
 							Your company is ready to be registered. Once submitted, you will
 							be able to manage your profile and listings.
 						</p>

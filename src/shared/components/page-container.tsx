@@ -15,8 +15,8 @@ export const PageContainer: React.FC<PageContainerProps> = ({
 	return (
 		<div
 			className={cn(
-				"py-6 md:py-10",
-				!isFluid && "container mx-auto max-w-[1600px] px-4 sm:px-6",
+				"py-4 md:py-10",
+				!isFluid && "container mx-auto max-w-[1800px] px-2 sm:px-6",
 				className,
 			)}
 		>

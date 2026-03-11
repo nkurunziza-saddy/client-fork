@@ -8,8 +8,8 @@ export const CategoryPerformanceCard: React.FC<
 	CategoryPerformanceCardProps
 > = ({ categories }) => {
 	return (
-		<div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-			<h3 className="text-xl font-semibold text-gray-900 mb-6">
+		<div className="bg-card rounded-none border border-border/40 p-6 shadow-sm">
+			<h3 className="text-xl font-display font-black uppercase tracking-tight text-foreground mb-6">
 				Category Performance
 			</h3>
 
@@ -36,31 +36,31 @@ export const CategoryPerformanceCard: React.FC<
 							<path
 								key={category.category}
 								d={pathData}
-								fill={category.color
-									.replace("bg-", "")
-									.replace("-500", "")
-									.replace("primary", "orange-600")}
 								className="hover:opacity-80 transition-opacity cursor-pointer"
 								style={{
 									fill:
-										category.color === "bg-blue-500"
-											? "#3b82f6"
-											: category.color === "bg-green-500"
-												? "#10b981"
-												: category.color === "bg-orange-500" ||
+										category.color === "bg-info"
+											? "var(--color-chart-1)"
+											: category.color === "bg-success"
+												? "var(--color-chart-2)"
+												: category.color === "bg-warning" ||
 														category.color === "bg-primary"
-													? "#ea580c"
-													: "#a855f7",
+													? "var(--color-chart-3)"
+													: "var(--color-chart-4)",
 								}}
 							/>
 						);
 					})}
-					<circle cx="50" cy="50" r="20" fill="white" />
+					<circle cx="50" cy="50" r="20" className="fill-card" />
 				</svg>
 				<div className="absolute inset-0 flex items-center justify-center">
 					<div className="text-center">
-						<div className="text-lg font-bold text-gray-900">100%</div>
-						<div className="text-xs text-gray-500">Total</div>
+						<div className="text-lg font-black text-foreground tracking-tighter">
+							100%
+						</div>
+						<div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+							Total
+						</div>
 					</div>
 				</div>
 			</div>
@@ -72,16 +72,29 @@ export const CategoryPerformanceCard: React.FC<
 						className="flex items-center justify-between"
 					>
 						<div className="flex items-center">
-							<div className={`w-3 h-3 ${category.color} rounded-full mr-3`} />
-							<span className="text-sm font-medium text-gray-700">
+							<div
+								className="w-3 h-3 rounded-none mr-3"
+								style={{
+									backgroundColor:
+										category.color === "bg-info"
+											? "var(--color-chart-1)"
+											: category.color === "bg-success"
+												? "var(--color-chart-2)"
+												: category.color === "bg-warning" ||
+														category.color === "bg-primary"
+													? "var(--color-chart-3)"
+													: "var(--color-chart-4)",
+								}}
+							/>
+							<span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
 								{category.category}
 							</span>
 						</div>
 						<div className="text-right">
-							<div className={`text-sm font-semibold ${category.textColor}`}>
+							<div className="text-sm font-black text-foreground tracking-tight">
 								{category.percentage}%
 							</div>
-							<div className="text-xs text-gray-500">
+							<div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
 								{category.value} inquiries
 							</div>
 						</div>

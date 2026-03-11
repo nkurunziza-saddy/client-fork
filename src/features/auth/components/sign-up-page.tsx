@@ -138,7 +138,8 @@ export function SignUpPage() {
 				/>
 			) : (
 				<div className="space-y-6 text-center py-12 border border-dashed border-border rounded-none bg-muted/5 relative overflow-hidden">
-					<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
+					<div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+
 					<div className="w-16 h-16 bg-primary/10 text-primary mx-auto flex items-center justify-center rounded-none rotate-45 mb-8 relative z-10">
 						<RiMailLine className="w-8 h-8 -rotate-45" />
 					</div>

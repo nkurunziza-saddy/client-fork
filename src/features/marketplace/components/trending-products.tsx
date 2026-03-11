@@ -22,9 +22,9 @@ const TrendingProducts: React.FC = () => {
 			withGrid
 			borderTop
 			borderBottom
-			className="py-16 lg:py-32"
+			className="py-12 sm:py-16 lg:py-24"
 		>
-			<div className="space-y-16">
+			<div className="space-y-8 sm:space-y-16">
 				<SectionHeader
 					title="Trending Products"
 					subtitle="Most viewed products currently available on the marketplace."
@@ -35,11 +35,11 @@ const TrendingProducts: React.FC = () => {
 				/>
 
 				{products.length === 0 ? (
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6">
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div
 								key={`trending-skeleton-${i}`}
-								className="aspect-4/3 rounded-lg border border-border/40 bg-muted/20 animate-pulse"
+								className="aspect-4/3 rounded-none border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>

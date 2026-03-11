@@ -17,6 +17,14 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { useSupplierFilters } from "@/hooks/use-supplier-filters";
 import { cn } from "@/lib/utils";
@@ -81,8 +89,8 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 	return (
 		<div className="min-h-screen bg-background">
 			{/* Header */}
-			<div className="bg-background border-b border-border sticky top-0 z-30 py-4 md:py-5">
-				<div className="max-w-[1600px] mx-auto px-4 md:px-6">
+			<div className="bg-background border-b border-border sticky top-[56px] z-30 py-3 md:py-5">
+				<div className="max-w-[1800px] mx-auto px-2 md:px-6">
 					<div className="flex flex-row items-center justify-between gap-4">
 						<div className="space-y-0.5">
 							<h1 className="text-xl md:text-3xl font-display font-black uppercase text-foreground tracking-tighter leading-none">
@@ -118,7 +126,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 				</div>
 			</div>
 
-			<div className="max-w-[1600px] mx-auto px-4 md:px-6 py-8">
+			<div className="max-w-[1800px] mx-auto px-1 md:px-6 py-6 md:py-8">
 				<div className="flex flex-col lg:flex-row gap-8 items-start">
 					{/* Desktop Sidebar */}
 					{showFilters && (
@@ -305,10 +313,10 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 						{isLoading ? (
 							<div
 								className={cn(
-									"grid gap-6",
+									"grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-6",
 									showFilters
-										? "grid-cols-1 md:grid-cols-2 xl:grid-cols-4"
-										: "grid-cols-1 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6",
+										? ""
+										: "md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6",
 								)}
 							>
 								{Array.from({ length: 12 }).map((_, i) => (
@@ -321,33 +329,41 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 						) : (
 							<>
 								{companies.length === 0 ? (
-									<div className="flex flex-col items-center justify-center py-32 text-center border border-border/20 rounded-none bg-muted/5 relative overflow-hidden">
-										<div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
-										<Building2 className="w-12 h-12 text-primary/20 mb-6" />
-										<h3 className="text-2xl font-display font-bold uppercase tracking-tight mb-2">
-											No Suppliers Found
-										</h3>
-										<p className="text-xs text-muted-foreground uppercase tracking-widest mb-8">
-											Try adjusting your filters
-										</p>
-										<Button
-											onClick={handleClearFilters}
-											className="rounded-none px-8 h-12 font-bold uppercase tracking-widest"
-										>
-											Clear Filters
-										</Button>
+									<div className="py-20 flex justify-center w-full">
+										<Empty className="max-w-md w-full">
+											<EmptyHeader>
+												<EmptyMedia variant="icon">
+													<Building2 className="w-4 h-4 text-primary" />
+												</EmptyMedia>
+												<EmptyTitle className="text-xl font-display font-black uppercase">
+													No Suppliers Found
+												</EmptyTitle>
+												<EmptyDescription className="uppercase tracking-widest text-[10px]">
+													We couldn't find any suppliers matching your current
+													filters. Try adjusting your search.
+												</EmptyDescription>
+											</EmptyHeader>
+											<EmptyContent>
+												<Button
+													onClick={handleClearFilters}
+													className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+												>
+													Clear Filters
+												</Button>
+											</EmptyContent>
+										</Empty>
 									</div>
 								) : (
 									<div
 										className={
 											viewMode === "grid"
 												? cn(
-														"grid gap-6",
+														"grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-6",
 														showFilters
-															? "grid-cols-1 md:grid-cols-2 xl:grid-cols-4"
-															: "grid-cols-1 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6",
+															? "grid-cols-2"
+															: "grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6",
 													)
-												: "flex flex-col gap-6"
+												: "flex flex-col gap-4 sm:gap-6"
 										}
 									>
 										{companies.map((company: Company) => (
@@ -361,25 +377,25 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 								)}
 
 								{meta && meta.totalPages > 1 && (
-									<div className="flex justify-center gap-4 mt-16 pt-10 border-t border-border/20">
+									<div className="flex justify-center items-center gap-2 sm:gap-4 mt-12 pt-8 border-t border-border/20">
 										<Button
 											variant="outline"
 											size="sm"
-											className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
+											className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
 											disabled={filters.page <= 1}
 											onClick={() =>
 												handleFiltersChange({ page: filters.page - 1 })
 											}
 										>
-											Previous
+											Prev
 										</Button>
-										<span className="flex items-center px-6 text-[10px] font-display font-bold uppercase tracking-widest text-muted-foreground/30">
-											Page {meta.page} of {meta.totalPages}
+										<span className="flex items-center px-2 text-[9px] sm:text-[10px] font-display font-bold uppercase tracking-widest text-muted-foreground/30">
+											{meta.page} / {meta.totalPages}
 										</span>
 										<Button
 											variant="outline"
 											size="sm"
-											className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
+											className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
 											disabled={filters.page >= meta.totalPages}
 											onClick={() =>
 												handleFiltersChange({ page: filters.page + 1 })

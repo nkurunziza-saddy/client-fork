@@ -76,7 +76,7 @@ const FeaturedServices: React.FC = () => {
 												No Image
 											</div>
 										)}
-										<div className="absolute top-0 left-0 bg-primary text-white px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.3em] shadow-2xl">
+										<div className="absolute top-0 left-0 bg-primary text-primary-foreground px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.3em] shadow-2xl">
 											{service.category?.name || "Service"}
 										</div>
 									</div>
@@ -101,7 +101,7 @@ const FeaturedServices: React.FC = () => {
 													RWF {price.toLocaleString()}
 												</span>
 												{service.discount && service.discount > 0 && (
-													<span className="text-[8px] sm:text-[9px] font-black text-emerald-500 uppercase tracking-widest">
+													<span className="text-[8px] sm:text-[9px] font-black text-success uppercase tracking-widest">
 														-{service.discount}%
 													</span>
 												)}

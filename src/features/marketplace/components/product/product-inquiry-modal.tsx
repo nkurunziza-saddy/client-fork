@@ -46,7 +46,7 @@ export const ProductInquiryModal: React.FC<ProductInquiryModalProps> = ({
 						Cancel
 					</Button>
 					<Button
-						className="rounded-none text-[10px] uppercase font-black tracking-widest h-11 px-8 bg-primary text-white order-1 sm:order-2"
+						className="rounded-none text-[10px] uppercase font-black tracking-widest h-11 px-8 bg-primary text-primary-foreground order-1 sm:order-2"
 						disabled={!messageText.trim()}
 						onClick={onSubmit}
 					>

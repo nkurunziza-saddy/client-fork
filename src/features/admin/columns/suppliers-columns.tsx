@@ -49,7 +49,7 @@ export const getSuppliersColumns = ({
 							{row.original.type}
 						</span>
 						{row.original.isVerified && (
-							<RiCheckboxCircleLine className="h-3 w-3 text-emerald-500" />
+							<RiCheckboxCircleLine className="h-3 w-3 text-success" />
 						)}
 					</div>
 				</div>

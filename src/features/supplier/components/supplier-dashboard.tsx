@@ -92,6 +92,9 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
 									src={supplierData?.avatar || "/logo.svg"}
 									className="w-full h-full object-cover"
 									alt=""
+									onError={(e) => {
+										e.currentTarget.src = "/image-fallback.svg";
+									}}
 								/>
 							</div>
 						</div>

@@ -3,6 +3,13 @@ import { Link } from "@tanstack/react-router";
 import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
 import { ROUTES } from "@/shared/constants/routes";
@@ -73,11 +80,20 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
 						))}
 					</div>
 				) : filtered.length === 0 ? (
-					<div className="text-center py-20 bg-card rounded-none border border-border/10 shadow-2xl shadow-primary/5">
-						<RiPagesLine className="w-12 h-12 text-muted-foreground/20 mx-auto mb-6" />
-						<p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">
-							No categories found.
-						</p>
+					<div className="py-20 flex justify-center">
+						<Empty className="max-w-md">
+							<EmptyHeader>
+								<EmptyMedia variant="icon">
+									<RiPagesLine className="w-4 h-4 text-primary" />
+								</EmptyMedia>
+								<EmptyTitle className="text-xl font-display font-black uppercase">
+									No Categories Found
+								</EmptyTitle>
+								<EmptyDescription className="uppercase tracking-widest text-[10px]">
+									We couldn't find any categories matching your current search.
+								</EmptyDescription>
+							</EmptyHeader>
+						</Empty>
 					</div>
 				) : (
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

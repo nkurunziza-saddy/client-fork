@@ -36,8 +36,8 @@ export const getServiceColumns = ({
 		header: "Service",
 		cell: ({ row }) => (
 			<div className="flex items-center gap-3">
-				<div className="rounded-sm border border-orange-100 bg-orange-50 p-2">
-					<RiServiceLine size={16} className="text-orange-600" />
+				<div className="rounded-sm border border-warning/20 bg-warning/5 p-2">
+					<RiServiceLine size={16} className="text-warning" />
 				</div>
 				<div>
 					<p className="font-heading font-bold text-foreground">

@@ -67,7 +67,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 					>
 						<RiHeartLine size={18} />
 						{wishlistCount > 0 && (
-							<Badge className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center p-0 text-[9px] font-bold bg-primary text-white border-2 border-background rounded-md font-sans">
+							<Badge className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center p-0 text-[9px] font-bold bg-primary text-primary-foreground border-2 border-background rounded-md font-sans">
 								{wishlistCount > 99 ? "99+" : wishlistCount}
 							</Badge>
 						)}
@@ -89,23 +89,23 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 						render={
 							<Button
 								variant="ghost"
-								className="flex items-center gap-2 pl-1 pr-2 py-1 h-10 rounded-lg border border-border/40 hover:border-primary/30 hover:bg-muted/5 transition-all duration-300"
+								className="flex items-center gap-1.5 pl-0.5 pr-1 py-0.5 h-8 rounded-none border border-border/40 hover:border-primary/30 hover:bg-muted/5 transition-all duration-300"
 							>
-								<Avatar className="h-8 w-8 rounded-md border border-border/40">
+								<Avatar className="h-6.5 w-6.5 rounded-none border border-border/40">
 									<AvatarImage src={user.image} alt={user.name} />
-									<AvatarFallback className="font-heading font-bold bg-primary/5 text-primary text-[10px] rounded-md">
+									<AvatarFallback className="font-heading font-bold bg-primary/5 text-primary text-[8px] rounded-none">
 										{user.name?.charAt(0).toUpperCase()}
 									</AvatarFallback>
 								</Avatar>
 								<RiArrowDownSLine
-									size={14}
+									size={12}
 									className="text-muted-foreground group-data-[state=open]:rotate-180 transition-transform duration-300"
 								/>
 							</Button>
 						}
 					/>
 					<DropdownMenuContent
-						className="w-72 align-end border border-border/40 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-1.5 bg-background/95 backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300"
+						className="w-72 align-end border border-border/40 rounded-lg shadow-[0_20px_50px] shadow-foreground/10 p-1.5 bg-background/95 backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300"
 						align="end"
 					>
 						<DropdownMenuGroup>
@@ -189,7 +189,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 						</Button>
 					</Link>
 					<Link to={ROUTES.AUTH.SIGNUP}>
-						<Button className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] h-10 px-6 rounded-lg bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
+						<Button className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] h-10 px-6 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
 							Join Free
 						</Button>
 					</Link>

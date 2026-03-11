@@ -33,12 +33,12 @@ export const FeaturedBrands: React.FC = () => {
 					{BRANDS.map((brand) => (
 						<div
 							key={brand.name}
-							className="h-40 bg-white dark:bg-slate-900 flex flex-col items-center justify-center group hover:bg-primary/5 transition-all duration-500 cursor-pointer rounded-lg"
+							className="h-40 bg-background flex flex-col items-center justify-center group hover:bg-primary/5 transition-all duration-500 cursor-pointer rounded-none"
 						>
 							<span className="text-3xl font-heading font-black text-muted-foreground/30 group-hover:text-primary transition-colors tracking-tighter italic">
 								{brand.logo}
 							</span>
-							<div className="mt-4 text-[9px] font-bold text-muted-foreground/0 group-hover:text-muted-foreground/100 transition-all duration-500 uppercase tracking-widest translate-y-2 group-hover:translate-y-0">
+							<div className="mt-4 text-[9px] font-bold text-muted-foreground/0 group-hover:text-muted-foreground transition-all duration-500 uppercase tracking-widest translate-y-2 group-hover:translate-y-0">
 								Verified Brand
 							</div>
 						</div>

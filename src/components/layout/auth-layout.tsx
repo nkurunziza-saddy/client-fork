@@ -19,6 +19,9 @@ export function AuthLayout() {
 						src="https://images.pexels.com/photos/544966/pexels-photo-544966.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
 						alt="Construction Site"
 						className="w-full h-full object-cover opacity-40 mix-blend-overlay"
+						onError={(e) => {
+							e.currentTarget.src = "/image-fallback.svg";
+						}}
 					/>
 					<div className="absolute inset-0 bg-linear-to-t from-foreground/90 via-foreground/50 to-foreground/30" />
 				</div>
@@ -59,6 +62,9 @@ export function AuthLayout() {
 										src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
 										alt="User"
 										className="w-full h-full object-cover"
+										onError={(e) => {
+											e.currentTarget.src = "/image-fallback.svg";
+										}}
 									/>
 								</div>
 								<div>

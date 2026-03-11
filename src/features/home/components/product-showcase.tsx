@@ -39,7 +39,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 
 	return (
 		<HomeSection variant={variant} withGrid={withGrid} className={className}>
-			<div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+			<div className="max-w-[1800px] mx-auto px-4 lg:px-6">
 				<SectionHeader
 					title={title}
 					subtitle={subtitle}
@@ -49,16 +49,16 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 				/>
 
 				{listings.length === 0 ? (
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6">
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div
 								key={i}
-								className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20 animate-pulse"
+								className="aspect-[4/3] rounded-none border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>
 				) : (
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6">
 						{listings.map((product) => (
 							<ProductCard
 								key={product.id}
@@ -74,7 +74,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 				<div className="mt-8 md:hidden">
 					<Button
 						variant="outline"
-						size="lg"
+						className="w-full rounded-none h-11 text-[10px] font-black uppercase tracking-widest border-border/40"
 						onClick={() => {
 							navigate({
 								to: "/products",

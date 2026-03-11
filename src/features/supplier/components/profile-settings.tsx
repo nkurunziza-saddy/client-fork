@@ -103,6 +103,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
 										src={profileData.avatar}
 										alt="Profile"
 										className="w-28 h-28 rounded-sm object-cover border border-background shadow-none"
+										onError={(e) => {
+											e.currentTarget.src = "/image-fallback.svg";
+										}}
 									/>
 									<button className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2.5 rounded-sm hover:scale-110 transition-transform shadow-none border border-background">
 										<Camera className="w-4 h-4" />
@@ -193,6 +196,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
 									src={companyData.coverImage}
 									alt="Cover"
 									className="w-full h-full object-cover opacity-60"
+									onError={(e) => {
+										e.currentTarget.src = "/image-fallback.svg";
+									}}
 								/>
 								<div className="absolute inset-0 flex items-center justify-center">
 									<Button

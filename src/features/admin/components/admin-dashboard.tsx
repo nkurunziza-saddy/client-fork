@@ -8,11 +8,17 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Empty,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { useGetCompaniesQuery } from "@/services/api/companies";
 import { useGetProductsQuery } from "@/services/api/products";
 import { useGetServicesQuery } from "@/services/api/services";
 import { useGetMarketplaceStatsQuery } from "@/services/api/stats";
-import { PageContainer } from "@/shared/components";
+import { PageContainer, StatsGrid } from "@/shared/components";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatDate } from "@/shared/utils/format";
 import { Card } from "./card";
@@ -100,36 +106,36 @@ export function AdminDashboard() {
 				badge="System Administrator"
 			/>
 
-			<div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
+			<StatsGrid columns={4}>
 				<StatCard
 					label="Suppliers"
 					value={compact(verifiedSuppliers)}
 					icon={RiShieldCheckLine}
-					bgColor="bg-emerald-50"
-					color="text-emerald-600"
+					bgColor="bg-success/5"
+					color="text-success"
 				/>
 				<StatCard
 					label="Listings"
 					value={compact(activeListings)}
 					icon={RiApps2Line}
-					bgColor="bg-blue-50"
-					color="text-blue-600"
+					bgColor="bg-info/5"
+					color="text-info"
 				/>
 				<StatCard
 					label="Catalog"
 					value={compact(catalogItems)}
 					icon={RiFolder2Line}
-					bgColor="bg-violet-50"
-					color="text-violet-600"
+					bgColor="bg-info/5"
+					color="text-info"
 				/>
 				<StatCard
 					label="Review"
 					value={compact(pendingReviewCount)}
 					icon={RiAlertLine}
-					bgColor="bg-amber-50"
-					color="text-amber-600"
+					bgColor="bg-warning/5"
+					color="text-warning"
 				/>
-			</div>
+			</StatsGrid>
 
 			<div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
 				<Card
@@ -176,10 +182,17 @@ export function AdminDashboard() {
 					noPadding
 				>
 					{recentActivity.length === 0 ? (
-						<div className="py-16 text-center">
-							<p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">
-								No activity yet
-							</p>
+						<div className="py-12 px-6">
+							<Empty className="border-none bg-transparent p-0 gap-2">
+								<EmptyHeader>
+									<EmptyMedia variant="icon" className="mb-0">
+										<RiAlertLine className="w-4 h-4 text-muted-foreground/40" />
+									</EmptyMedia>
+									<EmptyTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+										No activity yet
+									</EmptyTitle>
+								</EmptyHeader>
+							</Empty>
 						</div>
 					) : (
 						<div className="divide-y divide-border/40">

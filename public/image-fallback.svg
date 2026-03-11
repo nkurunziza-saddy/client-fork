@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- Background -->
+  <rect width="100%" height="100%" rx="14" fill="#f8fafc"/>
+
+  <!-- Image icon frame -->
+  <rect x="120" y="70" width="160" height="100" rx="10"
+        fill="none" stroke="#cbd5e1" stroke-width="2"/>
+
+  <!-- Minimal mountain -->
+  <path d="M135 150 L175 110 L215 150 Z"
+        fill="#cbd5e1"/>
+
+  <!-- Sun -->
+  <circle cx="235" cy="105" r="7" fill="#cbd5e1"/>
+
+  <!-- Clean text -->
+  <text x="200" y="200"
+        text-anchor="middle"
+        font-family="Inter, system-ui, sans-serif"
+        font-size="16"
+        fill="#64748b">
+    Image failed to load
+  </text>
+</svg>
