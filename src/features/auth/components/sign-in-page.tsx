@@ -1,10 +1,11 @@
 import { RiArrowLeftLine } from "@remixicon/react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { SignInForm } from "@/features/forms/components/sign-in-form";
 import { getErrorFromRtkQuery } from "@/lib/utils";
+import { Route } from "@/routes/auth.signin";
 import {
 	useResendVerificationEmailMutation,
 	useSignInMutation,
@@ -13,13 +14,12 @@ import { setToken, setUser } from "@/store/slices/auth-slice";
 
 export function SignInPage() {
 	const navigate = useNavigate();
-	const search = useSearch({ from: "/auth/signin" });
+	const { from } = Route.useSearch();
 	const dispatch = useDispatch();
 	const [signIn, { isLoading, error }] = useSignInMutation();
 	const [resendVerification, { isLoading: isResending }] =
 		useResendVerificationEmailMutation();
 
-	const from = (search as any).from;
 	const [lastEmail, setLastEmail] = useState("");
 
 	const serverError = getErrorFromRtkQuery(error);
@@ -49,7 +49,7 @@ export function SignInPage() {
 			const needsOnboarding = result.user.needsOnboarding;
 
 			if (from) {
-				window.location.href = from;
+				navigate({ to: from, replace: true });
 			} else if (needsOnboarding) {
 				navigate({ to: "/onboarding", replace: true });
 			} else if (isAdmin) {

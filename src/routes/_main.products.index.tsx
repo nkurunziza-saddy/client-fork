@@ -2,9 +2,22 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MarketplacePage } from "@/features/marketplace/components/marketplace-page";
 import { productsApi } from "@/services/api/products";
 import { store } from "@/store";
+import { createSeoMeta } from "@/shared/utils/seo";
 
 export const Route = createFileRoute("/_main/products/")({
 	component: () => <MarketplacePage forcedType="PRODUCT" />,
+	head: () =>
+		createSeoMeta({
+			title: "Wholesale Products Marketplace",
+			description:
+				"Browse our extensive catalog of quality wholesale products from across Africa. Find the best deals on electronics, fashion, food, and more.",
+			keywords: [
+				"wholesale products Africa",
+				"African electronics wholesale",
+				"African fashion suppliers",
+				"wholesale food Africa",
+			],
+		}),
 	validateSearch: (
 		search: Record<string, unknown>,
 	): {

@@ -12,6 +12,7 @@ import { AuctionsGrid } from "@/features/auctions/components/auctions-grid";
 import { useAuctionsFilters } from "@/hooks/use-auctions-filters";
 import { auctionsApi } from "@/services/api/auctions";
 import { store } from "@/store";
+import { createSeoMeta } from "@/shared/utils/seo";
 
 export const Route = createFileRoute("/_main/auctions/")({
 	component: AuctionsPage,
@@ -23,6 +24,18 @@ export const Route = createFileRoute("/_main/auctions/")({
 			}),
 		);
 	},
+	head: () =>
+		createSeoMeta({
+			title: "Live Wholesale Auctions",
+			description:
+				"Participate in live wholesale auctions on AfrikaMarket. Bid on quality products from verified African suppliers and get the best prices.",
+			keywords: [
+				"wholesale auctions Africa",
+				"live bidding Africa",
+				"B2B auctions",
+				"African marketplace auctions",
+			],
+		}),
 });
 
 function AuctionsPage() {
