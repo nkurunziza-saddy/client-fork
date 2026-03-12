@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
-    "sitemap": "tsx scripts/generate-sitemap.ts",
+    "sitemap": "tsx --env-file=.env scripts/generate-sitemap.ts",
     "pre-push": "pnpm run sitemap && git add public/sitemap.xml",
     "preview": "vite preview",
     "test": "vitest run",

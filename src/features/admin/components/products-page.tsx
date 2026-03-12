@@ -11,6 +11,7 @@ import { ActionModal } from "@/shared/components/action-modal";
 import { PageContainer } from "@/shared/components/page-container";
 import type { ProductRow } from "@/types";
 import { getProductColumns } from "../columns/products-columns";
+import { AdminTableToolbar } from "./admin-table-toolbar";
 import { Card } from "./card";
 import { PageHeader } from "./page-header";
 
@@ -100,10 +101,14 @@ export function AdminProductsPage() {
 	);
 
 	return (
-		<PageContainer>
+		<PageContainer isFluid className="space-y-6">
 			<PageHeader title="Products" subtitle="Manage catalog materials" />
 
-			<Card noPadding>
+			<Card
+				title="Product Catalog"
+				subtitle="Search and review product listings"
+				noPadding
+			>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
 						Loading products...
@@ -112,8 +117,18 @@ export function AdminProductsPage() {
 					<DataTable
 						columns={columns}
 						data={products}
-						filterColumn="name"
-						filterPlaceholder="Search products..."
+						renderToolbar={(table) => (
+							<AdminTableToolbar
+								table={table}
+								searchColumn="name"
+								searchPlaceholder="Search products..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Active", value: "active" },
+									{ label: "Inactive", value: "inactive" },
+								]}
+							/>
+						)}
 						manualPagination
 						pageCount={productsResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}

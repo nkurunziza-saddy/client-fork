@@ -35,7 +35,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
 
 	return (
 		<img
-			src={error ? fallbackSrc : src}
+			src={error || !src ? fallbackSrc : src}
 			alt={finalAlt}
 			onError={() => setError(true)}
 			className={cn(

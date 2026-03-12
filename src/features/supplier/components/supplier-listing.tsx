@@ -104,23 +104,88 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 							</div>
 						</div>
 
-						<div className="flex items-center bg-muted/20 border border-border/10 p-0.5 rounded-none hidden sm:flex h-9">
-							<Button
-								variant={viewMode === "grid" ? "secondary" : "ghost"}
-								size="icon"
-								className="rounded-none h-8 w-8 data-[state=active]:bg-background"
-								onClick={() => setViewMode("grid")}
+						<div className="flex items-center gap-2 md:gap-3">
+							<Drawer
+								open={isMobileFiltersOpen}
+								onOpenChange={setIsMobileFiltersOpen}
 							>
-								<Grid className="w-3.5 h-3.5" />
-							</Button>
+								<DrawerTrigger asChild>
+									<Button
+										variant="outline"
+										size="sm"
+										className="lg:hidden rounded-none border-border/40 h-9 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
+									>
+										<SlidersHorizontal className="w-3.5 h-3.5" />
+										Filters
+										{hasActiveFilters && (
+											<span className="w-1.5 h-1.5 rounded-full bg-primary" />
+										)}
+									</Button>
+								</DrawerTrigger>
+								<DrawerContent className="bg-background flex flex-col">
+									<DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
+										<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
+											<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+											Supplier Filters
+										</DrawerTitle>
+									</DrawerHeader>
+									<div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
+										<SupplierFilterPanel
+											filters={filters}
+											categories={categories}
+											onFilterChange={handleFiltersChange}
+										/>
+									</div>
+									{hasActiveFilters && (
+										<div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
+											<Button
+												variant="ghost"
+												size="sm"
+												className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
+												onClick={() => {
+													handleClearFilters();
+													setIsMobileFiltersOpen(false);
+												}}
+											>
+												Reset All Filters
+											</Button>
+										</div>
+									)}
+								</DrawerContent>
+							</Drawer>
+
 							<Button
-								variant={viewMode === "list" ? "secondary" : "ghost"}
-								size="icon"
-								className="rounded-none h-8 w-8"
-								onClick={() => setViewMode("list")}
+								variant="outline"
+								size="sm"
+								className={cn(
+									"hidden lg:flex rounded-none border-border/40 h-9 font-black uppercase text-[10px] tracking-widest",
+									showFilters &&
+										"bg-foreground text-background border-foreground hover:bg-foreground/90",
+								)}
+								onClick={() => setShowFilters(!showFilters)}
 							>
-								<List className="w-3.5 h-3.5" />
+								<SlidersHorizontal className="w-3.5 h-3.5 mr-2" />
+								{showFilters ? "Hide Filters" : "Show Filters"}
 							</Button>
+
+							<div className="flex items-center bg-muted/20 border border-border/10 p-0.5 rounded-none hidden sm:flex h-9">
+								<Button
+									variant={viewMode === "grid" ? "secondary" : "ghost"}
+									size="icon"
+									className="rounded-none h-8 w-8 data-[state=active]:bg-background"
+									onClick={() => setViewMode("grid")}
+								>
+									<Grid className="w-3.5 h-3.5" />
+								</Button>
+								<Button
+									variant={viewMode === "list" ? "secondary" : "ghost"}
+									size="icon"
+									className="rounded-none h-8 w-8"
+									onClick={() => setViewMode("list")}
+								>
+									<List className="w-3.5 h-3.5" />
+								</Button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -162,70 +227,6 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 						{/* Toolbar */}
 						<div className="flex flex-col gap-4 mb-8">
 							<div className="flex flex-row gap-3 items-center">
-								<Button
-									variant="outline"
-									size="icon"
-									className={cn(
-										"hidden lg:flex shrink-0 rounded-none border-border/40 h-10 w-10",
-										showFilters &&
-											"bg-foreground text-background border-foreground hover:bg-foreground/90",
-									)}
-									onClick={() => setShowFilters(!showFilters)}
-								>
-									<SlidersHorizontal className="w-4 h-4" />
-								</Button>
-
-								{/* Mobile Filter */}
-								<Drawer
-									open={isMobileFiltersOpen}
-									onOpenChange={setIsMobileFiltersOpen}
-									direction="right"
-								>
-									<DrawerTrigger asChild>
-										<Button
-											variant="outline"
-											size="sm"
-											className="lg:hidden rounded-none border-border/40 h-10 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
-										>
-											<SlidersHorizontal className="w-3.5 h-3.5" />
-											Filters
-											{hasActiveFilters && (
-												<span className="w-1.5 h-1.5 rounded-full bg-primary" />
-											)}
-										</Button>
-									</DrawerTrigger>
-									<DrawerContent className="bg-background flex flex-col">
-										<DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
-											<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
-												<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
-												Supplier Filters
-											</DrawerTitle>
-										</DrawerHeader>
-										<div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
-											<SupplierFilterPanel
-												filters={filters}
-												categories={categories}
-												onFilterChange={handleFiltersChange}
-											/>
-										</div>
-										{hasActiveFilters && (
-											<div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
-												<Button
-													variant="ghost"
-													size="sm"
-													className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
-													onClick={() => {
-														handleClearFilters();
-														setIsMobileFiltersOpen(false);
-													}}
-												>
-													Reset All
-												</Button>
-											</div>
-										)}
-									</DrawerContent>
-								</Drawer>
-
 								<div className="relative flex-1 group">
 									<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
 									<Input

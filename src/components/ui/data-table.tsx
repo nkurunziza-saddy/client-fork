@@ -11,6 +11,7 @@ import type {
 	OnChangeFn,
 	PaginationState,
 	SortingState,
+	Table as TableInstance,
 	VisibilityState,
 } from "@tanstack/react-table";
 import {
@@ -49,12 +50,17 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
 	filterColumn?: string;
 	filterPlaceholder?: string;
+	className?: string;
+	toolbarClassName?: string;
+	showToolbar?: boolean;
+	renderToolbar?: (table: TableInstance<TData>) => React.ReactNode;
 	pageCount?: number;
 	manualPagination?: boolean;
 	onPaginationChange?: OnChangeFn<PaginationState>;
@@ -68,6 +74,10 @@ export function DataTable<TData, TValue>({
 	data,
 	filterColumn,
 	filterPlaceholder = "Filter...",
+	className,
+	toolbarClassName,
+	showToolbar = true,
+	renderToolbar,
 	pageCount,
 	manualPagination,
 	onPaginationChange,
@@ -110,68 +120,76 @@ export function DataTable<TData, TValue>({
 		},
 	});
 
-	return (
-		<div className="space-y-4">
-			<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-				<div className="flex flex-1 items-center">
-					{filterColumn && (
-						<Input
-							placeholder={filterPlaceholder}
-							value={
-								(table.getColumn(filterColumn)?.getFilterValue() as string) ??
-								""
-							}
-							onChange={(event) =>
-								table
-									.getColumn(filterColumn)
-									?.setFilterValue(event.target.value)
-							}
-							className="h-9 w-full sm:w-[250px] rounded-none border-border/40 text-[10px] font-bold uppercase tracking-widest"
-						/>
-					)}
-				</div>
-				<DropdownMenu>
-					<DropdownMenuTrigger
-						render={
-							<Button
-								variant="outline"
-								size="sm"
-								className="hidden lg:flex h-9 rounded-none border-border/40 font-black uppercase text-[10px] tracking-widest"
-							>
-								<RiSettings2Line className="mr-2 h-4 w-4" />
-								Columns
-							</Button>
+	const defaultToolbar = (
+		<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+			<div className="flex flex-1 items-center">
+				{filterColumn && (
+					<Input
+						placeholder={filterPlaceholder}
+						value={
+							(table.getColumn(filterColumn)?.getFilterValue() as string) ??
+							""
 						}
+						onChange={(event) =>
+							table
+								.getColumn(filterColumn)
+								?.setFilterValue(event.target.value)
+						}
+						className="h-9 w-full sm:w-[250px] rounded-none border-border/40 text-[10px] font-bold uppercase tracking-widest"
 					/>
-					<DropdownMenuContent align="end" className="w-48">
-						<DropdownMenuGroup>
-							<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							{table
-								.getAllColumns()
-								.filter(
-									(column) =>
-										typeof column.accessorFn !== "undefined" &&
-										column.getCanHide(),
-								)
-								.map((column) => {
-									return (
-										<DropdownMenuCheckboxItem
-											key={column.id}
-											className="capitalize"
-											checked={column.getIsVisible()}
-											onCheckedChange={(value) =>
-												column.toggleVisibility(!!value)
-											}
-										>
-											{column.id}
-										</DropdownMenuCheckboxItem>
-									);
-								})}
-						</DropdownMenuGroup>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				)}
 			</div>
+			<DropdownMenu>
+				<DropdownMenuTrigger
+					render={
+						<Button
+							variant="outline"
+							size="sm"
+							className="hidden lg:flex h-9 rounded-none border-border/40 font-black uppercase text-[10px] tracking-widest"
+						>
+							<RiSettings2Line className="mr-2 h-4 w-4" />
+							Columns
+						</Button>
+					}
+				/>
+				<DropdownMenuContent align="end" className="w-48">
+					<DropdownMenuGroup>
+						<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						{table
+							.getAllColumns()
+							.filter(
+								(column) =>
+									typeof column.accessorFn !== "undefined" &&
+									column.getCanHide(),
+							)
+							.map((column) => {
+								return (
+									<DropdownMenuCheckboxItem
+										key={column.id}
+										className="capitalize"
+										checked={column.getIsVisible()}
+										onCheckedChange={(value) =>
+											column.toggleVisibility(!!value)
+										}
+									>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								);
+							})}
+					</DropdownMenuGroup>
+				</DropdownMenuContent>
+			</DropdownMenu>
+		</div>
+	);
+
+	return (
+		<div className={cn("space-y-4", className)}>
+			{showToolbar && (
+				<div className={toolbarClassName}>
+					{renderToolbar ? renderToolbar(table) : defaultToolbar}
+				</div>
+			)}
 			<div className="rounded-none border border-border/40 overflow-hidden">
 				<div className="overflow-x-auto custom-scrollbar">
 					<Table>

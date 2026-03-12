@@ -90,18 +90,22 @@ export const CombinedView: React.FC<CombinedViewProps> = ({
 
 	if (isFetching && items.length === 0) {
 		return (
-			<div
-				className={cn(
-					"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
-					showFilters ? "xl:grid-cols-4" : "xl:grid-cols-5 2xl:grid-cols-6",
-				)}
-			>
-				{Array.from({ length: 9 }).map((_, i) => (
-					<div
-						key={`comb-skeleton-${i}`}
-						className="h-72 bg-muted/5 animate-pulse"
-					/>
-				))}
+			<div className="space-y-12">
+				<div
+					className={cn(
+						"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+						showFilters
+							? "xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6"
+							: "xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8",
+					)}
+				>
+					{Array.from({ length: 12 }).map((_, i) => (
+						<div
+							key={`comb-skeleton-${i}`}
+							className="h-72 bg-muted/5 animate-pulse"
+						/>
+					))}
+				</div>
 			</div>
 		);
 	}
@@ -136,15 +140,15 @@ export const CombinedView: React.FC<CombinedViewProps> = ({
 	}
 
 	return (
-		<div className="space-y-12">
+		<div className="space-y-12 w-full">
 			<div
 				className={cn(
 					viewMode === "grid"
 						? cn(
 								"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
 								showFilters
-									? "xl:grid-cols-4"
-									: "xl:grid-cols-5 2xl:grid-cols-6",
+									? "xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6"
+									: "xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8",
 							)
 						: "flex flex-col gap-6",
 					isFetching && "opacity-60",

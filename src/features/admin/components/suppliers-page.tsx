@@ -19,6 +19,7 @@ import { PageContainer } from "@/shared/components/page-container";
 import { StatsGrid } from "@/shared/components/stats-grid";
 import type { SupplierRow } from "@/types";
 import { getSuppliersColumns } from "../columns/suppliers-columns";
+import { AdminTableToolbar } from "./admin-table-toolbar";
 import { Card } from "./card";
 import { PageHeader } from "./page-header";
 import { StatCard } from "./stat-card";
@@ -112,7 +113,7 @@ export function AdminSuppliersPage() {
 	);
 
 	return (
-		<PageContainer>
+		<PageContainer isFluid className="space-y-6">
 			<PageHeader
 				title="Suppliers"
 				subtitle="Manage verified supplier entities"
@@ -126,7 +127,7 @@ export function AdminSuppliersPage() {
 				}
 			/>
 
-			<StatsGrid columns={3}>
+			<StatsGrid columns={3} className="mb-0">
 				<StatCard
 					label="Total Suppliers"
 					value={companiesResult?.meta?.total?.toString() || "0"}
@@ -155,7 +156,11 @@ export function AdminSuppliersPage() {
 				/>
 			</StatsGrid>
 
-			<Card noPadding>
+			<Card
+				title="Supplier Directory"
+				subtitle="Search and manage supplier accounts"
+				noPadding
+			>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
 						Loading suppliers...
@@ -164,8 +169,18 @@ export function AdminSuppliersPage() {
 					<DataTable
 						columns={columns}
 						data={suppliers}
-						filterColumn="name"
-						filterPlaceholder="Search suppliers..."
+						renderToolbar={(table) => (
+							<AdminTableToolbar
+								table={table}
+								searchColumn="name"
+								searchPlaceholder="Search suppliers..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Active", value: "active" },
+									{ label: "Suspended", value: "suspended" },
+								]}
+							/>
+						)}
 						manualPagination
 						pageCount={companiesResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}

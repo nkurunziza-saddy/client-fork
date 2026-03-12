@@ -11,6 +11,7 @@ import { ActionModal } from "@/shared/components/action-modal";
 import { PageContainer } from "@/shared/components/page-container";
 import type { Auction, AuctionStatus } from "@/types";
 import { getAuctionColumns } from "../columns/auctions-columns";
+import { AdminTableToolbar } from "./admin-table-toolbar";
 import { Card } from "./card";
 import { PageHeader } from "./page-header";
 
@@ -86,13 +87,17 @@ export function AdminAuctionsPage() {
 	);
 
 	return (
-		<PageContainer>
+		<PageContainer isFluid className="space-y-6">
 			<PageHeader
 				title="Auctions"
 				subtitle="Review and moderate supplier auctions"
 			/>
 
-			<Card noPadding>
+			<Card
+				title="Auction Pipeline"
+				subtitle="Track review status for auctions"
+				noPadding
+			>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
 						Loading auctions...
@@ -101,8 +106,19 @@ export function AdminAuctionsPage() {
 					<DataTable
 						columns={columns}
 						data={auctions}
-						filterColumn="title"
-						filterPlaceholder="Search auctions..."
+						renderToolbar={(table) => (
+							<AdminTableToolbar
+								table={table}
+								searchColumn="title"
+								searchPlaceholder="Search auctions..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Pending", value: "PENDING" },
+									{ label: "Approved", value: "APPROVED" },
+									{ label: "Rejected", value: "REJECTED" },
+								]}
+							/>
+						)}
 						manualPagination
 						pageCount={auctionsResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}

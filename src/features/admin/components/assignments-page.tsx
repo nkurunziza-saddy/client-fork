@@ -4,6 +4,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { useGetServicesQuery } from "@/services/api/services";
 import type { AssignmentRow } from "@/types";
 import { getAssignmentColumns } from "../columns/assignments-columns";
+import { AdminTableToolbar } from "./admin-table-toolbar";
 import { Card } from "./card";
 import { PageHeader } from "./page-header";
 
@@ -70,8 +71,18 @@ export function AdminAssignmentsPage() {
 					<DataTable
 						columns={columns}
 						data={assignments}
-						filterColumn="service"
-						filterPlaceholder="Search services..."
+						renderToolbar={(table) => (
+							<AdminTableToolbar
+								table={table}
+								searchColumn="service"
+								searchPlaceholder="Search services..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Active", value: "active" },
+									{ label: "Inactive", value: "inactive" },
+								]}
+							/>
+						)}
 						manualPagination
 						pageCount={servicesResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}

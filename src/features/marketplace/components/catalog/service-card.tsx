@@ -31,7 +31,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 		}
 	};
 
-	const mainImage = service.images?.[0] || null;
+	const mainImage = service.images?.[0] || "";
 	const company = service.company;
 
 	const badges = service.priceType && (

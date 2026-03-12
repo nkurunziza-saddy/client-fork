@@ -94,7 +94,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 
 			{/* Top sticky header with supplier name */}
 			<div className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-[48px] z-30 py-3 md:py-4 px-4 md:px-8">
-				<div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
+				<div className="w-full mx-auto px-4 md:px-8 lg:px-12 flex items-center justify-between gap-4">
 					<div className="flex items-center gap-3 overflow-hidden">
 						<Button
 							variant="ghost"
@@ -115,7 +115,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 				</div>
 			</div>
 
-			<div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-12">
+			<div className="w-full mx-auto px-4 md:px-8 lg:px-12 py-12">
 				<div className="grid mt-16 md:grid-cols-[200px_1fr] gap-8 md:gap-12 items-start pt-4 md:pt-0">
 					<div className="hidden md:block" />
 

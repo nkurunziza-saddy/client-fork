@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { useGetUsersQuery } from "@/services/api/users";
 import { type BuyerRow, buyerColumns } from "../columns/buyers-columns";
+import { AdminTableToolbar } from "./admin-table-toolbar";
 import { Card } from "./card";
 import { PageHeader } from "./page-header";
 import { StatCard } from "./stat-card";
@@ -95,8 +96,18 @@ export function AdminBuyersPage() {
 					<DataTable
 						columns={buyerColumns}
 						data={buyers}
-						filterColumn="name"
-						filterPlaceholder="Search by name..."
+						renderToolbar={(table) => (
+							<AdminTableToolbar
+								table={table}
+								searchColumn="name"
+								searchPlaceholder="Search by name..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Verified", value: "verified" },
+									{ label: "Unverified", value: "unverified" },
+								]}
+							/>
+						)}
 						manualPagination
 						pageCount={usersResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}

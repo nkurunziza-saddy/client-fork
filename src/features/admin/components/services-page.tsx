@@ -11,6 +11,7 @@ import { ActionModal } from "@/shared/components/action-modal";
 import { PageContainer } from "@/shared/components/page-container";
 import type { ServiceRow } from "@/types";
 import { getServiceColumns } from "../columns/services-columns";
+import { AdminTableToolbar } from "./admin-table-toolbar";
 import { Card } from "./card";
 import { PageHeader } from "./page-header";
 
@@ -101,10 +102,14 @@ export function AdminServicesPage() {
 	);
 
 	return (
-		<PageContainer>
+		<PageContainer isFluid className="space-y-6">
 			<PageHeader title="Services" subtitle="Manage catalog services" />
 
-			<Card noPadding>
+			<Card
+				title="Service Directory"
+				subtitle="Search and review catalog services"
+				noPadding
+			>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
 						Loading services...
@@ -113,8 +118,18 @@ export function AdminServicesPage() {
 					<DataTable
 						columns={columns}
 						data={services}
-						filterColumn="name"
-						filterPlaceholder="Search services..."
+						renderToolbar={(table) => (
+							<AdminTableToolbar
+								table={table}
+								searchColumn="name"
+								searchPlaceholder="Search services..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Active", value: "active" },
+									{ label: "Inactive", value: "inactive" },
+								]}
+							/>
+						)}
 						manualPagination
 						pageCount={servicesResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}

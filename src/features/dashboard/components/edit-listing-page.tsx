@@ -3,12 +3,6 @@ import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProductForm } from "@/features/forms/components/product-form";
@@ -23,6 +17,7 @@ import {
 	useGetServiceByIdQuery,
 	useUpdateServiceMutation,
 } from "@/services/api/services";
+import { ResponsiveModal } from "@/shared/components/responsive-modal";
 import type { CreateProductVariantInput } from "@/types";
 
 export function ProviderListingEditPage() {
@@ -267,70 +262,73 @@ function AddVariantDialog({
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={(v: boolean) => !v && onClose()}>
-			<DialogContent className="sm:max-w-md">
-				<DialogHeader>
-					<DialogTitle>Add Variant</DialogTitle>
-				</DialogHeader>
-				<form onSubmit={handleSubmit} className="space-y-4">
+		<ResponsiveModal
+			open={open}
+			onOpenChange={(v) => {
+				if (!v) onClose();
+			}}
+			title="Add Variant"
+			description="Create a new option for this product."
+			size="md"
+		>
+			<form onSubmit={handleSubmit} className="space-y-4">
+				<div>
+					<Label className="block text-xs font-medium text-muted-foreground mb-1">
+						Name *
+					</Label>
+					<Input
+						value={name}
+						onChange={(e: any) => setName(e.target.value)}
+						placeholder="e.g. Size L, 50kg bag"
+						required
+					/>
+				</div>
+				<div className="grid grid-cols-2 gap-4">
 					<div>
 						<Label className="block text-xs font-medium text-muted-foreground mb-1">
-							Name *
+							Price *
 						</Label>
 						<Input
-							value={name}
-							onChange={(e: any) => setName(e.target.value)}
-							placeholder="e.g. Size L, 50kg bag"
+							type="number"
+							step="0.01"
+							min={0}
+							value={price}
+							onChange={(e: any) => setPrice(e.target.value)}
 							required
 						/>
 					</div>
-					<div className="grid grid-cols-2 gap-4">
-						<div>
-							<Label className="block text-xs font-medium text-muted-foreground mb-1">
-								Price *
-							</Label>
-							<Input
-								type="number"
-								step="0.01"
-								min={0}
-								value={price}
-								onChange={(e: any) => setPrice(e.target.value)}
-								required
-							/>
-						</div>
-						<div>
-							<Label className="block text-xs font-medium text-muted-foreground mb-1">
-								Stock *
-							</Label>
-							<Input
-								type="number"
-								min={0}
-								value={stock}
-								onChange={(e: any) => setStock(e.target.value)}
-								required
-							/>
-						</div>
-					</div>
 					<div>
 						<Label className="block text-xs font-medium text-muted-foreground mb-1">
-							Unit
+							Stock *
 						</Label>
 						<Input
-							value={unit}
-							onChange={(e: any) => setUnit(e.target.value)}
-							placeholder="e.g. piece, kg"
+							type="number"
+							min={0}
+							value={stock}
+							onChange={(e: any) => setStock(e.target.value)}
+							required
 						/>
 					</div>
-					<div className="flex justify-end gap-2">
-						<Button type="button" variant="outline" onClick={onClose}>
-							Cancel
-						</Button>
-						<Button type="submit" disabled={isLoading}>
-							{isLoading ? "Adding..." : "Add Variant"}
-						</Button>
-					</div>
-				</form>
-			</DialogContent>
-		</Dialog>
+				</div>
+				<div>
+					<Label className="block text-xs font-medium text-muted-foreground mb-1">
+						Unit
+					</Label>
+					<Input
+						value={unit}
+						onChange={(e: any) => setUnit(e.target.value)}
+						placeholder="e.g. piece, kg"
+					/>
+				</div>
+				<div className="flex justify-end gap-2">
+					<Button type="button" variant="outline" onClick={onClose}>
+						Cancel
+					</Button>
+					<Button type="submit" disabled={isLoading}>
+						{isLoading ? "Adding..." : "Add Variant"}
+					</Button>
+				</div>
+			</form>
+		</ResponsiveModal>
 	);
 }
