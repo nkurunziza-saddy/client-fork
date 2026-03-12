@@ -110,11 +110,11 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 			</div>
 
 			{/* Primary Action */}
-			<div className="pt-6 flex flex-col sm:flex-row gap-4">
+			<div className="pt-6 pb-2 flex flex-col sm:flex-row gap-4">
 				<Button
 					onClick={onInquire}
 					size="lg"
-					className="h-12 flex-1 rounded-none bg-primary text-white hover:bg-primary/95 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-primary/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+					className="h-14 flex-1 rounded-none bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-primary/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] py-4"
 				>
 					<RiChat3Line size={16} className="mr-2" />
 					Send Inquiry

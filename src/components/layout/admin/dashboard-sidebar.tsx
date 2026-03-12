@@ -114,6 +114,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 							src={supplierData?.avatar || "/logo.svg"}
 							className="w-10 h-10 rounded-sm object-cover border border-background/20"
 							alt=""
+							onError={(e) => {
+								e.currentTarget.src = "/image-fallback.svg";
+							}}
 						/>
 						<div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border border-foreground"></div>
 					</div>

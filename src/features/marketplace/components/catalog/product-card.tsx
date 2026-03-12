@@ -48,12 +48,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
 	const badges = (
 		<>
 			{product.isFeatured && (
-				<div className="bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
+				<div className="bg-warning text-primary-foreground text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
 					Featured
 				</div>
 			)}
 			{discount > 0 && (
-				<div className="bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
+				<div className="bg-success text-primary-foreground text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
 					{discount}% OFF
 				</div>
 			)}
@@ -84,7 +84,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 						{company.isVerified && (
 							<RiShieldCheckLine
 								size={10}
-								className="text-emerald-500 shrink-0 opacity-80"
+								className="text-success shrink-0 opacity-80"
 							/>
 						)}
 					</div>
@@ -131,7 +131,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
 				{viewMode === "grid" && (
 					<div className="hidden md:flex items-center gap-1 opacity-60">
-						<RiStarLine size={10} className="text-amber-500 fill-amber-400" />
+						<RiStarLine size={10} className="text-warning fill-warning" />
 						<span className="text-[10px] font-bold text-foreground font-display">
 							-
 						</span>

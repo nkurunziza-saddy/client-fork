@@ -202,7 +202,7 @@ export default function UserDashboard() {
 												<Button
 													variant="outline"
 													size="sm"
-													className="flex-1 sm:flex-none h-9 rounded-none text-[9px] font-black uppercase tracking-widest border-border/40 hover:border-amber-500/40 hover:text-amber-600"
+													className="flex-1 sm:flex-none h-9 rounded-none text-[9px] font-black uppercase tracking-widest border-border/40 hover:border-warning/40 hover:text-warning"
 													onClick={() => {
 														setSelectedItem({
 															provider: listing.company?.name ?? "Supplier",

@@ -98,7 +98,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
 			role="button"
 			tabIndex={0}
 			className={cn(
-				"group flex flex-col bg-card border border-border/20 hover:border-primary/40 transition-all duration-500 cursor-pointer h-full relative rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5",
+				"group flex flex-col bg-card border border-border/20 hover:border-primary/40 transition-all duration-500 cursor-pointer h-full relative rounded-none overflow-hidden hover:shadow-lg hover:shadow-primary/5",
 				className,
 			)}
 			onClick={onClick}
@@ -106,7 +106,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
 		>
 			<div className="absolute top-0 left-0 w-full h-px transition-all duration-500 z-20 bg-primary/0 group-hover:bg-primary/40" />
 
-			<div className="relative aspect-4/3 overflow-hidden bg-muted/10">
+			<div className="relative aspect-[4/3] sm:aspect-4/3 overflow-hidden bg-muted/10">
 				<ImageWithFallback
 					src={image || undefined}
 					alt={name}
@@ -114,7 +114,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
 				/>
 
 				{badges && (
-					<div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+					<div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10 scale-90 origin-top-left">
 						{badges}
 					</div>
 				)}
@@ -124,7 +124,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
 						variant="outline"
 						size="icon"
 						className={cn(
-							"absolute top-2 right-2 shadow-2xl bg-background/80 md:backdrop-blur-md border-border/20 rounded-none w-8 h-8 z-10",
+							"absolute top-1.5 right-1.5 shadow-2xl bg-background/80 md:backdrop-blur-md border-border/20 rounded-none w-7 h-7 sm:w-8 sm:h-8 z-10",
 							{ "opacity-0 group-hover:opacity-100": !isInWishlist },
 						)}
 						onClick={(e) => {
@@ -133,27 +133,29 @@ export const BaseCard: React.FC<BaseCardProps> = ({
 						}}
 					>
 						{isInWishlist ? (
-							<RiHeartFill className="fill-destructive text-destructive w-4 h-4" />
+							<RiHeartFill className="fill-destructive text-destructive w-3.5 h-3.5 sm:w-4 sm:h-4" />
 						) : (
-							<RiHeartLine className="w-4 h-4" />
+							<RiHeartLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
 						)}
 					</Button>
 				)}
 			</div>
 
-			<div className="p-4 flex flex-col grow gap-2">
+			<div className="p-2 sm:p-4 flex flex-col grow gap-1.5 sm:gap-2">
 				{categoryName && (
-					<div className="text-[9px] font-bold uppercase tracking-widest text-primary bg-primary/5 px-2 py-0.5 w-fit">
+					<div className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-primary bg-primary/5 px-1.5 py-0.5 w-fit">
 						{categoryName}
 					</div>
 				)}
-				<h3 className="text-xs md:text-[13px] font-display font-extrabold text-foreground tracking-tight leading-tight line-clamp-2 md:min-h-10 group-hover:text-primary transition-colors uppercase">
+				<h3 className="text-[11px] sm:text-xs md:text-[13px] font-display font-extrabold text-foreground tracking-tight leading-tight line-clamp-2 min-h-[1.75rem] sm:min-h-10 group-hover:text-primary transition-colors uppercase">
 					{name}
 				</h3>
 
 				<div className="flex-1">{children}</div>
 				{footer && (
-					<div className="mt-auto pt-3 border-t border-border/40">{footer}</div>
+					<div className="mt-auto pt-2 sm:pt-3 border-t border-border/40">
+						{footer}
+					</div>
 				)}
 			</div>
 		</div>

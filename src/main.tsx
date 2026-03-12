@@ -17,6 +17,8 @@ import { Toaster } from "./components/ui/sonner";
 const router = createRouter({
 	routeTree,
 	defaultPreload: "intent",
+	// Wait 150ms of hover/focus before preloading to avoid "bloat" from accidental hovers
+	defaultPreloadDelay: 150,
 	scrollRestoration: true,
 });
 

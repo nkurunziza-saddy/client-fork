@@ -25,6 +25,9 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
 					src={displayImage}
 					alt={auction.title}
 					className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+					onError={(e) => {
+						e.currentTarget.src = "/image-fallback.svg";
+					}}
 				/>
 
 				<div className="absolute top-3 left-3 flex flex-col gap-2">

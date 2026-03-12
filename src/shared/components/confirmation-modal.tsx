@@ -42,9 +42,9 @@ export function ConfirmationModal({
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogMedia
-						className={isDanger ? "bg-red-100" : "bg-primary/10"}
+						className={isDanger ? "bg-destructive/10" : "bg-primary/10"}
 					>
-						<Icon className={isDanger ? "text-red-600" : "text-primary"} />
+						<Icon className={isDanger ? "text-destructive" : "text-primary"} />
 					</AlertDialogMedia>
 					<AlertDialogTitle>{title}</AlertDialogTitle>
 					<AlertDialogDescription>{message}</AlertDialogDescription>

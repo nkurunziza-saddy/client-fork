@@ -22,9 +22,9 @@ const CategoryGrid: React.FC = () => {
 			withGrid
 			borderTop
 			borderBottom
-			className="py-10 sm:py-16 lg:py-32"
+			className="py-8 sm:py-16 lg:py-24"
 		>
-			<div className="space-y-12 sm:space-y-16">
+			<div className="space-y-8 sm:space-y-16">
 				<SectionHeader
 					title="Market Categories"
 					subtitle="Discover specialized materials and services organized by industry sector."

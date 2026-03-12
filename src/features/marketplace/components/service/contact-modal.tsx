@@ -23,7 +23,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 	onSubmit,
 }) => {
 	return (
-		<div className="fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in duration-200">
+		<div className="fixed inset-0 bg-foreground/80 z-[60] flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in duration-200">
 			<Card className="bg-background rounded-none border border-border max-w-md w-full p-8 shadow-2xl relative">
 				<button
 					type="button"
@@ -88,7 +88,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 						<Button
 							type="submit"
 							disabled={!message.trim() || sendingInquiry}
-							className="w-full rounded-none h-11 font-heading uppercase tracking-wider text-[10px] bg-primary text-white hover:bg-primary/90"
+							className="w-full rounded-none h-11 font-heading uppercase tracking-wider text-[10px] bg-primary text-primary-foreground hover:bg-primary/90"
 						>
 							{sendingInquiry ? "Sending..." : "Submit Inquiry"}
 						</Button>

@@ -26,5 +26,12 @@ export const Route = createFileRoute("/admin")({
 			});
 		}
 	},
+	preload: false,
 	component: AdminLayout,
+	head: () => ({
+		meta: [
+			{ title: "Admin Panel | AfrikaMarket" },
+			{ name: "robots", content: "noindex, nofollow" },
+		],
+	}),
 });

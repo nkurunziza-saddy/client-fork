@@ -36,8 +36,8 @@ export const getProductColumns = ({
 		header: "Product",
 		cell: ({ row }) => (
 			<div className="flex items-center gap-3">
-				<div className="rounded-sm border border-blue-100 bg-blue-50 p-2">
-					<RiPagesLine size={16} className="text-blue-600" />
+				<div className="rounded-sm border border-info/20 bg-info/5 p-2">
+					<RiPagesLine size={16} className="text-info" />
 				</div>
 				<div>
 					<p className="font-heading font-bold text-foreground">

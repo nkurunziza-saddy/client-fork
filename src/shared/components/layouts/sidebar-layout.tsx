@@ -66,7 +66,7 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
 					</div>
 				</header>
 				<main className="flex-1 overflow-auto">
-					<div className="px-4 md:px-6 lg:px-8 py-10">
+					<div className="px-2 sm:px-6 lg:px-8 py-6 md:py-10">
 						<Outlet />
 					</div>
 				</main>

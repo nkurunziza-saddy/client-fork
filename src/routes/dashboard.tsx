@@ -26,5 +26,12 @@ export const Route = createFileRoute("/dashboard")({
 			});
 		}
 	},
+	preload: false,
 	component: DashboardLayout,
+	head: () => ({
+		meta: [
+			{ title: "Supplier Dashboard | AfrikaMarket" },
+			{ name: "robots", content: "noindex, nofollow" },
+		],
+	}),
 });

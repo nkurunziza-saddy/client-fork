@@ -56,8 +56,7 @@ export function OnboardingPage() {
 	return (
 		<div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-8 industrial-grain">
 			<div className="w-full max-w-2xl bg-card border border-border/40 p-8 md:p-12 relative overflow-hidden">
-				<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-
+				<div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
 				<div className="relative z-10 space-y-10">
 					<div className="space-y-4">
 						<div className="flex items-center gap-3">

@@ -212,6 +212,9 @@ const ProductManagement: React.FC = () => {
 												src={firstImage}
 												alt={product.name}
 												className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+												onError={(e) => {
+													e.currentTarget.src = "/image-fallback.svg";
+												}}
 											/>
 										) : (
 											<div className="absolute inset-0 flex items-center justify-center">

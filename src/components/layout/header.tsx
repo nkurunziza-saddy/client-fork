@@ -16,7 +16,12 @@ const navLinks = [
 	{ label: "Services", href: ROUTES.PUBLIC.SERVICES },
 	{ label: "Auctions", href: ROUTES.PUBLIC.AUCTIONS },
 	{ label: "Suppliers", href: ROUTES.PUBLIC.SUPPLIERS },
-	{ label: "About", href: ROUTES.ABOUT },
+];
+
+const secondaryLinks = [
+	{ label: "About Us", href: ROUTES.ABOUT },
+	{ label: "Help Center", href: ROUTES.HELP },
+	{ label: "Become a Supplier", href: ROUTES.AUTH.SIGNUP },
 ];
 
 export function MobileNav() {
@@ -30,15 +35,15 @@ export function MobileNav() {
 				aria-controls={mobileMenuId}
 				aria-expanded={open}
 				aria-label="Toggle menu"
-				className="md:hidden h-10 w-10 p-0"
+				className="h-7 w-7 p-0 hover:bg-transparent"
 				onClick={() => setOpen(!open)}
 				size="icon"
 				variant="ghost"
 			>
 				{open ? (
-					<RiCloseLine className="size-5" />
+					<RiCloseLine className="size-3.5" />
 				) : (
-					<RiMenuLine className="size-5" />
+					<RiMenuLine className="size-3.5" />
 				)}
 			</Button>
 			{open && (
@@ -47,39 +52,55 @@ export function MobileNav() {
 					<div
 						className={cn(
 							"data-[slot=open]:zoom-in-97 ease-out data-[slot=open]:animate-in",
-							"size-full p-4 bg-background border-t border-border/40",
+							"size-full p-6 bg-background border-t border-border/40 flex flex-col",
 						)}
 						data-slot={open ? "open" : "closed"}
 					>
-						<div className="grid gap-y-4 pt-4">
+						<div className="flex flex-col gap-2">
+							<span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 mb-2">
+								Navigation
+							</span>
 							{navLinks.map((link) => (
 								<Link
-									className="flex items-center justify-between text-lg font-black uppercase tracking-[0.2em] px-4 py-3 hover:bg-muted transition-colors group"
+									className="flex items-center justify-between text-base font-black uppercase tracking-[0.15em] py-3 border-b border-border/5 group"
 									key={link.label}
 									to={link.href}
 									onClick={() => setOpen(false)}
-									activeProps={{
-										className:
-											"text-primary bg-primary/5 border-l-4 border-primary",
-									}}
 								>
 									{link.label}
-									<RiArrowRightLine className="size-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+									<RiArrowRightLine className="size-4 opacity-30 group-hover:opacity-100 transition-all" />
 								</Link>
 							))}
 						</div>
+
+						<div className="mt-8 flex flex-col gap-2">
+							<span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 mb-2">
+								Resources
+							</span>
+							{secondaryLinks.map((link) => (
+								<Link
+									className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors py-2"
+									key={link.label}
+									to={link.href}
+									onClick={() => setOpen(false)}
+								>
+									{link.label}
+								</Link>
+							))}
+						</div>
+
 						{!isAuthenticated && (
-							<div className="mt-8 flex flex-col gap-3">
+							<div className="mt-auto pt-8 flex flex-col gap-3">
 								<Link to={ROUTES.AUTH.SIGNIN} onClick={() => setOpen(false)}>
 									<Button
-										className="w-full h-11 text-base font-bold"
+										className="w-full h-12 text-xs font-black uppercase tracking-widest rounded-none"
 										variant="outline"
 									>
 										Sign In
 									</Button>
 								</Link>
 								<Link to={ROUTES.AUTH.SIGNUP} onClick={() => setOpen(false)}>
-									<Button className="w-full h-11 text-base font-bold">
+									<Button className="w-full h-12 text-xs font-black uppercase tracking-widest rounded-none">
 										Get Started
 									</Button>
 								</Link>
@@ -108,25 +129,34 @@ export const Header: React.FC = () => {
 				},
 			)}
 		>
-			<div className="mx-auto flex h-12 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
+			<div className="mx-auto flex h-14 w-full max-w-[1800px] items-center justify-between px-3 sm:px-6 lg:px-8 gap-1 sm:gap-4 overflow-hidden">
 				<HeaderLogo />
 
-				<div className="hidden items-center gap-1 md:flex">
-					{navLinks.map((link) => (
-						<Link
-							key={link.label}
-							to={link.href}
-							className="font-heading font-black text-[10px] tracking-[0.2em] text-foreground/80 hover:text-primary px-4 py-2 uppercase transition-all relative group"
-							activeProps={{
-								className: "text-primary",
-							}}
-						>
-							{link.label}
-							<span className="absolute bottom-1 left-4 right-4 h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 group-[.active]:scale-x-100 transition-transform duration-300" />
-						</Link>
-					))}
+				{/* Main Navigation - Visible on all screens, scrollable on mobile */}
+				<nav className="flex-1 flex items-center relative overflow-hidden mx-0.5 sm:mx-6">
+					<div className="flex-1 flex items-center overflow-x-auto scrollbar-hide no-scrollbar border-x border-border/5 sm:border-none">
+						<div className="flex items-center gap-0 px-0.5 sm:gap-0.5">
+							{navLinks.map((link) => (
+								<Link
+									key={link.label}
+									to={link.href}
+									className="font-heading font-black text-[9px] sm:text-[10px] tracking-[0.05em] sm:tracking-[0.15em] text-foreground/80 hover:text-primary px-2 sm:px-3 py-1.5 uppercase transition-all relative group shrink-0"
+									activeProps={{
+										className: "text-primary",
+									}}
+								>
+									{link.label}
+									<span className="absolute bottom-1 left-2 right-2 sm:left-3 sm:right-3 h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 group-[.active]:scale-x-100 transition-transform duration-300" />
+								</Link>
+							))}
+						</div>
+					</div>
+					{/* Swipe Indicator Gradient */}
+					<div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none md:hidden" />
+				</nav>
 
-					<div className="ml-2 pl-2 border-l border-border/40 flex items-center gap-2">
+				<div className="flex items-center gap-0.5 sm:gap-3 shrink-0">
+					<div className="hidden sm:flex items-center gap-2 pl-4 border-l border-border/40">
 						{!isAuthenticated ? (
 							<>
 								<Link to={ROUTES.AUTH.SIGNIN}>
@@ -151,14 +181,14 @@ export const Header: React.FC = () => {
 							<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
 						)}
 					</div>
-				</div>
 
-				{/* Mobile View - Logo and Menu mapped differently */}
-				<div className="flex md:hidden items-center gap-2">
-					{isAuthenticated && (
-						<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
-					)}
-					<MobileNav />
+					{/* Mobile View - Actions and Menu */}
+					<div className="flex items-center gap-0 sm:hidden">
+						{isAuthenticated && (
+							<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
+						)}
+						<MobileNav />
+					</div>
 				</div>
 			</div>
 		</header>

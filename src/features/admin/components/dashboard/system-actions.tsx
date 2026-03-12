@@ -14,8 +14,8 @@ export const SystemActions: React.FC = () => (
 		<AdminCard title="Moderation Rules" subtitle="Automatic account actions">
 			<div className="space-y-8 mt-4">
 				<div className="flex gap-5">
-					<div className="w-12 h-12 rounded-sm bg-amber-50 flex items-center justify-center shrink-0 border border-amber-100/50">
-						<Package size={24} className="text-amber-600" />
+					<div className="w-12 h-12 rounded-sm bg-warning/5 flex items-center justify-center shrink-0 border border-warning/50">
+						<Package size={24} className="text-warning" />
 					</div>
 					<div>
 						<p className="text-sm font-heading font-bold text-foreground uppercase tracking-wider">
@@ -27,8 +27,8 @@ export const SystemActions: React.FC = () => (
 					</div>
 				</div>
 				<div className="flex gap-5">
-					<div className="w-12 h-12 rounded-sm bg-red-50 flex items-center justify-center shrink-0 border border-red-100/50">
-						<RiUserLine size={24} className="text-red-600" />
+					<div className="w-12 h-12 rounded-sm bg-destructive/5 flex items-center justify-center shrink-0 border border-destructive/50">
+						<RiUserLine size={24} className="text-destructive" />
 					</div>
 					<div>
 						<p className="text-sm font-heading font-bold text-foreground uppercase tracking-wider">

@@ -2,6 +2,14 @@ import { Package } from "lucide-react";
 import type React from "react";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters";
 import { cn } from "@/lib/utils";
 import {
@@ -59,7 +67,7 @@ export const ProductListingView: React.FC<ProductViewProps> = ({
 		return (
 			<div
 				className={cn(
-					"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+					"grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6",
 					showFilters ? "xl:grid-cols-4" : "xl:grid-cols-5 2xl:grid-cols-6",
 				)}
 			>
@@ -75,17 +83,29 @@ export const ProductListingView: React.FC<ProductViewProps> = ({
 
 	if (products.length === 0) {
 		return (
-			<div className="flex flex-col items-center justify-center py-32 text-center bg-muted/5">
-				<Package className="w-12 h-12 text-primary/20 mb-6" />
-				<h3 className="text-2xl font-display font-bold uppercase tracking-tight mb-2">
-					No Products Found
-				</h3>
-				<p className="text-xs text-muted-foreground uppercase tracking-widest mb-8">
-					Try adjusting your filters
-				</p>
-				<Button onClick={resetFilters} className="rounded-none">
-					Reset Filters
-				</Button>
+			<div className="py-20 flex justify-center">
+				<Empty className="max-w-md">
+					<EmptyHeader>
+						<EmptyMedia variant="icon">
+							<Package className="w-4 h-4 text-primary" />
+						</EmptyMedia>
+						<EmptyTitle className="text-xl font-display font-black uppercase">
+							No Products Found
+						</EmptyTitle>
+						<EmptyDescription className="uppercase tracking-widest text-[10px]">
+							We couldn't find any products matching your current filters. Try
+							adjusting your search.
+						</EmptyDescription>
+					</EmptyHeader>
+					<EmptyContent>
+						<Button
+							onClick={resetFilters}
+							className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+						>
+							Reset Filters
+						</Button>
+					</EmptyContent>
+				</Empty>
 			</div>
 		);
 	}
@@ -121,23 +141,25 @@ export const ProductListingView: React.FC<ProductViewProps> = ({
 			</div>
 
 			{meta && meta.totalPages > 1 && (
-				<div className="flex justify-center gap-4 pt-10 border-t border-border/20">
+				<div className="flex justify-center items-center gap-2 sm:gap-4 pt-6 md:pt-10 border-t border-border/20">
 					<Button
 						variant="outline"
+						size="sm"
 						disabled={filters.page <= 1}
 						onClick={() => patchFilters({ page: filters.page - 1 })}
-						className="rounded-none h-10 px-6 uppercase text-[9px] font-bold tracking-widest"
+						className="rounded-none h-9 sm:h-10 px-4 sm:px-6 uppercase text-[8px] sm:text-[9px] font-bold tracking-widest"
 					>
-						Previous
+						Prev
 					</Button>
-					<span className="flex items-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
-						Page {meta.page} of {meta.totalPages}
+					<span className="flex items-center text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 px-2">
+						{meta.page} / {meta.totalPages}
 					</span>
 					<Button
 						variant="outline"
+						size="sm"
 						disabled={filters.page >= meta.totalPages}
 						onClick={() => patchFilters({ page: filters.page + 1 })}
-						className="rounded-none h-10 px-6 uppercase text-[9px] font-bold tracking-widest"
+						className="rounded-none h-9 sm:h-10 px-4 sm:px-6 uppercase text-[8px] sm:text-[9px] font-bold tracking-widest"
 					>
 						Next
 					</Button>

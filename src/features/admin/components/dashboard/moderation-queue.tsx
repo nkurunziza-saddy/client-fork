@@ -34,7 +34,7 @@ export const ModerationQueue: React.FC<ModerationQueueProps> = ({
 				<h2 className="text-2xl font-heading font-bold text-foreground uppercase tracking-tight">
 					Moderation Queue
 				</h2>
-				<Badge className="rounded-sm bg-red-100 text-red-600 border border-red-200 font-heading font-bold uppercase text-[10px] tracking-widest px-2.5 py-1">
+				<Badge className="rounded-sm bg-destructive/10 text-destructive border border-destructive/20 font-heading font-bold uppercase text-[10px] tracking-widest px-2.5 py-1">
 					Urgent
 				</Badge>
 			</div>
@@ -58,13 +58,13 @@ export const ModerationQueue: React.FC<ModerationQueueProps> = ({
 					<AdminCard
 						key={report.id}
 						noPadding
-						className="hover:border-red-200/50 transition-all duration-300 shadow-sm hover:shadow-md"
+						className="hover:border-destructive/50 transition-all duration-300 shadow-sm hover:shadow-md"
 					>
 						<div className="flex flex-col md:flex-row">
 							<div className="p-8 flex-1">
 								<div className="flex items-center gap-4 mb-4">
-									<div className="w-10 h-10 rounded-sm bg-red-50 flex items-center justify-center border border-red-100/50 shrink-0">
-										<RiFlagLine size={20} className="text-red-500" />
+									<div className="w-10 h-10 rounded-sm bg-destructive/5 flex items-center justify-center border border-destructive/50 shrink-0">
+										<RiFlagLine size={20} className="text-destructive" />
 									</div>
 									<div className="flex flex-wrap gap-2 items-center">
 										<span className="text-[10px] font-mono font-bold text-muted-foreground tracking-widest uppercase">
@@ -82,13 +82,13 @@ export const ModerationQueue: React.FC<ModerationQueueProps> = ({
 								<h3 className="text-xl font-heading font-bold text-foreground mb-2 uppercase tracking-tight">
 									{report.target}
 								</h3>
-								<p className="text-sm font-bold text-red-600 mb-6 font-heading uppercase tracking-widest">
+								<p className="text-sm font-bold text-destructive mb-6 font-heading uppercase tracking-widest">
 									{report.reason}
 								</p>
 
 								<div className="flex items-center gap-8 text-[10px] font-heading font-bold text-muted-foreground uppercase tracking-widest">
 									<div className="flex items-center gap-2">
-										<RiAlertLine size={14} className="text-red-400" />
+										<RiAlertLine size={14} className="text-destructive" />
 										<span>{report.count} Violations</span>
 									</div>
 									<div className="flex items-center gap-2">
@@ -108,14 +108,14 @@ export const ModerationQueue: React.FC<ModerationQueueProps> = ({
 								<div className="flex gap-3">
 									<Button
 										variant="outline"
-										className="flex-1 rounded-sm border border-border hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 h-12 shadow-none transition-all"
+										className="flex-1 rounded-sm border border-border hover:bg-success/5 hover:text-success hover:border-success/20 h-12 shadow-none transition-all"
 										title="Clear Report"
 									>
 										<RiCheckboxCircleLine size={20} className="mx-auto" />
 									</Button>
 									<Button
 										variant="outline"
-										className="flex-1 rounded-sm border border-border hover:bg-red-50 hover:text-red-600 hover:border-red-200 h-12 shadow-none transition-all"
+										className="flex-1 rounded-sm border border-border hover:bg-destructive/5 hover:text-destructive hover:border-destructive/20 h-12 shadow-none transition-all"
 										title="Suspend Account"
 									>
 										<RiCloseCircleLine size={20} className="mx-auto" />

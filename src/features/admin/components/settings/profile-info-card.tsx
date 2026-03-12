@@ -42,9 +42,12 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 									src={formData.avatar}
 									alt="Profile"
 									className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+									onError={(e) => {
+										e.currentTarget.src = "/image-fallback.svg";
+									}}
 								/>
 							</div>
-							<button className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-sm hover:bg-primary/90 transition-all shadow-lg translate-y-1/4 translate-x-1/4 border border-background">
+							<button className="absolute bottom-0 right-0 bg-primary text-primary-foreground p-2 rounded-sm hover:bg-primary/90 transition-all shadow-lg translate-y-1/4 translate-x-1/4 border border-background">
 								<RiUserLine size={16} />
 							</button>
 						</div>
@@ -64,7 +67,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 										</Badge>
 										<Badge
 											variant="outline"
-											className="bg-green-50 text-green-700 border-green-100 font-heading font-bold text-[9px] uppercase tracking-widest px-2.5 py-1"
+											className="bg-success/5 text-success border-success/10 font-heading font-bold text-[9px] uppercase tracking-widest px-2.5 py-1"
 										>
 											Online
 										</Badge>

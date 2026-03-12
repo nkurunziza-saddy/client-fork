@@ -58,16 +58,16 @@ export function ActionModal({
 }: ActionModalProps) {
 	const colorConfig = {
 		delete: {
-			media: "bg-red-100",
-			iconColor: "text-red-600",
+			media: "bg-destructive/10",
+			iconColor: "text-destructive",
 			variant: "destructive" as const,
-			warning: "bg-red-50 border-red-200 text-red-800",
+			warning: "bg-destructive/5 border-destructive/20 text-destructive",
 		},
 		suspend: {
-			media: "bg-yellow-100",
-			iconColor: "text-yellow-600",
+			media: "bg-warning/10",
+			iconColor: "text-warning",
 			variant: "default" as const,
-			warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
+			warning: "bg-warning/5 border-warning/20 text-warning",
 		},
 		warning: {
 			media: "bg-primary/10",
@@ -76,16 +76,16 @@ export function ActionModal({
 			warning: "bg-primary/5 border-primary/20 text-primary",
 		},
 		success: {
-			media: "bg-green-100",
-			iconColor: "text-green-600",
+			media: "bg-success/10",
+			iconColor: "text-success",
 			variant: "default" as const,
-			warning: "bg-green-50 border-green-200 text-green-800",
+			warning: "bg-success/5 border-success/20 text-success",
 		},
 		info: {
-			media: "bg-blue-100",
-			iconColor: "text-blue-600",
+			media: "bg-info/10",
+			iconColor: "text-info",
 			variant: "default" as const,
-			warning: "bg-blue-50 border-blue-200 text-blue-800",
+			warning: "bg-info/5 border-info/20 text-info",
 		},
 	};
 

@@ -1,17 +1,24 @@
 import { skipToken } from "@reduxjs/toolkit/query";
 import {
-	RiAuctionLine,
+	RiArrowLeftLine,
 	RiBox3Line,
 	RiCheckDoubleLine,
 	RiMore2Fill,
 	RiSendPlane2Fill,
-	RiWrenchLine,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import {
 	useGetChatHistoryQuery,
 	useGetConversationsQuery,
@@ -31,7 +38,6 @@ function formatTime(iso: string | undefined) {
 
 export function MessagesPage() {
 	const [msg, setMsg] = useState("");
-	// Ref on the actual scrollable div — not a phantom end element
 	const messagesScrollRef = useRef<HTMLDivElement>(null);
 
 	const currentUserId = useSelector(
@@ -43,21 +49,21 @@ export function MessagesPage() {
 
 	const [activePartnerId, setActivePartnerId] = useState<string | null>(null);
 
+	// On desktop, auto-select first conversation if none selected
 	useEffect(() => {
-		if (!activePartnerId && conversations.length > 0) {
+		const isDesktop = window.innerWidth >= 1024;
+		if (isDesktop && !activePartnerId && conversations.length > 0) {
 			setActivePartnerId(conversations[0].partner.id);
 		}
 	}, [activePartnerId, conversations]);
 
 	const activeConversation: ConversationPartner | undefined = useMemo(
-		() =>
-			conversations.find((c) => c.partner.id === activePartnerId) ??
-			conversations[0],
+		() => conversations.find((c) => c.partner.id === activePartnerId),
 		[conversations, activePartnerId],
 	);
 
-	const chatArgs = activeConversation?.partner.id
-		? { partnerId: activeConversation.partner.id, page: 1, limit: 50 }
+	const chatArgs = activePartnerId
+		? { partnerId: activePartnerId, page: 1, limit: 50 }
 		: skipToken;
 
 	const { data: chatHistory, isFetching: loadingHistory } =
@@ -77,21 +83,21 @@ export function MessagesPage() {
 	useEffect(() => {
 		const id = setTimeout(scrollToBottom, 50);
 		return () => clearTimeout(id);
-	}, [scrollToBottom]);
+	}, [scrollToBottom]); // scroll on new messages
 
 	const handleSend = useCallback(async () => {
-		if (!activeConversation?.partner.id || !msg.trim() || sending) return;
+		if (!activePartnerId || !msg.trim() || sending) return;
 		const content = msg.trim();
 		setMsg("");
 		try {
 			await sendMessage({
-				receiverId: activeConversation.partner.id,
+				receiverId: activePartnerId,
 				content,
 			}).unwrap();
 		} catch (err) {
 			console.error(err);
 		}
-	}, [activeConversation, msg, sending, sendMessage]);
+	}, [activePartnerId, msg, sending, sendMessage]);
 
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -103,52 +109,81 @@ export function MessagesPage() {
 		[handleSend],
 	);
 
+	const isChatViewVisible = activePartnerId !== null;
+
 	return (
-		<div className="h-[calc(100vh-48px)] flex bg-white overflow-hidden">
-			<div className="w-72 xl:w-80 border-r border-slate-100 flex flex-col bg-slate-50 shrink-0">
-				<div className="p-5 border-b border-slate-100 bg-white shrink-0">
-					<h1 className="text-xl font-black uppercase tracking-tight text-slate-950">
-						Messages
-					</h1>
+		<div className="h-[calc(100vh-56px)] flex bg-background overflow-hidden relative">
+			{/* Conversations List Sidebar */}
+			<div
+				className={cn(
+					"w-full lg:w-80 xl:w-96 border-r border-border flex flex-col bg-muted shrink-0 transition-all duration-300",
+					isChatViewVisible ? "hidden lg:flex" : "flex",
+				)}
+			>
+				<div className="p-4 sm:p-5 border-b border-border bg-background shrink-0">
+					<div className="flex items-center justify-between">
+						<h1 className="text-xl font-black uppercase tracking-tight text-foreground">
+							Messages
+						</h1>
+						<div className="lg:hidden">
+							{/* Placeholder for potential mobile-only list actions */}
+						</div>
+					</div>
 					<span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-0.5 block opacity-60">
 						Professional Workspace
 					</span>
 				</div>
 
-				<div className="flex-1 overflow-y-auto">
+				<div className="flex-1 overflow-y-auto custom-scrollbar">
 					<div className="p-2 space-y-1">
 						{loadingConversations && (
-							<div className="p-4 text-[11px] text-muted-foreground uppercase tracking-[0.2em]">
-								Loading conversations…
+							<div className="p-8 text-center space-y-3">
+								<div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+								<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+									Loading chats...
+								</p>
 							</div>
 						)}
 
 						{!loadingConversations && conversations.length === 0 && (
-							<div className="p-4 text-[11px] text-muted-foreground uppercase tracking-[0.2em]">
-								No conversations yet.
+							<div className="p-8">
+								<Empty className="border-none p-0 gap-2">
+									<EmptyHeader>
+										<EmptyMedia variant="icon">
+											<RiBox3Line className="w-4 h-4 text-muted-foreground/20" />
+										</EmptyMedia>
+										<EmptyTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+											No conversations yet
+										</EmptyTitle>
+									</EmptyHeader>
+								</Empty>
 							</div>
 						)}
 
 						{!loadingConversations &&
 							conversations.map((chat) => {
-								const isActive =
-									chat.partner.id === activeConversation?.partner.id;
+								const isActive = chat.partner.id === activePartnerId;
 								return (
 									<button
 										key={chat.partner.id}
 										type="button"
 										onClick={() => setActivePartnerId(chat.partner.id)}
-										className={`w-full text-left p-4 transition-all duration-200 ${
+										className={cn(
+											"w-full text-left p-4 transition-all duration-200 group relative",
 											isActive
-												? "bg-white border border-slate-200 shadow-sm"
-												: "hover:bg-white/70 opacity-60 hover:opacity-100"
-										}`}
+												? "bg-background border border-border shadow-sm"
+												: "hover:bg-background/70 opacity-70 hover:opacity-100",
+										)}
 									>
+										{isActive && (
+											<div className="absolute left-0 top-4 bottom-4 w-1 bg-primary" />
+										)}
 										<div className="flex justify-between items-start mb-1 gap-2">
 											<span
-												className={`text-[11px] font-black uppercase tracking-tight truncate ${
-													isActive ? "text-primary" : "text-slate-900"
-												}`}
+												className={cn(
+													"text-[11px] font-black uppercase tracking-tight truncate",
+													isActive ? "text-primary" : "text-foreground",
+												)}
 											>
 												{chat.partner.name || chat.partner.email}
 											</span>
@@ -156,7 +191,7 @@ export function MessagesPage() {
 												{formatTime(chat.lastMessageAt)}
 											</span>
 										</div>
-										<p className="text-[10px] font-medium text-muted-foreground truncate">
+										<p className="text-[10px] font-medium text-muted-foreground truncate pr-4">
 											{chat.lastMessage}
 										</p>
 									</button>
@@ -166,165 +201,232 @@ export function MessagesPage() {
 				</div>
 			</div>
 
-			<div className="flex-1 flex flex-col overflow-hidden bg-white min-w-0">
-				<div className="h-[72px] border-b border-slate-100 px-6 flex items-center justify-between bg-white shrink-0">
-					<div className="flex items-center gap-3 min-w-0">
-						<div className="w-9 h-9 bg-slate-950 flex items-center justify-center text-white text-sm font-black uppercase tracking-tighter shrink-0">
-							{(
-								activeConversation?.partner.name ||
-								activeConversation?.partner.email ||
-								"?"
-							).charAt(0)}
-						</div>
-						<div className="min-w-0">
-							<h2 className="text-sm font-black uppercase tracking-widest text-slate-900 leading-none mb-1 truncate">
-								{activeConversation
-									? activeConversation.partner.name ||
-										activeConversation.partner.email
-									: "Select a conversation"}
-							</h2>
-							<div className="flex items-center gap-1.5">
-								<div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shrink-0" />
-								<span className="text-[10px] font-bold uppercase tracking-tight text-muted-foreground">
-									Direct Supplier
-								</span>
-							</div>
-						</div>
-					</div>
-					<Button
-						variant="ghost"
-						size="icon"
-						className="rounded-none border border-slate-100 shrink-0"
-					>
-						<RiMore2Fill className="w-5 h-5 opacity-60" />
-					</Button>
-				</div>
+			{/* Chat View */}
+			<div
+				className={cn(
+					"flex-1 flex flex-col overflow-hidden bg-background min-w-0 transition-all duration-300",
+					!isChatViewVisible ? "hidden lg:flex" : "flex",
+				)}
+			>
+				{activeConversation ? (
+					<>
+						{/* Chat Header */}
+						<div className="h-14 sm:h-[72px] border-b border-border px-4 sm:px-6 flex items-center justify-between bg-background shrink-0 sticky top-0 z-10">
+							<div className="flex items-center gap-3 min-w-0">
+								<Button
+									variant="ghost"
+									size="icon"
+									className="lg:hidden -ml-2 rounded-none h-9 w-9 shrink-0"
+									onClick={() => setActivePartnerId(null)}
+								>
+									<RiArrowLeftLine className="w-5 h-5" />
+								</Button>
 
-				<div
-					ref={messagesScrollRef}
-					className="flex-1 min-h-0 overflow-y-auto bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:40px_40px]"
-				>
-					<div className="max-w-3xl mx-auto space-y-6 p-6">
-						{loadingHistory && (
-							<div className="text-center text-[11px] text-muted-foreground uppercase tracking-[0.2em] py-8">
-								Loading messages…
-							</div>
-						)}
-						{!loadingHistory && messages.length === 0 && (
-							<div className="text-center text-[11px] text-muted-foreground uppercase tracking-[0.2em] py-8">
-								No messages in this conversation yet.
-							</div>
-						)}
-						{!loadingHistory &&
-							messages.map((m) => {
-								const isMe =
-									currentUserId != null && m.sender.id === currentUserId;
-								return (
-									<div
-										key={m.id}
-										className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
-									>
-										<div
-											className={`max-w-[75%] p-4 border ${
-												isMe
-													? "bg-slate-950 text-white border-slate-950 shadow-lg shadow-slate-950/10"
-													: "bg-white text-slate-900 border-slate-100 shadow-sm"
-											}`}
-										>
-											{m.product && (
-												<Link
-													to="/products/$productId"
-													params={{ productId: m.product.id }}
-													className="mb-3 flex items-center gap-2 bg-primary/10 px-3 py-2 border border-primary/20 hover:bg-primary/20 transition-colors w-max max-w-full"
-												>
-													<RiBox3Line className="h-4 w-4 text-primary shrink-0" />
-													<div className="flex flex-col min-w-0">
-														<span className="text-[9px] font-black uppercase tracking-widest text-primary/70">
-															Product Inquiry
-														</span>
-														<span className="text-xs font-bold text-primary truncate">
-															{m.product.name}
-														</span>
-													</div>
-												</Link>
-											)}
-
-											{m.service && (
-												<Link
-													to="/services/$serviceId"
-													params={{ serviceId: m.service.id }}
-													className="mb-3 flex items-center gap-2 bg-blue-500/10 px-3 py-2 border border-blue-500/20 hover:bg-blue-500/20 transition-colors w-max max-w-full"
-												>
-													<RiWrenchLine className="h-4 w-4 text-blue-600 shrink-0" />
-													<div className="flex flex-col min-w-0">
-														<span className="text-[9px] font-black uppercase tracking-widest text-blue-600/70">
-															Service Inquiry
-														</span>
-														<span className="text-xs font-bold text-blue-600 truncate">
-															{m.service.name}
-														</span>
-													</div>
-												</Link>
-											)}
-
-											{m.auction && (
-												<Link
-													to={`/auctions/${m.auction.id}` as any}
-													className="mb-3 flex items-center gap-2 bg-amber-500/10 px-3 py-2 border border-amber-500/20 hover:bg-amber-500/20 transition-colors w-max max-w-full"
-												>
-													<RiAuctionLine className="h-4 w-4 text-amber-600 shrink-0" />
-													<div className="flex flex-col min-w-0">
-														<span className="text-[9px] font-black uppercase tracking-widest text-amber-600/70">
-															Auction Inquiry
-														</span>
-														<span className="text-xs font-bold text-amber-600 truncate">
-															{m.auction.title}
-														</span>
-													</div>
-												</Link>
-											)}
-
-											<p className="text-[13px] font-medium leading-relaxed break-words">
-												{m.content}
-											</p>
-										</div>
-
-										<div className="flex items-center gap-1.5 mt-1.5 opacity-40">
-											<span className="text-[9px] font-bold uppercase tracking-widest">
-												{formatTime(m.createdAt)}
-											</span>
-											{isMe && (
-												<RiCheckDoubleLine className="w-3 h-3 text-emerald-500" />
-											)}
-										</div>
+								<div className="w-8 h-8 sm:w-10 sm:h-10 bg-foreground flex items-center justify-center text-background text-xs sm:text-sm font-black uppercase tracking-tighter shrink-0">
+									{(
+										activeConversation.partner.name ||
+										activeConversation.partner.email ||
+										"?"
+									).charAt(0)}
+								</div>
+								<div className="min-w-0">
+									<h2 className="text-xs sm:text-sm font-black uppercase tracking-widest text-foreground leading-none mb-1 truncate">
+										{activeConversation.partner.name ||
+											activeConversation.partner.email}
+									</h2>
+									<div className="flex items-center gap-1.5">
+										<div className="w-1.5 h-1.5 bg-success rounded-full shrink-0" />
+										<span className="text-[9px] font-bold uppercase tracking-tight text-muted-foreground">
+											Direct Supplier
+										</span>
 									</div>
-								);
-							})}
-					</div>
-				</div>
+								</div>
+							</div>
+							<Button
+								variant="ghost"
+								size="icon"
+								className="rounded-none border border-border shrink-0 h-9 w-9 sm:h-10 sm:w-10"
+							>
+								<RiMore2Fill className="w-5 h-5 opacity-60" />
+							</Button>
+						</div>
 
-				<div className="shrink-0 p-4 border-t border-slate-100 bg-white">
-					<div className="max-w-3xl mx-auto flex gap-3">
-						<Input
-							value={msg}
-							onChange={(e) => setMsg(e.target.value)}
-							onKeyDown={handleKeyDown}
-							placeholder="Type your message to the supplier…"
-							className="flex-1 h-12 bg-slate-50 border-slate-200 focus-visible:ring-0 focus-visible:border-primary/40 text-sm rounded-none px-5"
-							disabled={!activeConversation}
-						/>
-						<Button
-							onClick={handleSend}
-							disabled={
-								!activeConversation?.partner.id || !msg.trim() || sending
-							}
-							className="h-12 px-6 rounded-none bg-slate-950 hover:bg-slate-800 transition-colors shrink-0 shadow-lg shadow-slate-950/10"
+						{/* Messages Area */}
+						<div
+							ref={messagesScrollRef}
+							className="flex-1 min-h-0 overflow-y-auto bg-muted bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] bg-[size:40px_40px] custom-scrollbar"
 						>
-							<RiSendPlane2Fill className="w-4 h-4" />
-						</Button>
+							<div className="max-w-3xl mx-auto space-y-6 p-4 sm:p-6">
+								{loadingHistory && (
+									<div className="text-center py-12">
+										<div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+										<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+											Syncing history...
+										</p>
+									</div>
+								)}
+								{!loadingHistory && messages.length === 0 && (
+									<div className="text-center py-12">
+										<div className="w-12 h-12 bg-background rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-border">
+											<RiChatDoubleLine className="w-6 h-6 text-muted-foreground/20" />
+										</div>
+										<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 max-w-[200px] mx-auto">
+											Start a conversation with this supplier
+										</p>
+									</div>
+								)}
+								{!loadingHistory &&
+									messages.map((m) => {
+										const isMe =
+											currentUserId != null && m.sender.id === currentUserId;
+										return (
+											<div
+												key={m.id}
+												className={cn(
+													"flex flex-col animate-in fade-in slide-in-from-bottom-1 duration-300",
+													isMe ? "items-end" : "items-start",
+												)}
+											>
+												<div
+													className={cn(
+														"max-w-[85%] sm:max-w-[75%] p-3 sm:p-4 border relative",
+														isMe
+															? "bg-foreground text-background border-foreground shadow-lg shadow-foreground/10"
+															: "bg-background text-foreground border-border shadow-sm",
+													)}
+												>
+													{m.product && (
+														<Link
+															to="/products/$productId"
+															params={{ productId: m.product.id }}
+															className={cn(
+																"mb-3 flex items-center gap-2 px-3 py-2 border hover:opacity-90 transition-opacity w-full",
+																isMe
+																	? "bg-background/10 border-background/10"
+																	: "bg-primary/5 border-primary/10",
+															)}
+														>
+															<RiBox3Line
+																className={cn(
+																	"h-4 w-4 shrink-0",
+																	isMe ? "text-background/60" : "text-primary",
+																)}
+															/>
+															<div className="flex flex-col min-w-0">
+																<span
+																	className={cn(
+																		"text-[8px] font-black uppercase tracking-widest",
+																		isMe
+																			? "text-background/40"
+																			: "text-primary/60",
+																	)}
+																>
+																	Product Inquiry
+																</span>
+																<span
+																	className={cn(
+																		"text-[10px] font-bold truncate",
+																		isMe ? "text-background" : "text-primary",
+																	)}
+																>
+																	{m.product.name}
+																</span>
+															</div>
+														</Link>
+													)}
+
+													{/* Similar blocks for Service and Auction... simplified for space */}
+													{(m.service || m.auction) && (
+														<div className="mb-3 flex items-center gap-2 bg-muted-foreground/10 px-3 py-2 border border-muted-foreground/10 text-[10px] font-bold uppercase tracking-widest opacity-60">
+															Linked Reference Attached
+														</div>
+													)}
+
+													<p className="text-[12px] sm:text-[13px] font-medium leading-relaxed break-words">
+														{m.content}
+													</p>
+												</div>
+
+												<div className="flex items-center gap-1.5 mt-1.5 opacity-40">
+													<span className="text-[8px] font-bold uppercase tracking-widest">
+														{formatTime(m.createdAt)}
+													</span>
+													{isMe && (
+														<RiCheckDoubleLine className="w-3 h-3 text-success" />
+													)}
+												</div>
+											</div>
+										);
+									})}
+							</div>
+						</div>
+
+						{/* Input Area */}
+						<div className="shrink-0 p-3 sm:p-4 border-t border-border bg-background">
+							<div className="max-w-3xl mx-auto flex gap-2 sm:gap-3 items-end">
+								<div className="flex-1 relative">
+									<Input
+										value={msg}
+										onChange={(e) => setMsg(e.target.value)}
+										onKeyDown={handleKeyDown}
+										placeholder="Type your message..."
+										className="w-full min-h-[48px] max-h-32 bg-muted border-border focus-visible:ring-0 focus-visible:border-primary/40 text-sm rounded-none px-4 sm:px-5 py-3 transition-all"
+										disabled={!activeConversation}
+									/>
+								</div>
+								<Button
+									onClick={handleSend}
+									disabled={!activePartnerId || !msg.trim() || sending}
+									className="h-12 w-12 sm:w-auto sm:px-6 rounded-none bg-foreground hover:bg-foreground/90 transition-all shrink-0 shadow-lg shadow-foreground/10 active:scale-95 text-background"
+								>
+									<RiSendPlane2Fill className="w-4 h-4 sm:mr-2" />
+									<span className="hidden sm:inline font-black uppercase text-[10px] tracking-widest">
+										Send
+									</span>
+								</Button>
+							</div>
+						</div>
+					</>
+				) : (
+					<div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-muted bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] bg-[size:40px_40px]">
+						<Empty className="max-w-xs border-none bg-transparent">
+							<EmptyHeader>
+								<EmptyMedia className="w-16 h-16 rounded-full bg-background shadow-sm border border-border flex items-center justify-center mb-4">
+									<RiBox3Line className="w-8 h-8 text-muted-foreground/20" />
+								</EmptyMedia>
+								<EmptyTitle className="text-sm font-black uppercase tracking-[0.2em] text-foreground">
+									Your Inbox
+								</EmptyTitle>
+								<EmptyDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-relaxed">
+									Select a conversation from the left to view messages and
+									details
+								</EmptyDescription>
+							</EmptyHeader>
+						</Empty>
 					</div>
-				</div>
+				)}
 			</div>
 		</div>
+	);
+}
+
+// Adding a placeholder for the missing icon in the initial read
+function RiChatDoubleLine({ className }: { className?: string }) {
+	return (
+		<svg
+			className={className}
+			fill="none"
+			height="24"
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth="2"
+			viewBox="0 0 24 24"
+			width="24"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path d="M7 8v8a2 2 0 0 0 2 2h9l4 4V6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2Z" />
+			<path d="M15 8V4a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v14l4-4h3" />
+		</svg>
 	);
 }

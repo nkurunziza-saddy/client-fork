@@ -25,6 +25,9 @@ export function NavHeader({ info }: { info: NavHeaderInfo }) {
 								src={info.logoUrl}
 								alt={info.name}
 								className="size-full object-cover"
+								onError={(e) => {
+									e.currentTarget.src = "/image-fallback.svg";
+								}}
 							/>
 						) : info.logo ? (
 							<info.logo className="size-4" />

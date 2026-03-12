@@ -29,11 +29,11 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 	const getVariantStyles = () => {
 		switch (variant) {
 			case "blue":
-				return "group-hover:border-blue-500/30";
+				return "group-hover:border-info/30";
 			case "emerald":
-				return "group-hover:border-emerald-500/30";
+				return "group-hover:border-success/30";
 			case "orange":
-				return "group-hover:border-orange-500/30";
+				return "group-hover:border-primary/30";
 			default:
 				return "group-hover:border-primary/30";
 		}
@@ -42,11 +42,11 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 	const getTextAccentColor = () => {
 		switch (variant) {
 			case "blue":
-				return "text-blue-600";
+				return "text-info";
 			case "emerald":
-				return "text-emerald-600";
+				return "text-success";
 			case "orange":
-				return "text-orange-600";
+				return "text-primary";
 			default:
 				return "text-primary";
 		}
@@ -55,11 +55,11 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 	const getBgAccentColor = () => {
 		switch (variant) {
 			case "blue":
-				return "bg-blue-600";
+				return "bg-info";
 			case "emerald":
-				return "bg-emerald-600";
+				return "bg-success";
 			case "orange":
-				return "bg-orange-600";
+				return "bg-primary";
 			default:
 				return "bg-primary";
 		}

@@ -47,20 +47,20 @@ export const MarketplaceStats: React.FC = () => {
 		},
 	];
 	return (
-		<section className="py-24 bg-slate-950 text-white relative overflow-hidden">
+		<section className="py-24 bg-foreground text-background relative overflow-hidden">
 			{/* Decorative Background */}
 			<div className="absolute inset-0 opacity-10 pointer-events-none">
 				<div className="absolute top-0 right-0 w-1/2 h-full bg-primary/20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
-				<div className="absolute bottom-0 left-0 w-1/2 h-full bg-sky-500/10 blur-3xl rounded-full -translate-x-1/2 translate-y-1/2" />
+				<div className="absolute bottom-0 left-0 w-1/2 h-full bg-info/10 blur-3xl rounded-full -translate-x-1/2 translate-y-1/2" />
 			</div>
 
-			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
+			<div className="max-w-[1800px] mx-auto px-4 lg:px-6 relative z-10">
 				<div className="text-center max-w-3xl mx-auto mb-20">
 					<h2 className="text-4xl md:text-6xl font-heading font-bold mb-6 tracking-tight">
 						The Platform for{" "}
 						<span className="text-primary">Rwanda's Construction</span>
 					</h2>
-					<p className="text-lg text-white/60 leading-relaxed font-normal">
+					<p className="text-lg text-background/60 leading-relaxed font-normal">
 						AfrikaMarket connects the entire construction industry, from local
 						manufacturers to large-scale infrastructure projects.
 					</p>
@@ -70,18 +70,18 @@ export const MarketplaceStats: React.FC = () => {
 					{STATS.map((stat, index) => (
 						<div
 							key={index}
-							className="p-10 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-500 group text-center"
+							className="p-10 rounded-2xl bg-background/5 border border-background/10 hover:border-background/20 transition-all duration-500 group text-center"
 						>
 							<div className="w-16 h-16 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-500 shadow-lg shadow-primary/5">
 								{stat.icon}
 							</div>
-							<div className="text-5xl font-sans font-bold text-white mb-3">
+							<div className="text-5xl font-sans font-bold text-background mb-3">
 								{stat.value}
 							</div>
-							<div className="text-lg font-heading font-bold text-white/90 mb-2">
+							<div className="text-lg font-heading font-bold text-background/90 mb-2">
 								{stat.label}
 							</div>
-							<div className="text-sm text-white/40 font-normal">
+							<div className="text-sm text-background/40 font-normal">
 								{stat.description}
 							</div>
 						</div>

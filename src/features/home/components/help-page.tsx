@@ -96,9 +96,10 @@ export function HelpPage() {
 					showPattern
 				/>
 
-				<section className="bg-slate-950 py-20 border border-primary/20 rounded-none relative overflow-hidden shadow-2xl shadow-primary/5">
-					<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-					<div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950 pointer-events-none" />
+				<section className="bg-industrial py-20 border border-primary/20 rounded-none relative overflow-hidden shadow-2xl shadow-primary/5">
+					<div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
+
+					<div className="absolute inset-0 bg-gradient-to-b from-transparent via-industrial/50 to-industrial pointer-events-none" />
 
 					<div className="max-w-3xl mx-auto px-4 text-center relative z-10">
 						<div className="inline-flex items-center px-4 py-1.5 bg-primary/10 text-primary rounded-none font-bold text-[10px] uppercase tracking-[0.3em] mb-8 border border-primary/30">
@@ -120,7 +121,7 @@ export function HelpPage() {
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 									setSearchQuery(e.target.value)
 								}
-								className="pl-14 pr-6 h-16 bg-white/5 backdrop-blur-sm border-white/10 focus:border-primary focus:ring-0 rounded-none font-display font-bold uppercase tracking-widest text-lg shadow-2xl transition-all"
+								className="pl-14 pr-6 h-16 bg-background/5 backdrop-blur-sm border-white/10 focus:border-primary focus:ring-0 rounded-none font-display font-bold uppercase tracking-widest text-lg shadow-2xl transition-all"
 							/>
 						</div>
 					</div>

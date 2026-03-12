@@ -21,7 +21,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 	description,
 }) => {
 	return (
-		<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+		<div className="bg-background rounded-2xl p-6 border border-border shadow-sm hover:shadow-md transition-shadow">
 			<div className="flex items-center justify-between mb-4">
 				<div
 					className={`p-3 rounded-xl ${color === "primary" ? "bg-primary/10" : `bg-${color}-100`}`}
@@ -33,8 +33,8 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 				<div
 					className={`flex items-center text-sm font-semibold px-2 py-1 rounded-full ${
 						trend === "up"
-							? "text-green-700 bg-green-100"
-							: "text-red-700 bg-red-100"
+							? "text-success bg-success/10"
+							: "text-destructive bg-destructive/10"
 					}`}
 				>
 					{trend === "up" ? (
@@ -45,9 +45,9 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 					{change}
 				</div>
 			</div>
-			<div className="text-3xl font-bold text-gray-900 mb-2">{value}</div>
-			<div className="text-sm font-medium text-gray-900 mb-1">{label}</div>
-			<div className="text-xs text-gray-500">{description}</div>
+			<div className="text-3xl font-bold text-foreground mb-2">{value}</div>
+			<div className="text-sm font-medium text-foreground mb-1">{label}</div>
+			<div className="text-xs text-muted-foreground">{description}</div>
 		</div>
 	);
 };

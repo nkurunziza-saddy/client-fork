@@ -26,15 +26,15 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 			<div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
 				<section>
 					<div className="flex items-center gap-3 mb-6">
-						<div className="w-8 h-8 rounded-none bg-slate-100 flex items-center justify-center">
-							<RiInformationLine className="w-4 h-4 text-slate-600" />
+						<div className="w-8 h-8 rounded-none bg-muted flex items-center justify-center">
+							<RiInformationLine className="w-4 h-4 text-muted-foreground" />
 						</div>
-						<h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-950">
+						<h2 className="text-xs font-black uppercase tracking-[0.2em] text-foreground">
 							Service Overview
 						</h2>
 					</div>
 					<div className="prose prose-slate max-w-none">
-						<p className="text-slate-600 leading-relaxed text-xs">
+						<p className="text-muted-foreground leading-relaxed text-xs">
 							{service.description ||
 								"Detailed description of this professional construction service will appear here. The provider hasn't updated the full overview yet."}
 						</p>
@@ -42,10 +42,10 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 				</section>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-					<section className="p-6 bg-slate-50 border border-slate-200">
+					<section className="p-6 bg-muted/50 border border-border">
 						<div className="flex items-center gap-3 mb-6">
-							<RiCheckDoubleLine className="w-5 h-5 text-emerald-600" />
-							<h3 className="text-[10px] font-black uppercase tracking-widest text-slate-950">
+							<RiCheckDoubleLine className="w-5 h-5 text-success" />
+							<h3 className="text-[10px] font-black uppercase tracking-widest text-foreground">
 								What's Included
 							</h3>
 						</div>
@@ -57,8 +57,8 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 								"Workmanship guarantee",
 							].map((item, i) => (
 								<li key={i} className="flex items-start gap-3">
-									<div className="mt-1.5 w-1.5 h-1.5 bg-slate-300 transform rotate-45" />
-									<span className="text-[11px] font-bold uppercase tracking-tight text-slate-600">
+									<div className="mt-1.5 w-1.5 h-1.5 bg-muted/30 transform rotate-45" />
+									<span className="text-[11px] font-bold uppercase tracking-tight text-muted-foreground">
 										{item}
 									</span>
 								</li>
@@ -66,10 +66,10 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 						</ul>
 					</section>
 
-					<section className="p-6 bg-white border border-slate-200">
+					<section className="p-6 bg-background border border-border">
 						<div className="flex items-center gap-3 mb-6">
 							<RiBriefcaseLine className="w-5 h-5 text-primary" />
-							<h3 className="text-[10px] font-black uppercase tracking-widest text-slate-950">
+							<h3 className="text-[10px] font-black uppercase tracking-widest text-foreground">
 								Service Experience
 							</h3>
 						</div>
@@ -78,7 +78,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 								<span className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">
 									Typical Duration
 								</span>
-								<span className="text-[11px] font-black text-slate-950 uppercase">
+								<span className="text-[11px] font-black text-foreground uppercase">
 									{service.duration || "Contact for estimate"}
 								</span>
 							</div>
@@ -86,7 +86,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 								<span className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">
 									Standard Area
 								</span>
-								<span className="text-[11px] font-black text-slate-950 uppercase">
+								<span className="text-[11px] font-black text-foreground uppercase">
 									Kigali City
 								</span>
 							</div>
@@ -94,7 +94,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 								<span className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">
 									Availability
 								</span>
-								<span className="text-[11px] font-black text-slate-950 uppercase">
+								<span className="text-[11px] font-black text-foreground uppercase">
 									Mon - Sat
 								</span>
 							</div>
@@ -108,9 +108,9 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 	if (activeTab === "provider") {
 		return (
 			<div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-				<section className="p-8 bg-slate-950 text-white rounded-none">
+				<section className="p-8 bg-muted/95 text-primary-foreground rounded-none">
 					<div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
-						<div className="w-24 h-24 bg-white/10 border border-white/20 flex items-center justify-center text-3xl font-black uppercase tracking-tighter">
+						<div className="w-24 h-24 bg-background/10 border border-white/20 flex items-center justify-center text-3xl font-black uppercase tracking-tighter">
 							{service.company?.name?.charAt(0) || "S"}
 						</div>
 						<div className="flex-1">
@@ -131,7 +131,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 									</span>
 								</div>
 							</div>
-							<p className="text-sm text-slate-400 max-w-2xl leading-relaxed italic">
+							<p className="text-sm text-muted-foreground max-w-2xl leading-relaxed italic">
 								"Dedicated to delivering precision construction solutions across
 								Rwanda with verified expertise."
 							</p>
@@ -166,8 +166,8 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 
 	return (
 		<div className="py-20 text-center animate-in fade-in duration-500">
-			<RiFileTextLine className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-			<span className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">
+			<RiFileTextLine className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+			<span className="text-xs font-black uppercase tracking-[0.3em] text-muted-foreground">
 				Section Under Development
 			</span>
 		</div>

@@ -31,9 +31,9 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
 						</span>
 					</div>
 					{service.company?.isVerified && (
-						<div className="flex items-center gap-1.5 bg-emerald-500/5 px-2 py-0.5 border border-emerald-500/10">
-							<ShieldCheck className="w-3 h-3 text-emerald-600" />
-							<span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">
+						<div className="flex items-center gap-1.5 bg-success/5 px-2 py-0.5 border border-success/10">
+							<ShieldCheck className="w-3 h-3 text-success" />
+							<span className="text-[9px] font-black text-success uppercase tracking-widest">
 								Certified
 							</span>
 						</div>
@@ -92,11 +92,11 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
 			</div>
 
 			{/* Primary Action */}
-			<div className="pt-6 flex flex-col sm:flex-row gap-4">
+			<div className="pt-6 pb-2 flex flex-col sm:flex-row gap-4">
 				<Button
 					onClick={onInquire}
 					size="lg"
-					className="h-12 flex-1 rounded-none bg-foreground text-background hover:bg-foreground/95 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[10px] shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+					className="h-14 flex-1 rounded-none bg-foreground text-background hover:bg-foreground/95 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[10px] shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] py-4"
 				>
 					<RiChat3Line size={16} className="mr-2" />
 					Send Inquiry

@@ -42,11 +42,11 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
 			{/* Carousel Viewport */}
 			<div className="overflow-hidden" ref={emblaRef}>
-				<div className="flex gap-3 md:gap-4 lg:gap-6 touch-pan-y">
+				<div className="flex gap-2 sm:gap-4 lg:gap-6 touch-pan-y">
 					{products.map((product) => (
 						<div
 							key={product.id}
-							className="flex-[0_0_70%] sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_20%] min-w-0"
+							className="flex-[0_0_75%] sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_20%] min-w-0"
 						>
 							<ProductCard
 								product={product as any}
