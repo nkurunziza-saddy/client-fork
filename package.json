@@ -8,8 +8,9 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc -b && vite build && npm run sitemap",
+    "build": "tsc -b && vite build",
     "sitemap": "tsx scripts/generate-sitemap.ts",
+    "pre-push": "pnpm run sitemap && git add public/sitemap.xml",
     "preview": "vite preview",
     "test": "vitest run",
     "format": "biome format",
@@ -67,6 +68,7 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "husky": "^9.1.7",
     "jsdom": "^27.0.0",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"

@@ -3,7 +3,8 @@ import path from "path";
 
 const BASE_URL =
   process.env.VITE_APP_URL || "https://afri-market-rep.vercel.app";
-const API_URL = process.env.VITE_API_URL || "http://localhost:3000/api";
+const API_URL =
+  `${process.env.VITE_API_URL}/api` || "http://localhost:3000/api";
 
 const STATIC_ROUTES = [
   "",
@@ -25,24 +26,32 @@ async function getDynamicRoutes() {
   try {
     // Fetch products
     const productsRes = await fetch(`${API_URL}/products?limit=100`);
-    if (!productsRes.ok)
-      throw new Error(`HTTP error! status: ${productsRes.status}`);
-    const productsData = await productsRes.json();
-    if (productsData.data) {
-      productsData.data.forEach((p: any) => {
-        routes.push(`/products/${p.id}`);
-      });
+    if (!productsRes.ok) {
+      console.warn(
+        `⚠️  [Sitemap Warning]: Failed to fetch products (${productsRes.status}). Skipping dynamic product routes.`,
+      );
+    } else {
+      const productsData = await productsRes.json();
+      if (productsData.data) {
+        productsData.data.forEach((p: any) => {
+          routes.push(`/products/${p.id}`);
+        });
+      }
     }
 
     // Fetch suppliers
     const suppliersRes = await fetch(`${API_URL}/companies?limit=100`);
-    if (!suppliersRes.ok)
-      throw new Error(`HTTP error! status: ${suppliersRes.status}`);
-    const suppliersData = await suppliersRes.json();
-    if (suppliersData.data) {
-      suppliersData.data.forEach((s: any) => {
-        routes.push(`/suppliers/${s.id}`);
-      });
+    if (!suppliersRes.ok) {
+      console.warn(
+        `⚠️  [Sitemap Warning]: Failed to fetch suppliers (${suppliersRes.status}). Skipping dynamic supplier routes.`,
+      );
+    } else {
+      const suppliersData = await suppliersRes.json();
+      if (suppliersData.data) {
+        suppliersData.data.forEach((s: any) => {
+          routes.push(`/suppliers/${s.id}`);
+        });
+      }
     }
   } catch (error: any) {
     if (error.code === "ECONNREFUSED") {
