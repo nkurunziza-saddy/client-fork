@@ -10,7 +10,7 @@ import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/auctions/")({
   validateSearch: auctionSearchSchema,
-  staleTime: 30_000, // auctions are more volatile
+  staleTime: 30_000,
   gcTime: 300_000,
   component: AuctionsPage,
   pendingComponent: RouteLoading,
