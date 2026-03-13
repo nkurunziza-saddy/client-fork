@@ -134,6 +134,15 @@ export const authApi = apiSlice.injectEndpoints({
 				body,
 			}),
 		}),
+
+		checkEmailUniqueness: builder.query<{ available: boolean }, string>({
+			query: (email) => `/auth/check-email?email=${encodeURIComponent(email)}`,
+		}),
+
+		checkRegistrationUniqueness: builder.query<{ available: boolean }, string>({
+			query: (regId) =>
+				`/auth/check-registration?id=${encodeURIComponent(regId)}`,
+		}),
 	}),
 });
 
@@ -146,4 +155,7 @@ export const {
 	useResendVerificationEmailMutation,
 	useForgetPasswordMutation,
 	useResetPasswordMutation,
+	useCheckEmailUniquenessQuery,
+	useLazyCheckEmailUniquenessQuery,
+	useLazyCheckRegistrationUniquenessQuery,
 } = authApi;

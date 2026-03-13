@@ -1,5 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { AdminLayout } from "@/components/layout/admin-layout";
+import { NotFound } from "@/shared/components/not-found";
+import { RouteError } from "@/shared/components/route-error";
+import { RouteLoading } from "@/shared/components/route-loading";
 import { ROLES } from "@/shared/constants";
 import { ROUTES } from "@/shared/constants/routes";
 import { store } from "@/store";
@@ -28,9 +31,12 @@ export const Route = createFileRoute("/admin")({
 	},
 	preload: false,
 	component: AdminLayout,
+	pendingComponent: RouteLoading,
+	notFoundComponent: NotFound,
+	errorComponent: RouteError,
 	head: () => ({
 		meta: [
-			{ title: "Admin Panel | AfrikaMarket" },
+			{ title: "Admin Panel | Karibu" },
 			{ name: "robots", content: "noindex, nofollow" },
 		],
 	}),

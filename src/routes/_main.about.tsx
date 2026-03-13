@@ -8,6 +8,6 @@ export const Route = createFileRoute("/_main/about")({
 		createSeoMeta({
 			title: "About Us",
 			description:
-				"Learn more about AfrikaMarket, our mission to empower African wholesale commerce, and how we connect retailers with verified suppliers.",
+				"Learn more about Karibu, our mission to empower African wholesale commerce, and how we connect retailers with verified suppliers.",
 		}),
 });

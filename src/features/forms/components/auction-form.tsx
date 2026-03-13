@@ -5,18 +5,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { getFormFieldErrors } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { FormField } from "@/shared/components/form-field";
 import { useFileUpload } from "@/shared/hooks/use-file-upload";
-
-interface AuctionFormValues {
-	title: string;
-	description: string;
-	startingPrice: string;
-	startDate: string;
-	endDate: string;
-	imageUrls: string[];
-}
+import {
+	type AuctionFormValues,
+	auctionOptions,
+} from "@/shared/schemas/business";
 
 interface AuctionFormProps {
 	onSubmit: (
@@ -33,7 +29,6 @@ interface AuctionFormProps {
 const MAX_IMAGES = 5;
 const MAX_SIZE_MB = 5;
 
-// Format a date object or string into `YYYY-MM-DDThh:mm` for input type="datetime-local"
 const toDateTimeLocal = (val?: string | Date) => {
 	if (!val) return "";
 	const d = new Date(val);
@@ -69,14 +64,16 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 	});
 
 	const form = useForm({
+		...auctionOptions,
 		defaultValues: {
+			...auctionOptions.defaultValues,
 			title: initialValues?.title ?? "",
 			description: initialValues?.description ?? "",
 			startingPrice: initialValues?.startingPrice ?? "",
 			startDate: toDateTimeLocal(initialValues?.startDate),
 			endDate: toDateTimeLocal(initialValues?.endDate),
 			imageUrls: initialValues?.imageUrls ?? [],
-		} as AuctionFormValues,
+		},
 		onSubmit: async ({ value }) => {
 			let newUploadedUrls: string[] = [];
 			const filesToUpload = files
@@ -123,26 +120,39 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 					</AlertDescription>
 				</Alert>
 			)}
-			<form.Field name="title">
-				{(field) => (
-					<FormField label="Auction Title" required>
+			<form.Field
+				name="title"
+				children={(field) => (
+					<FormField
+						label="Auction Title"
+						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+					>
 						<Input
+							id={field.name}
+							aria-label="Auction Title"
 							name={field.name}
 							value={field.state.value}
 							onBlur={field.handleBlur}
 							onChange={(e) => field.handleChange(e.target.value)}
 							className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
 							placeholder="Enter auction title"
-							required
 						/>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
-			<form.Field name="startingPrice">
-				{(field) => (
-					<FormField label="Starting Price (RWF)" required>
+			<form.Field
+				name="startingPrice"
+				children={(field) => (
+					<FormField
+						label="Starting Price (RWF)"
+						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+					>
 						<Input
+							id={field.name}
+							aria-label="Starting Price"
 							name={field.name}
 							value={field.state.value}
 							type="number"
@@ -152,49 +162,65 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 							onChange={(e) => field.handleChange(e.target.value)}
 							className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
 							placeholder="0.00"
-							required
 						/>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
 			<div className="grid grid-cols-2 gap-4">
-				<form.Field name="startDate">
-					{(field) => (
-						<FormField label="Start Date & Time" required>
+				<form.Field
+					name="startDate"
+					children={(field) => (
+						<FormField
+							label="Start Date & Time"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+						>
 							<Input
+								id={field.name}
+								aria-label="Start Date"
 								name={field.name}
 								value={field.state.value}
 								type="datetime-local"
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
 								className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-								required
 							/>
 						</FormField>
 					)}
-				</form.Field>
-				<form.Field name="endDate">
-					{(field) => (
-						<FormField label="End Date & Time" required>
+				/>
+				<form.Field
+					name="endDate"
+					children={(field) => (
+						<FormField
+							label="End Date & Time"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+						>
 							<Input
+								id={field.name}
+								aria-label="End Date"
 								name={field.name}
 								value={field.state.value}
 								type="datetime-local"
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
 								className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-								required
 							/>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 			</div>
 
-			<form.Field name="description">
-				{(field) => (
-					<FormField label="Description">
+			<form.Field
+				name="description"
+				children={(field) => (
+					<FormField
+						label="Description"
+						error={getFormFieldErrors(field.state.meta.errors)}
+					>
 						<Textarea
+							id={field.name}
 							name={field.name}
 							value={field.state.value}
 							onBlur={field.handleBlur}
@@ -205,11 +231,12 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 						/>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
 			<div>
-				<form.Field name="imageUrls">
-					{(field) => {
+				<form.Field
+					name="imageUrls"
+					children={(field) => {
 						const existingImages = field.state.value || [];
 						const remainingSlots = MAX_IMAGES - existingImages.length;
 
@@ -221,7 +248,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 											Existing Images ({existingImages.length})
 										</label>
 										<div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-											{existingImages.map((url, i) => (
+											{existingImages.map((url: string, i: number) => (
 												<div
 													key={url}
 													className="relative aspect-square border border-border/40 bg-muted/20"
@@ -239,7 +266,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 														onClick={() =>
 															field.handleChange(
 																existingImages.filter(
-																	(_, index) => index !== i,
+																	(_: string, index: number) => index !== i,
 																),
 															)
 														}
@@ -255,6 +282,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 
 								<FormField
 									label={`New Auction Images (up to ${remainingSlots} more)`}
+									error={getFormFieldErrors(field.state.meta.errors)}
 								>
 									<div
 										className="relative flex min-h-36 flex-col items-center not-data-files:justify-center overflow-hidden rounded-none border border-dashed border-border/40 p-3 transition-colors data-[dragging=true]:bg-accent/50"
@@ -344,7 +372,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 							</div>
 						);
 					}}
-				</form.Field>
+				/>
 				{uploadErrors.length > 0 && (
 					<div
 						className="flex items-center gap-1 text-destructive text-[10px] font-black uppercase tracking-widest mt-1.5"
@@ -365,19 +393,24 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 				>
 					Cancel
 				</Button>
-				<Button
-					type="submit"
-					disabled={isLoading || isUploading}
-					className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-primary/20"
-				>
-					{isUploading
-						? "Uploading..."
-						: isLoading
-							? "Saving..."
-							: initialValues?.title
-								? "Save Changes"
-								: "Create Auction"}
-				</Button>
+				<form.Subscribe
+					selector={(state) => [state.canSubmit, state.isSubmitting]}
+					children={([canSubmit, isSubmitting]) => (
+						<Button
+							type="submit"
+							disabled={!canSubmit || isLoading || isUploading || isSubmitting}
+							className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-primary/20"
+						>
+							{isUploading || isSubmitting
+								? "Uploading..."
+								: isLoading
+									? "Saving..."
+									: initialValues?.title
+										? "Save Changes"
+										: "Create Auction"}
+						</Button>
+					)}
+				/>
 			</div>
 		</form>
 	);

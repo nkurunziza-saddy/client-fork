@@ -53,8 +53,8 @@ export function ContactActions({
 		// Clean phone number: remove non-numeric chars
 		const clnPhone = targetPhone?.replace(/\D/g, "");
 		const text = companyName
-			? `Hello ${companyName}, I found your profile on AfriMarket and I'm interested in your services.`
-			: "Hello, I found your profile on AfriMarket and I'm interested in your services.";
+			? `Hello ${companyName}, I found your profile on Karibu and I'm interested in your services.`
+			: "Hello, I found your profile on Karibu and I'm interested in your services.";
 		window.open(
 			`https://wa.me/${clnPhone}?text=${encodeURIComponent(text)}`,
 			"_blank",
@@ -64,7 +64,7 @@ export function ContactActions({
 	const handleEmail = () => {
 		if (!email) return;
 		handleLog("EMAIL_CLICK");
-		const subject = "Inquiry from AfriMarket";
+		const subject = "Inquiry from Karibu";
 		window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
 	};
 

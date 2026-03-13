@@ -1,9 +1,4 @@
-import {
-	RiArrowLeftSLine,
-	RiBuildingLine,
-	RiLoader2Line,
-	RiUserLine,
-} from "@remixicon/react";
+import { RiArrowLeftSLine, RiBuildingLine, RiUserLine } from "@remixicon/react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,8 +7,10 @@ import {
 	useGetCompanyByIdQuery,
 	useUpdateCompanyMutation,
 } from "@/services/api/companies";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
+import type { SupplierProvisionValues } from "@/shared/schemas/business";
 
 export function AdminEditSupplierPage() {
 	const navigate = useNavigate();
@@ -40,7 +37,7 @@ export function AdminEditSupplierPage() {
 		};
 	}, [company]);
 
-	const handleSubmit = async (values: any) => {
+	const handleSubmit = async (values: SupplierProvisionValues) => {
 		try {
 			await updateCompany({
 				id: supplierId,
@@ -53,18 +50,17 @@ export function AdminEditSupplierPage() {
 					sector: values.sectorAddress || undefined,
 				},
 			}).unwrap();
-			navigate({ to: `/admin/suppliers/${supplierId}` as any });
+			navigate({
+				to: "/admin/suppliers/$supplierId",
+				params: { supplierId },
+			});
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
 	if (isLoading) {
-		return (
-			<div className="flex items-center justify-center p-20">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!company) {
@@ -84,7 +80,10 @@ export function AdminEditSupplierPage() {
 				<Button
 					variant="ghost"
 					onClick={() =>
-						navigate({ to: `/admin/suppliers/${supplierId}` as any })
+						navigate({
+							to: "/admin/suppliers/$supplierId",
+							params: { supplierId },
+						})
 					}
 					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-foreground hover:bg-muted"
 				>
@@ -105,6 +104,7 @@ export function AdminEditSupplierPage() {
 			<Card noPadding>
 				<div className="flex border-b-2 border-border">
 					<button
+						type="button"
 						onClick={() => setCurrentStep(1)}
 						className={`flex flex-1 items-center justify-center gap-3 border-r-2 border-border py-5 text-xs font-heading font-bold uppercase tracking-widest transition-all ${
 							currentStep === 1
@@ -116,6 +116,7 @@ export function AdminEditSupplierPage() {
 						Company
 					</button>
 					<button
+						type="button"
 						onClick={() => setCurrentStep(2)}
 						className={`flex flex-1 items-center justify-center gap-3 py-5 text-xs font-heading font-bold uppercase tracking-widest transition-all ${
 							currentStep === 2
@@ -137,7 +138,10 @@ export function AdminEditSupplierPage() {
 					initialValues={initialValues}
 					onSubmit={handleSubmit}
 					onCancel={() =>
-						navigate({ to: `/admin/suppliers/${supplierId}` as any })
+						navigate({
+							to: "/admin/suppliers/$supplierId",
+							params: { supplierId },
+						})
 					}
 				/>
 			</div>

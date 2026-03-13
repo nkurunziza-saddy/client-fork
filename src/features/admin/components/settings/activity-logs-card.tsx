@@ -1,8 +1,8 @@
 import { RiPulseLine } from "@remixicon/react";
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
-import { Card as AdminCard } from "@/features/admin/components/card";
 import { AdminTable } from "@/features/admin/components/table";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 
 export const ActivityLogsCard: React.FC = () => {
 	const activities = [

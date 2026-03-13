@@ -1,6 +1,5 @@
 import {
 	RiArrowLeftSLine,
-	RiLoader2Line,
 	RiMoneyDollarCircleLine,
 	RiPagesLine,
 	RiSaveLine,
@@ -13,8 +12,9 @@ import {
 	useGetProductByIdQuery,
 	useUpdateProductMutation,
 } from "@/services/api/products";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 
 export function AdminEditProductPage() {
 	const { supplierId, productId } = useParams({
@@ -85,7 +85,8 @@ export function AdminEditProductPage() {
 				},
 			}).unwrap();
 			navigate({
-				to: `/admin/suppliers/${supplierId}/product/${productId}` as any,
+				to: "/admin/suppliers/$supplierId/product/$productId",
+				params: { supplierId, productId },
 			});
 		} catch (error) {
 			console.error(error);
@@ -93,11 +94,7 @@ export function AdminEditProductPage() {
 	};
 
 	if (isLoadingData) {
-		return (
-			<div className="flex min-h-screen items-center justify-center bg-background">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!product || !supplier) {
@@ -109,7 +106,10 @@ export function AdminEditProductPage() {
 					</h1>
 					<Button
 						onClick={() =>
-							navigate({ to: `/admin/suppliers/${supplierId}` as any })
+							navigate({
+								to: "/admin/suppliers/$supplierId",
+								params: { supplierId },
+							})
 						}
 						className="h-11 w-full rounded-sm font-heading font-bold uppercase text-xs tracking-wider"
 					>
@@ -127,7 +127,8 @@ export function AdminEditProductPage() {
 					variant="ghost"
 					onClick={() =>
 						navigate({
-							to: `/admin/suppliers/${supplierId}/product/${productId}` as any,
+							to: "/admin/suppliers/$supplierId/product/$productId",
+							params: { supplierId, productId },
 						})
 					}
 					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-foreground hover:bg-muted"

@@ -1,102 +1,126 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import type { CatalogFilters, ListingType } from "@/types";
-import { useMarketplaceParams } from "./use-marketplace-params";
 
 const DEFAULT_PRICE_MAX = 1_000_000;
 
 export function useMarketplaceFilters(
-	_initialCategoryId = "all",
-	_initialType: ListingType = "all",
-	onTypeChange?: (type: ListingType) => void,
+  _initialCategoryId = "all",
+  _initialType: ListingType = "all",
+  onTypeChange?: (type: ListingType) => void,
 ) {
-	const [filters, setFilters] = useMarketplaceParams();
+  const search = useSearch({ strict: false });
+  const navigate = useNavigate();
+  const [isPending, startTransition] = useTransition();
 
-	const [searchInput, setSearchInput] = useState(filters.searchQuery);
-	const [priceRange, setPriceRange] = useState<[number, number]>([
-		filters.minPrice ? Number(filters.minPrice) : 0,
-		filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
-	]);
+  const [searchInput, setSearchInput] = useState(search.searchQuery || "");
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    search.minPrice ? Number(search.minPrice) : 0,
+    search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+  ]);
 
-	// Sync state if filters change (e.g. from URL or reset)
-	useEffect(() => {
-		setSearchInput(filters.searchQuery);
-	}, [filters.searchQuery]);
+  // Sync state if filters change (e.g. from URL or reset)
+  useEffect(() => {
+    setSearchInput(search.searchQuery || "");
+  }, [search.searchQuery]);
 
-	useEffect(() => {
-		setPriceRange([
-			filters.minPrice ? Number(filters.minPrice) : 0,
-			filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
-		]);
-	}, [filters.minPrice, filters.maxPrice]);
+  useEffect(() => {
+    setPriceRange([
+      search.minPrice ? Number(search.minPrice) : 0,
+      search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+    ]);
+  }, [search.minPrice, search.maxPrice]);
 
-	const patchFilters = useCallback(
-		(patch: Partial<CatalogFilters>) => {
-			setFilters((prev) => {
-				const next = { ...prev, ...patch };
-				if (patch.type != null && patch.type !== prev.type) {
-					onTypeChange?.(patch.type as ListingType);
-				}
-				return next;
-			});
-		},
-		[setFilters, onTypeChange],
-	);
+  const patchFilters = useCallback(
+    (patch: Partial<CatalogFilters>) => {
+      startTransition(() => {
+        navigate({
+          search: ((prev: Record<string, unknown>) => {
+            const next = { ...prev, ...patch };
+            if (patch.type != null && patch.type !== prev.type) {
+              onTypeChange?.(patch.type as ListingType);
+            }
+            return next;
+          }) as never,
+        });
+      });
+    },
+    [navigate, onTypeChange],
+  );
 
-	const resetFilters = useCallback(() => {
-		setFilters({
-			searchQuery: "",
-			categoryId: "all",
-			type: "all",
-			district: "",
-			minPrice: "",
-			maxPrice: "",
-			onlyInStock: false,
-			companyType: "all",
-			sortBy: "createdAt",
-			sortOrder: "DESC",
-			page: 1,
-		});
-		onTypeChange?.("all");
-	}, [setFilters, onTypeChange]);
+  const resetFilters = useCallback(() => {
+    startTransition(() => {
+      navigate({
+        search: ((prev: Record<string, unknown>) => ({
+          ...prev,
+          searchQuery: "",
+          categoryId: "all",
+          type: "all",
+          district: "",
+          minPrice: undefined,
+          maxPrice: undefined,
+          onlyInStock: false,
+          companyType: "all",
+          sortBy: "createdAt",
+          sortOrder: "DESC",
+          page: 1,
+        })) as never,
+      });
+      onTypeChange?.("all");
+    });
+  }, [navigate, onTypeChange]);
 
-	const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
-	useEffect(() => {
-		if (searchInput === filters.searchQuery) return; // Skip if already synced
+  const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => {
+    if (searchInput === (search.searchQuery || "")) return;
 
-		clearTimeout(searchDebounce.current);
-		searchDebounce.current = setTimeout(() => {
-			setFilters({ searchQuery: searchInput, page: 1 });
-		}, 400);
-		return () => clearTimeout(searchDebounce.current);
-	}, [searchInput, filters.searchQuery, setFilters]);
+    clearTimeout(searchDebounce.current);
+    searchDebounce.current = setTimeout(() => {
+      startTransition(() => {
+        navigate({
+          search: ((prev: Record<string, unknown>) => ({
+            ...prev,
+            searchQuery: searchInput,
+            page: 1,
+          })) as never,
+        });
+      });
+    }, 400);
+    return () => clearTimeout(searchDebounce.current);
+  }, [searchInput, search.searchQuery, navigate]);
 
-	const commitPrice = useCallback(() => {
-		setFilters({
-			minPrice: priceRange[0].toString(),
-			maxPrice: priceRange[1].toString(),
-			page: 1,
-		});
-	}, [priceRange, setFilters]);
+  const commitPrice = useCallback(() => {
+    startTransition(() => {
+      navigate({
+        search: ((prev: Record<string, unknown>) => ({
+          ...prev,
+          minPrice: priceRange[0],
+          maxPrice: priceRange[1],
+          page: 1,
+        })) as never,
+      });
+    });
+  }, [priceRange, navigate]);
 
-	const hasActiveFilters =
-		filters.categoryId !== "all" ||
-		filters.type !== "all" ||
-		filters.companyType !== "all" ||
-		!!filters.district ||
-		!!filters.minPrice ||
-		!!filters.maxPrice ||
-		filters.onlyInStock;
+  const hasActiveFilters =
+    search.categoryId !== "all" ||
+    search.type !== "all" ||
+    search.companyType !== "all" ||
+    !!search.district ||
+    !!search.minPrice ||
+    !!search.maxPrice ||
+    search.onlyInStock;
 
-	return {
-		filters,
-		setFilters,
-		patchFilters,
-		resetFilters,
-		searchInput,
-		setSearchInput,
-		priceRange,
-		setPriceRange,
-		commitPrice,
-		hasActiveFilters,
-	};
+  return {
+    filters: search as CatalogFilters,
+    patchFilters,
+    resetFilters,
+    searchInput,
+    setSearchInput,
+    priceRange,
+    setPriceRange,
+    commitPrice,
+    hasActiveFilters,
+    isPending,
+  };
 }

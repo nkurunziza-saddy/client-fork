@@ -1,11 +1,19 @@
 import { RiArrowLeftLine } from "@remixicon/react";
-import type React from "react";
+import { Building2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { useSupplierActions } from "@/hooks/use-supplier-actions";
 import { useGetCompanyByIdQuery } from "@/services/api/companies";
 import { useGetProductsQuery } from "@/services/api/products";
+import { DetailPageSkeleton } from "@/shared/components/skeletons";
 import type { Product } from "@/types";
 import { SupplierActions } from "./details/supplier-actions";
 import { SupplierContactModal } from "./details/supplier-contact-modal";
@@ -38,8 +46,6 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 		showContactModal,
 		setShowContactModal,
 		handleOpenContactModal,
-		message,
-		setMessage,
 		handleSubmitInquiry,
 		sendingInquiry,
 	} = useSupplierActions(company);
@@ -49,52 +55,58 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 		[company?.district, company?.province].filter(Boolean).join(", ") ||
 		"Kigali, Rwanda";
 
-	const tags = [
-		company?.type?.replace("_", " "),
-		"Verified",
-		company?.category?.name,
-	].filter((t): t is string => Boolean(t));
-
-	const joinedYear = company?.createdAt
-		? new Date(company.createdAt).getFullYear()
-		: "2024";
-
 	if (isLoading) {
-		return (
-			<div className="min-h-screen bg-background flex items-center justify-center">
-				<div className="animate-pulse text-muted-foreground uppercase text-[10px] font-bold tracking-[0.2em]">
-					Loading supplier...
-				</div>
-			</div>
-		);
+		return <DetailPageSkeleton />;
 	}
 
 	if (error || !company) {
 		return (
-			<div className="min-h-screen bg-muted/30 flex items-center justify-center">
-				<div className="text-center">
-					<h2 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-tighter">
-						Supplier Not Found
-					</h2>
-					<Button onClick={onBack} variant="outline" className="rounded-none">
-						Back to Directory
-					</Button>
-				</div>
+			<div className="flex min-h-[60vh] items-center justify-center p-6">
+				<Empty className="max-w-md w-full">
+					<EmptyHeader>
+						<EmptyMedia variant="icon">
+							<Building2 className="w-4 h-4 text-primary" />
+						</EmptyMedia>
+						<EmptyTitle className="text-xl font-display font-black uppercase">
+							Supplier Not Found
+						</EmptyTitle>
+						<EmptyDescription className="uppercase tracking-widest text-[10px]">
+							The supplier you are looking for may have been removed or does not
+							exist.
+						</EmptyDescription>
+					</EmptyHeader>
+					<EmptyContent>
+						<Button
+							onClick={onBack}
+							className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+						>
+							Back to Directory
+						</Button>
+					</EmptyContent>
+				</Empty>
 			</div>
 		);
 	}
 
 	return (
 		<div className="min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24">
-			<SupplierActions
+			<SupplierContactModal
+				isOpen={showContactModal}
+				onClose={() => setShowContactModal(false)}
+				onSubmit={handleSubmitInquiry}
 				company={company}
-				isMobile
-				onContactClick={handleOpenContactModal}
+				sendingInquiry={sendingInquiry}
 			/>
 
-			{/* Top sticky header with supplier name */}
-			<div className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-[48px] z-30 py-3 md:py-4 px-4 md:px-8">
-				<div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
+			<SupplierActions
+				company={company}
+				onContactClick={handleOpenContactModal}
+				isMobile
+			/>
+
+			{/* Top Navigation */}
+			<div className="bg-background border-b border-border/40 py-3 md:py-4 px-3 sm:px-6 lg:px-8">
+				<div className="max-w-[1800px] mx-auto flex items-center justify-between gap-4">
 					<div className="flex items-center gap-3 overflow-hidden">
 						<Button
 							variant="ghost"
@@ -109,103 +121,73 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 							{company.name}
 						</h1>
 					</div>
-					<Badge className="shrink-0 bg-primary/10 text-primary border-primary/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-none uppercase hidden sm:block">
-						{company.type || "Supplier"}
-					</Badge>
+					<div className="flex items-center gap-2 shrink-0">
+						<Button
+							onClick={handleOpenContactModal}
+							className="hidden md:inline-flex h-8 px-4 rounded-none text-[10px] font-black uppercase tracking-[0.2em]"
+						>
+							Contact Supplier
+						</Button>
+						<Badge className="bg-primary/10 text-primary border-primary/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-none uppercase hidden sm:block">
+							{company.isVerified ? "Verified Provider" : "Supplier"}
+						</Badge>
+					</div>
 				</div>
 			</div>
 
-			<div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-12">
-				<div className="grid mt-16 md:grid-cols-[200px_1fr] gap-8 md:gap-12 items-start pt-4 md:pt-0">
-					<div className="hidden md:block" />
+			<div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-12 pb-8 md:pb-12 space-y-12">
+				<SupplierHeader
+					company={company}
+					rating={rating}
+					location={location}
+					onContactClick={handleOpenContactModal}
+				/>
 
-					<div className="space-y-10">
-						<SupplierHeader
+				<div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start pt-2 md:pt-4">
+					<div className="lg:col-span-8 space-y-12">
+						<SupplierTabsContent
 							company={company}
-							location={location}
-							rating={rating}
-							onContactClick={handleOpenContactModal}
+							listings={listings}
+							onProductClick={onProductClick}
+							featuredListings={featuredListings}
 						/>
+					</div>
 
-						<div className="space-y-8">
-							{/* Tags */}
-							<div className="flex flex-wrap gap-2">
-								{tags.map((tag: string, i: number) => (
-									<div
-										key={i}
-										className="px-3 py-1 bg-muted/20 border border-border/40 rounded-none text-[9px] font-black uppercase tracking-wider text-muted-foreground hover:bg-primary/5 hover:border-primary/20 transition-colors"
-									>
-										{tag}
-									</div>
-								))}
-							</div>
+					<div className="lg:col-span-4 space-y-8">
+						<div className="hidden md:block">
+							<SupplierActions
+								company={company}
+								onContactClick={handleOpenContactModal}
+							/>
+						</div>
 
-							{/* Quick Stats Row - Tight and technical */}
-							<div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-border/40 border border-border/40 shadow-sm">
-								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
-									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
-										Active items
-									</div>
-									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
-										{listings.length}
-									</div>
+						{/* Contact Info Card */}
+						<div className="rounded-none border border-border/40 bg-muted/10 p-8 relative overflow-hidden">
+							<div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
+							<h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground mb-3">
+								Supplier Contact
+							</h4>
+							<div className="space-y-4">
+								<div>
+									<p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">
+										Location
+									</p>
+									<p className="text-xs font-bold">{location}</p>
 								</div>
-								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
-									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
-										Views
-									</div>
-									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
-										{company.visits || 0}
-									</div>
-								</div>
-								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
-									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
-										Member since
-									</div>
-									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
-										{joinedYear}
-									</div>
+								<div>
+									<p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">
+										Joined
+									</p>
+									<p className="text-xs font-bold">
+										{company.createdAt
+											? new Date(company.createdAt).getFullYear()
+											: "2024"}
+									</p>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				{/* Tabs Section */}
-				<div className="pt-8 border-t border-border/40">
-					<Tabs defaultValue="overview" className="w-full">
-						<TabsList variant="line" className="justify-start mb-8">
-							{["overview", "products", "reviews", "contact"].map((tab) => (
-								<TabsTrigger
-									key={tab}
-									value={tab}
-									className="uppercase text-[10px] font-black tracking-[0.2em]"
-								>
-									{tab === "overview" ? "Company overview" : tab}
-								</TabsTrigger>
-							))}
-						</TabsList>
-
-						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-							<SupplierTabsContent
-								company={company}
-								listings={listings}
-								featuredListings={featuredListings}
-								onProductClick={onProductClick}
-							/>
-						</div>
-					</Tabs>
-				</div>
-
-				<SupplierContactModal
-					company={company}
-					message={message}
-					setMessage={setMessage}
-					sendingInquiry={sendingInquiry}
-					isOpen={showContactModal}
-					onClose={() => setShowContactModal(false)}
-					onSubmit={handleSubmitInquiry}
-				/>
 			</div>
 		</div>
 	);

@@ -1,3 +1,4 @@
+import { useForm } from "@tanstack/react-form";
 import { Link } from "@tanstack/react-router";
 import {
 	CheckCircle2,
@@ -7,29 +8,27 @@ import {
 	Phone,
 	User,
 } from "lucide-react";
-import { type FormEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { handleRtkQueryError } from "@/lib/utils";
+import { getFormFieldErrors, handleRtkQueryError } from "@/lib/utils";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
 import {
 	useGetProfileQuery,
 	useUpdateProfileMutation,
 } from "@/services/api/users";
+import { FormField } from "@/shared/components/form-field";
+import { type ProfileFormValues, profileSchema } from "@/shared/schemas/auth";
 import type { RootState } from "@/store";
 
 export function ProfilePage() {
 	const { user } = useSelector((state: RootState) => state.auth);
 	const { data: profile, isLoading } = useGetProfileQuery();
 	const [updateProfile, { isLoading: updating }] = useUpdateProfileMutation();
-
-	const [name, setName] = useState("");
-	const [phoneNumber, setPhoneNumber] = useState("");
-	const [image, setImage] = useState("");
 
 	const { data: company, isLoading: isLoadingCompany } = useGetMyCompanyQuery(
 		undefined,
@@ -40,36 +39,41 @@ export function ProfilePage() {
 
 	const userId = profile?.id ?? user?.id;
 
+	const form = useForm({
+		defaultValues: {
+			name: profile?.name ?? user?.name ?? "",
+			phoneNumber: profile?.phoneNumber ?? "",
+			image: profile?.image ?? "",
+		} as ProfileFormValues,
+		validators: {
+			onChange: profileSchema,
+		},
+		onSubmit: async ({ value }) => {
+			if (!userId) return;
+			try {
+				await updateProfile({
+					id: userId,
+					data: {
+						name: value.name.trim() || undefined,
+						phoneNumber: value.phoneNumber?.trim() || undefined,
+						image: value.image?.trim() || undefined,
+					},
+				}).unwrap();
+				toast.success("Profile updated successfully");
+			} catch (err) {
+				handleRtkQueryError(err, "Failed to update profile");
+			}
+		},
+	});
+
+	// Update form when profile data changes
 	useEffect(() => {
 		if (profile) {
-			setName(profile.name ?? "");
-			setPhoneNumber(profile.phoneNumber ?? "");
-			setImage(profile.image ?? "");
-		} else if (user) {
-			setName(user.name ?? "");
-			setPhoneNumber("");
-			setImage("");
+			form.setFieldValue("name", profile.name ?? "");
+			form.setFieldValue("phoneNumber", profile.phoneNumber ?? "");
+			form.setFieldValue("image", profile.image ?? "");
 		}
-	}, [profile, user]);
-
-	const handleSubmit = async (e: FormEvent) => {
-		e.preventDefault();
-		if (!userId) return;
-
-		try {
-			await updateProfile({
-				id: userId,
-				data: {
-					name: name.trim() || undefined,
-					phoneNumber: phoneNumber.trim() || undefined,
-					image: image.trim() || undefined,
-				},
-			}).unwrap();
-			toast.success("Profile updated successfully");
-		} catch (err) {
-			handleRtkQueryError(err, "Failed to update profile");
-		}
-	};
+	}, [profile, form]);
 
 	if (isLoading) {
 		return (
@@ -91,18 +95,25 @@ export function ProfilePage() {
 				<div className="md:col-span-4 space-y-6">
 					<div className="bg-muted/30 border border-border/40 p-8 flex flex-col items-center text-center relative overflow-hidden">
 						<div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
-						<Avatar className="w-24 h-24 rounded-none border-2 border-primary/20 mb-6 shadow-xl relative z-10">
-							<AvatarImage
-								src={image || "/logo.svg"}
-								className="object-cover"
-							/>
-							<AvatarFallback className="rounded-none font-display font-black text-2xl">
-								{name?.charAt(0) || "U"}
-							</AvatarFallback>
-						</Avatar>
-						<h2 className="font-display font-black uppercase text-lg tracking-tight mb-1 relative z-10">
-							{name || "AfrikaMarket User"}
-						</h2>
+						<form.Subscribe
+							selector={(state) => [state.values.image, state.values.name]}
+							children={([image, name]) => (
+								<>
+									<Avatar className="w-24 h-24 rounded-none border-2 border-primary/20 mb-6 shadow-xl relative z-10">
+										<AvatarImage
+											src={image || "/logo.svg"}
+											className="object-cover"
+										/>
+										<AvatarFallback className="rounded-none font-display font-black text-2xl">
+											{name?.charAt(0) || "U"}
+										</AvatarFallback>
+									</Avatar>
+									<h2 className="font-display font-black uppercase text-lg tracking-tight mb-1 relative z-10">
+										{name || "Karibu User"}
+									</h2>
+								</>
+							)}
+						/>
 						<p className="text-[9px] font-black text-primary uppercase tracking-[0.2em] relative z-10">
 							{profile?.role || user?.role || "Member"}
 						</p>
@@ -114,14 +125,19 @@ export function ProfilePage() {
 									{email}
 								</span>
 							</div>
-							{phoneNumber && (
-								<div className="flex items-center gap-3 text-muted-foreground text-left">
-									<Phone className="w-3.5 h-3.5" />
-									<span className="text-[10px] font-bold uppercase tracking-widest">
-										{phoneNumber}
-									</span>
-								</div>
-							)}
+							<form.Subscribe
+								selector={(state) => state.values.phoneNumber}
+								children={(phoneNumber) =>
+									phoneNumber && (
+										<div className="flex items-center gap-3 text-muted-foreground text-left">
+											<Phone className="w-3.5 h-3.5" />
+											<span className="text-[10px] font-bold uppercase tracking-widest">
+												{phoneNumber}
+											</span>
+										</div>
+									)
+								}
+							/>
 						</div>
 					</div>
 
@@ -150,19 +166,38 @@ export function ProfilePage() {
 						</p>
 					</div>
 
-					<form onSubmit={handleSubmit} className="space-y-8">
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							form.handleSubmit();
+						}}
+						className="space-y-8"
+					>
 						<div className="grid gap-6">
-							<div className="space-y-2">
-								<Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-									<User className="w-3 h-3 text-primary" /> Full Name
-								</Label>
-								<Input
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-									className="h-12 bg-muted/5 border-border/40 focus:border-primary/40 rounded-none font-bold uppercase tracking-wide text-xs"
-									placeholder="Your Name"
-								/>
-							</div>
+							<form.Field
+								name="name"
+								children={(field) => (
+									<FormField
+										label="Full Name"
+										required
+										error={getFormFieldErrors(field.state.meta.errors)}
+									>
+										<div className="relative">
+											<User className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+											<Input
+												id={field.name}
+												name={field.name}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												className="h-12 pl-10 bg-muted/5 border-border/40 focus:border-primary/40 rounded-none font-bold uppercase tracking-wide text-xs"
+												placeholder="Your Name"
+											/>
+										</div>
+									</FormField>
+								)}
+							/>
 
 							<div className="space-y-2 opacity-60">
 								<Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
@@ -178,30 +213,51 @@ export function ProfilePage() {
 								</p>
 							</div>
 
-							<div className="space-y-2">
-								<Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-									<Phone className="w-3 h-3 text-primary" /> Phone Number
-								</Label>
-								<Input
-									value={phoneNumber}
-									onChange={(e) => setPhoneNumber(e.target.value)}
-									className="h-12 bg-muted/5 border-border/40 focus:border-primary/40 rounded-none font-mono text-xs font-bold"
-									placeholder="+250 ..."
-								/>
-							</div>
+							<form.Field
+								name="phoneNumber"
+								children={(field) => (
+									<FormField
+										label="Phone Number"
+										error={getFormFieldErrors(field.state.meta.errors)}
+									>
+										<div className="relative">
+											<Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+											<Input
+												id={field.name}
+												name={field.name}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												className="h-12 pl-10 bg-muted/5 border-border/40 focus:border-primary/40 rounded-none font-mono text-xs font-bold"
+												placeholder="+250 ..."
+											/>
+										</div>
+									</FormField>
+								)}
+							/>
 
-							<div className="space-y-2">
-								<Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-									<ImageIcon className="w-3 h-3 text-primary" /> Profile Photo
-									URL
-								</Label>
-								<Input
-									value={image}
-									onChange={(e) => setImage(e.target.value)}
-									className="h-12 bg-muted/5 border-border/40 focus:border-primary/40 rounded-none font-mono text-[10px]"
-									placeholder="https://images.afrikamarket.com/..."
-								/>
-							</div>
+							<form.Field
+								name="image"
+								children={(field) => (
+									<FormField
+										label="Profile Photo URL"
+										error={getFormFieldErrors(field.state.meta.errors)}
+									>
+										<div className="relative">
+											<ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+											<Input
+												id={field.name}
+												name={field.name}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												className="h-12 pl-10 bg-muted/5 border-border/40 focus:border-primary/40 rounded-none font-mono text-[10px]"
+												placeholder="https://images.karibu.com/..."
+											/>
+										</div>
+									</FormField>
+								)}
+							/>
 						</div>
 
 						<div className="pt-6 border-t border-border/40 flex justify-between items-center">
@@ -211,20 +267,25 @@ export function ProfilePage() {
 							>
 								Change Password?
 							</Link>
-							<Button
-								type="submit"
-								disabled={updating || !userId}
-								className="h-14 px-12 rounded-none font-display font-black uppercase tracking-[0.2em] text-[11px] shadow-lg shadow-primary/20 min-w-[200px]"
-							>
-								{updating ? (
-									<>
-										<Loader2 className="w-4 h-4 mr-2 animate-spin" />
-										Saving...
-									</>
-								) : (
-									"Update Profile"
+							<form.Subscribe
+								selector={(state) => [state.canSubmit, state.isSubmitting]}
+								children={([canSubmit, isSubmitting]) => (
+									<Button
+										type="submit"
+										disabled={!canSubmit || updating || isSubmitting || !userId}
+										className="h-14 px-12 rounded-none font-display font-black uppercase tracking-[0.2em] text-[11px] shadow-lg shadow-primary/20 min-w-[200px]"
+									>
+										{updating || isSubmitting ? (
+											<>
+												<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+												Saving...
+											</>
+										) : (
+											"Update Profile"
+										)}
+									</Button>
 								)}
-							</Button>
+							/>
 						</div>
 					</form>
 
@@ -235,7 +296,7 @@ export function ProfilePage() {
 									Seller Dashboard
 								</h2>
 								<p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
-									Manage your business presence on AfriMarket
+									Manage your business presence on Karibu
 								</p>
 							</div>
 

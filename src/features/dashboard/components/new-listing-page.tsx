@@ -1,18 +1,16 @@
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	ProductForm,
-	type ProductFormValues,
-} from "@/features/forms/components/product-form";
-import {
-	ServiceForm,
-	type ServiceFormValues,
-} from "@/features/forms/components/service-form";
+import { ProductForm } from "@/features/forms/components/product-form";
+import { ServiceForm } from "@/features/forms/components/service-form";
 import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
 import { useCreateProductMutation } from "@/services/api/products";
 import { useCreateServiceMutation } from "@/services/api/services";
+import {
+	type ProductFormValues,
+	type ServiceFormValues,
+} from "@/shared/schemas/business";
 
 export function ProviderListingFormPage() {
 	const navigate = useNavigate();
@@ -97,7 +95,7 @@ export function ProviderListingFormPage() {
 					New Listing
 				</h1>
 				<p className="text-muted-foreground text-sm font-medium">
-					Showcase your inventory or expertise on AfrikaMarket.
+					Showcase your inventory or expertise on Karibu.
 				</p>
 			</div>
 

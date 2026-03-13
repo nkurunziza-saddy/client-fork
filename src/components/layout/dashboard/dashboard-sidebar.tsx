@@ -17,7 +17,7 @@ interface DashboardSidebarProps {
 }
 
 const defaultInfo: NavHeaderInfo = {
-	name: "AfrikaMarket",
+	name: "Karibu",
 	logo: RiStore2Line,
 	plan: "Supplier",
 };
@@ -56,7 +56,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ user }) => {
 
 	const sidebarUser = {
 		name: user?.name || "Supplier",
-		email: user?.email || "supplier@afrikamarket.com",
+		email: user?.email || "supplier@karibu.com",
 		avatar: user?.avatar || "/avatars/supplier.jpg",
 		role: user?.role,
 	};

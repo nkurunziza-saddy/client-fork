@@ -10,8 +10,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getFormFieldErrors } from "@/lib/utils";
 import { useResetPasswordMutation } from "@/services/api/auth";
 import { FormField } from "@/shared/components";
+import { resetPasswordSchema } from "@/shared/schemas/auth";
 
 export function ResetPasswordPage() {
 	const navigate = useNavigate();
@@ -23,11 +25,10 @@ export function ResetPasswordPage() {
 
 	const form = useForm({
 		defaultValues: { newPassword: "", confirmPassword: "" },
+		validators: {
+			onChange: resetPasswordSchema,
+		},
 		onSubmit: async ({ value }) => {
-			if (value.newPassword !== value.confirmPassword) {
-				toast.error("Passwords do not match.");
-				return;
-			}
 			if (!token) {
 				toast.error("Invalid or missing reset token.");
 				return;
@@ -88,12 +89,19 @@ export function ResetPasswordPage() {
 				}}
 				className="w-full space-y-6"
 			>
-				<form.Field name="newPassword">
-					{(field) => (
-						<FormField label="New Password" required>
+				<form.Field
+					name="newPassword"
+					children={(field) => (
+						<FormField
+							label="New Password"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<div className="relative">
 								<RiLockLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 								<Input
+									id={field.name}
 									name={field.name}
 									value={field.state.value}
 									onBlur={field.handleBlur}
@@ -101,8 +109,6 @@ export function ResetPasswordPage() {
 									type={showPw ? "text" : "password"}
 									placeholder="••••••••"
 									className="pl-10 h-12 shadow-none rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-									required
-									minLength={8}
 								/>
 								<button
 									type="button"
@@ -118,14 +124,21 @@ export function ResetPasswordPage() {
 							</div>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 
-				<form.Field name="confirmPassword">
-					{(field) => (
-						<FormField label="Confirm Password" required>
+				<form.Field
+					name="confirmPassword"
+					children={(field) => (
+						<FormField
+							label="Confirm Password"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<div className="relative">
 								<RiLockLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 								<Input
+									id={field.name}
 									name={field.name}
 									value={field.state.value}
 									onBlur={field.handleBlur}
@@ -133,7 +146,6 @@ export function ResetPasswordPage() {
 									type={showConfirm ? "text" : "password"}
 									placeholder="••••••••"
 									className="pl-10 h-12 shadow-none rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-									required
 								/>
 								<button
 									type="button"
@@ -149,15 +161,20 @@ export function ResetPasswordPage() {
 							</div>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 
-				<Button
-					type="submit"
-					className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 border-none rounded-none"
-					disabled={isLoading}
-				>
-					{isLoading ? "Resetting..." : "Reset Password"}
-				</Button>
+				<form.Subscribe
+					selector={(state) => [state.canSubmit, state.isSubmitting]}
+					children={([canSubmit, isSubmitting]) => (
+						<Button
+							type="submit"
+							className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 border-none rounded-none"
+							disabled={!canSubmit || isLoading || isSubmitting}
+						>
+							{isLoading || isSubmitting ? "Resetting..." : "Reset Password"}
+						</Button>
+					)}
+				/>
 			</form>
 		</>
 	);

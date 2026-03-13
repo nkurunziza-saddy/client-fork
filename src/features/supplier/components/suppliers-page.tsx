@@ -10,7 +10,7 @@ export function SuppliersPage() {
 			navigate({
 				to: "/suppliers/$supplierId",
 				params: { supplierId },
-			} as any);
+			});
 		},
 		[navigate],
 	);

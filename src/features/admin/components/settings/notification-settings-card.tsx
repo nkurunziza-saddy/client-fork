@@ -1,9 +1,9 @@
 import { RiNotification3Line } from "@remixicon/react";
 import type React from "react";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 
 interface NotificationSettingsCardProps {
-	notifications: any;
+	notifications: Record<string, boolean>;
 	onToggle: (
 		key:
 			| "emailNotifications"
@@ -69,6 +69,7 @@ export const NotificationSettingsCard: React.FC<
 							</p>
 						</div>
 						<button
+							type="button"
 							onClick={() => onToggle(key)}
 							className={`relative w-12 h-6 rounded-sm transition-all border ${
 								notifications[key]

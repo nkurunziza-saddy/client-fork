@@ -8,22 +8,11 @@ import {
 	useGetProductsQuery,
 } from "@/services/api/products";
 import { ActionModal } from "@/shared/components/action-modal";
-import { PageContainer } from "@/shared/components/page-container";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { ResourceManagementLayout } from "@/shared/components/layouts/resource-management-layout";
+import { formatDate } from "@/shared/utils/format";
 import type { ProductRow } from "@/types";
 import { getProductColumns } from "../columns/products-columns";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-
-function toDateLabel(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
 
 export function AdminProductsPage() {
 	const navigate = useNavigate();
@@ -55,7 +44,7 @@ export function AdminProductsPage() {
 			supplier: product.company?.name ?? "Unknown supplier",
 			supplierId: product.company?.id ?? "",
 			status: product.isActive ? "active" : "inactive",
-			createdDate: toDateLabel(product.createdAt),
+			createdDate: formatDate(product.createdAt),
 			views: Number(product.views) || 0,
 		}));
 	}, [productsResult]);
@@ -79,15 +68,16 @@ export function AdminProductsPage() {
 					navigate({
 						to: "/suppliers/$supplierId",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onViewDetails: (id) =>
 					navigate({
 						to: "/products/$productId",
 						params: { productId: id },
-					} as any),
+					}),
 				onEdit: (supplierId, productId) =>
 					navigate({
-						to: `/admin/suppliers/${supplierId}/product/${productId}/edit` as any,
+						to: "/admin/suppliers/$supplierId/product/$productId/edit",
+						params: { supplierId, productId },
 					}),
 				onDelete: (p) =>
 					setDeleteModal({
@@ -100,39 +90,50 @@ export function AdminProductsPage() {
 	);
 
 	return (
-		<PageContainer>
-			<PageHeader title="Products" subtitle="Manage catalog materials" />
-
-			<Card noPadding>
-				{isLoading ? (
-					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
-						Loading products...
-					</div>
-				) : (
-					<DataTable
-						columns={columns}
-						data={products}
-						filterColumn="name"
-						filterPlaceholder="Search products..."
-						manualPagination
-						pageCount={productsResult?.meta?.totalPages || 0}
-						onPaginationChange={setPagination}
-						state={{ pagination }}
-					/>
-				)}
-			</Card>
-
-			<ActionModal
-				isOpen={deleteModal.isOpen}
-				title="Delete Product"
-				description={`Are you sure you want to delete "${deleteModal.productName}"? This action cannot be undone.`}
-				type="delete"
-				onConfirm={handleDelete}
-				onCancel={() =>
-					setDeleteModal({ isOpen: false, productId: "", productName: "" })
-				}
-				isLoading={deleting}
-			/>
-		</PageContainer>
+		<ResourceManagementLayout
+			title="Products"
+			subtitle="Manage catalog materials"
+			cardTitle="Product Catalog"
+			cardSubtitle="Search and review product listings"
+			isLoading={isLoading}
+			loadingText="Loading products..."
+			content={
+				<DataTable
+					columns={columns}
+					data={products}
+					manualPagination
+					pageCount={productsResult?.meta?.totalPages || 0}
+					onPaginationChange={setPagination}
+					state={{ pagination }}
+				>
+					<DataTable.Toolbar>
+						<AdminTableToolbar
+							searchColumn="name"
+							searchPlaceholder="Search products..."
+							statusColumn="status"
+							statusOptions={[
+								{ label: "Active", value: "active" },
+								{ label: "Inactive", value: "inactive" },
+							]}
+						/>
+					</DataTable.Toolbar>
+					<DataTable.Content />
+					<DataTable.Pagination />
+				</DataTable>
+			}
+			modals={
+				<ActionModal
+					isOpen={deleteModal.isOpen}
+					title="Delete Product"
+					description={`Are you sure you want to delete "${deleteModal.productName}"? This action cannot be undone.`}
+					type="delete"
+					onConfirm={handleDelete}
+					onCancel={() =>
+						setDeleteModal({ isOpen: false, productId: "", productName: "" })
+					}
+					isLoading={deleting}
+				/>
+			}
+		/>
 	);
 }

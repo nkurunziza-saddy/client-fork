@@ -5,7 +5,6 @@ import {
 	RiDeleteBinLine,
 	RiEditLine,
 	RiEyeLine,
-	RiLoader2Line,
 	RiPriceTagLine,
 	RiStockLine,
 } from "@remixicon/react";
@@ -18,20 +17,11 @@ import {
 	useDeleteProductMutation,
 	useGetProductByIdQuery,
 } from "@/services/api/products";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 import { ConfirmationModal } from "@/shared/components/confirmation-modal";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
+import { formatDate } from "@/shared/utils/format";
 
 export function AdminProductDetailsPage() {
 	const { supplierId, productId } = useParams({
@@ -75,18 +65,17 @@ export function AdminProductDetailsPage() {
 		if (!product) return;
 		try {
 			await deleteProduct(product.id).unwrap();
-			navigate({ to: `/admin/suppliers/${supplierId}` as any });
+			navigate({
+				to: "/admin/suppliers/$supplierId",
+				params: { supplierId },
+			});
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
 	if (isLoading) {
-		return (
-			<div className="flex min-h-screen items-center justify-center bg-background">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!product || !supplier) {
@@ -98,9 +87,12 @@ export function AdminProductDetailsPage() {
 					</h1>
 					<Button
 						onClick={() =>
-							navigate({ to: `/admin/suppliers/${supplierId}` as any })
+							navigate({
+								to: "/admin/suppliers/$supplierId",
+								params: { supplierId },
+							})
 						}
-						className="h-11 w-full rounded-sm"
+						className="h-11 w-full rounded-sm font-heading font-bold uppercase text-xs tracking-wider"
 					>
 						Back to Supplier
 					</Button>
@@ -115,7 +107,10 @@ export function AdminProductDetailsPage() {
 				<Button
 					variant="ghost"
 					onClick={() =>
-						navigate({ to: `/admin/suppliers/${supplierId}` as any })
+						navigate({
+							to: "/admin/suppliers/$supplierId",
+							params: { supplierId },
+						})
 					}
 					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-foreground hover:bg-muted"
 				>
@@ -157,6 +152,7 @@ export function AdminProductDetailsPage() {
 							<div className="grid grid-cols-5 gap-2 border-t border-border p-3">
 								{images.map((image, index) => (
 									<button
+										type="button"
 										key={`${image}-${index}`}
 										onClick={() => setSelectedImageIndex(index)}
 										className={`aspect-square overflow-hidden rounded-sm border ${
@@ -276,7 +272,8 @@ export function AdminProductDetailsPage() {
 						<Button
 							onClick={() =>
 								navigate({
-									to: `/admin/suppliers/${supplierId}/product/${productId}/edit` as any,
+									to: "/admin/suppliers/$supplierId/product/$productId/edit",
+									params: { supplierId, productId },
 								})
 							}
 							className="h-12 w-full rounded-sm"

@@ -26,7 +26,7 @@ export const STATUSES = {
 } as const;
 
 export const APP_CONFIG = {
-	NAME: "AfrikaMarket",
-	SUPPORT_EMAIL: "support@afrikamarket.com",
+	NAME: "Karibu",
+	SUPPORT_EMAIL: "support@karibu.com",
 	DEFAULT_PAGE_SIZE: 10,
 } as const;

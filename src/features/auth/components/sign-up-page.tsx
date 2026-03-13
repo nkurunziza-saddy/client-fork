@@ -83,7 +83,7 @@ export function SignUpPage() {
 				</h2>
 				<p className="text-muted-foreground">
 					{step === "role"
-						? "Choose how you want to use AfrikaMarket."
+						? "Choose how you want to use Karibu."
 						: step === "details"
 							? `Completing registration as a ${role === "user" ? "Contractor / Customer" : "Supplier / Service Provider"}.`
 							: "We've sent a verification link to your email address."}

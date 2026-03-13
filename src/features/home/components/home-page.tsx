@@ -21,7 +21,7 @@ export function HomePage() {
 	const categories = categoriesResult?.data.slice(0, 2) || [];
 
 	return (
-		<div className="flex flex-col pb-20 industrial-grain bg-background min-h-screen">
+		<div className="flex flex-col pb-24 industrial-grain bg-background min-h-screen">
 			<LiveDealsTicker />
 			<MarketplaceSubNav />
 			<Hero />

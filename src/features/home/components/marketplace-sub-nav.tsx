@@ -42,7 +42,7 @@ export function MarketplaceSubNav() {
 	if (!isHomePage) return null;
 
 	return (
-		<div className="border-b border-border/40 bg-background sticky top-[56px] z-40 overflow-hidden">
+		<div className="border-b border-border/40 bg-background/90 supports-backdrop-filter:backdrop-blur-md sticky top-[56px] z-40 overflow-hidden shadow-sm">
 			<div className="max-w-[1800px] mx-auto px-2 md:px-6">
 				<div className="flex items-center gap-3 md:gap-10 h-9 md:h-11 overflow-x-auto scrollbar-hide no-scrollbar">
 					<div className="flex items-center gap-1.5 text-foreground/40 shrink-0">

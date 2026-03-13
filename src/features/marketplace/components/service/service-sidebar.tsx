@@ -42,7 +42,7 @@ export const ServiceSidebar: React.FC<ServiceSidebarProps> = ({
 						</div>
 						<div className="space-y-1">
 							<h4 className="font-display font-black text-lg uppercase tracking-tighter text-foreground leading-[0.85]">
-								{service.company?.name ?? "AfrikaMarket Seller"}
+								{service.company?.name ?? "Karibu Seller"}
 							</h4>
 							<p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">
 								{service.company?.district ?? "Regional Supplier"}

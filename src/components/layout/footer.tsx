@@ -106,7 +106,7 @@ export const Footer: React.FC<FooterProps> = ({
 									Contact Us
 								</span>
 								<span className="text-foreground font-bold text-xs md:text-sm">
-									contact@afrikamarket.rw
+									contact@karibu.rw
 								</span>
 							</div>
 						</div>
@@ -168,7 +168,7 @@ export const Footer: React.FC<FooterProps> = ({
 				{/* Legal & Compliance */}
 				<div className="mt-16 md:mt-32 pt-8 md:pt-12 border-t border-border/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-8">
 					<div className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
-						© 2026 AFRIKAMARKET RWANDA
+						© 2026 KARIBU RWANDA
 					</div>
 					<div className="flex gap-6 md:gap-12">
 						<a

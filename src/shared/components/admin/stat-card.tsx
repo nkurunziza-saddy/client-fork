@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 interface StatCardProps {
 	label: string;
 	value: string | number;
-	icon: any;
+	icon: React.ElementType;
 	change?: string;
 	bgColor?: string;
 	color?: string;

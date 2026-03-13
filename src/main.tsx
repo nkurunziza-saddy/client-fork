@@ -1,3 +1,4 @@
+import { setupListeners } from "@reduxjs/toolkit/query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -33,6 +34,7 @@ const rootElement = document.getElementById("root")!;
 
 if (!rootElement.innerHTML) {
 	const root = createRoot(rootElement);
+	setupListeners(store.dispatch);
 	root.render(
 		<StrictMode>
 			<Provider store={store}>

@@ -1,7 +1,8 @@
-import { X } from "lucide-react";
-import type React from "react";
-import { memo } from "react";
-import { Badge } from "@/components/ui/badge";
+import { memo, useMemo } from "react";
+import {
+	ActiveFilterBadges,
+	type FilterBadgeItem,
+} from "@/shared/components/active-filter-badges";
 import type { CatalogFilters } from "@/types";
 
 const COMPANY_TYPES = [
@@ -23,86 +24,68 @@ interface ActiveFiltersProps {
 
 export const ActiveFilters = memo<ActiveFiltersProps>(
 	({ filters, categories, onFilterChange }) => {
-		const active =
-			filters.categoryId !== "all" ||
-			filters.type !== "all" ||
-			filters.companyType !== "all" ||
-			filters.district ||
-			filters.minPrice ||
-			filters.maxPrice ||
-			filters.onlyInStock;
+		const badgeItems = useMemo<FilterBadgeItem[]>(() => {
+			const items: FilterBadgeItem[] = [];
 
-		if (!active) return null;
+			if (filters.categoryId !== "all") {
+				items.push({
+					id: "category",
+					label:
+						categories.find((c) => c.id === filters.categoryId)?.name ??
+						"Category",
+					onRemove: () => onFilterChange({ categoryId: "all", page: 1 }),
+				});
+			}
 
-		return (
-			<div className="flex flex-wrap gap-2 items-center mt-2">
-				{filters.categoryId !== "all" && (
-					<FilterBadge
-						label={
-							categories.find((c) => c.id === filters.categoryId)?.name ??
-							"Category"
-						}
-						onRemove={() => onFilterChange({ categoryId: "all", page: 1 })}
-					/>
-				)}
-				{filters.companyType !== "all" && (
-					<FilterBadge
-						label={
-							COMPANY_TYPES.find((t) => t.value === filters.companyType)
-								?.label ?? filters.companyType
-						}
-						onRemove={() => onFilterChange({ companyType: "all", page: 1 })}
-					/>
-				)}
-				{filters.type !== "all" && (
-					<FilterBadge
-						label={filters.type === "PRODUCT" ? "Products" : "Services"}
-						onRemove={() => onFilterChange({ type: "all", page: 1 })}
-					/>
-				)}
-				{filters.district && (
-					<FilterBadge
-						label={`District: ${filters.district}`}
-						onRemove={() => onFilterChange({ district: "", page: 1 })}
-					/>
-				)}
-				{(filters.minPrice || filters.maxPrice) && (
-					<FilterBadge
-						label={`${Number(filters.minPrice || 0).toLocaleString()} – ${Number(
-							filters.maxPrice || DEFAULT_PRICE_MAX,
-						).toLocaleString()} RWF`}
-						onRemove={() =>
-							onFilterChange({ minPrice: "", maxPrice: "", page: 1 })
-						}
-					/>
-				)}
-				{filters.onlyInStock && (
-					<FilterBadge
-						label="In Stock"
-						onRemove={() => onFilterChange({ onlyInStock: false, page: 1 })}
-					/>
-				)}
-			</div>
-		);
+			if (filters.companyType !== "all") {
+				items.push({
+					id: "companyType",
+					label:
+						COMPANY_TYPES.find((t) => t.value === filters.companyType)?.label ??
+						filters.companyType,
+					onRemove: () => onFilterChange({ companyType: "all", page: 1 }),
+				});
+			}
+
+			if (filters.type !== "all") {
+				items.push({
+					id: "type",
+					label: filters.type === "PRODUCT" ? "Products" : "Services",
+					onRemove: () => onFilterChange({ type: "all", page: 1 }),
+				});
+			}
+
+			if (filters.district) {
+				items.push({
+					id: "district",
+					label: `District: ${filters.district}`,
+					onRemove: () => onFilterChange({ district: "", page: 1 }),
+				});
+			}
+
+			if (filters.minPrice || filters.maxPrice) {
+				items.push({
+					id: "price",
+					label: `${Number(filters.minPrice || 0).toLocaleString()} – ${Number(
+						filters.maxPrice || DEFAULT_PRICE_MAX,
+					).toLocaleString()} RWF`,
+					onRemove: () =>
+						onFilterChange({ minPrice: "", maxPrice: "", page: 1 }),
+				});
+			}
+
+			if (filters.onlyInStock) {
+				items.push({
+					id: "stock",
+					label: "In Stock",
+					onRemove: () => onFilterChange({ onlyInStock: false, page: 1 }),
+				});
+			}
+
+			return items;
+		}, [filters, categories, onFilterChange]);
+
+		return <ActiveFilterBadges items={badgeItems} />;
 	},
 );
 ActiveFilters.displayName = "ActiveFilters";
-
-const FilterBadge: React.FC<{ label: string; onRemove: () => void }> = ({
-	label,
-	onRemove,
-}) => (
-	<Badge
-		variant="secondary"
-		className="gap-2 rounded-none text-[9px] font-bold uppercase tracking-widest pl-3 pr-1.5 h-7 bg-muted/50 border-border/10"
-	>
-		{label}
-		<button
-			type="button"
-			onClick={onRemove}
-			aria-label={`Remove ${label} filter`}
-		>
-			<X className="w-3.5 h-3.5 hover:text-destructive cursor-pointer transition-colors" />
-		</button>
-	</Badge>
-);

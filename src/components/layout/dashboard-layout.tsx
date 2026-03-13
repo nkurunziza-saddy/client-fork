@@ -10,7 +10,7 @@ export const DashboardLayout = () => {
 		<SidebarLayout
 			sidebar={<DashboardSidebar user={user} />}
 			user={user}
-			title="AfrikaMarket"
+			title="Karibu"
 			subtitle="Supplier Dashboard"
 		/>
 	);

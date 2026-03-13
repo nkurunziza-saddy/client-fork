@@ -6,7 +6,7 @@ export const HeaderLogo: React.FC = () => (
 		{/* Compact logo for mobile */}
 		<img
 			src="/logo.svg"
-			alt="AfrikaMarket"
+			alt="Karibu"
 			className="h-4.5 w-auto object-contain sm:hidden group-hover:opacity-90 transition-opacity"
 			onError={(e) => {
 				e.currentTarget.src = "/image-fallback.svg";
@@ -15,7 +15,7 @@ export const HeaderLogo: React.FC = () => (
 		{/* Full logo with name for desktop */}
 		<img
 			src="/logo_with_name.svg"
-			alt="AfrikaMarket"
+			alt="Karibu"
 			className="h-7 md:h-8 w-auto object-contain hidden sm:block group-hover:opacity-90 transition-opacity"
 			onError={(e) => {
 				e.currentTarget.src = "/image-fallback.svg";

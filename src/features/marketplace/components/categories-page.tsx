@@ -72,7 +72,6 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
 				{isLoading ? (
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 						{Array.from({ length: 9 }).map((_, i) => (
-							// biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton array
 							<div
 								key={`skeleton-${i}`}
 								className="h-40 rounded-none border border-border/10 bg-muted/10 animate-pulse"
@@ -104,7 +103,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
 								search={{ category: category.id }}
 								className="group text-left p-8 rounded-none border border-border/10 bg-card hover:border-primary/40 transition-all duration-500 relative overflow-hidden hover:shadow-2xl hover:shadow-primary/5"
 							>
-								<div className="absolute top-0 left-0 w-[1px] h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
+								<div className="absolute top-0 left-0 w-px h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
 
 								<div className="w-12 h-12 rounded-none bg-muted/20 border border-border/10 flex items-center justify-center mb-6 text-muted-foreground/60 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-500">
 									<RiPagesLine className="w-6 h-6" />

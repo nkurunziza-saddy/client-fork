@@ -1,37 +1,48 @@
-import { useCallback, useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useCallback, useTransition } from "react";
 import type { SupplierFiltersState } from "@/types";
 
-const defaultFilters: SupplierFiltersState = {
-	searchQuery: "",
-	categoryId: "all",
-	district: "",
-	type: "all",
-	minRating: "0",
-	verified: false,
-	page: 1,
-};
+export function useSupplierFilters() {
+  const search = useSearch({ strict: false });
+  const navigate = useNavigate();
+  const [isPending, startTransition] = useTransition();
 
-export function useSupplierFilters(initialSearchQuery = "") {
-	const [filters, setFilters] = useState<SupplierFiltersState>({
-		...defaultFilters,
-		searchQuery: initialSearchQuery,
-	});
+  const handleFiltersChange = useCallback(
+    (updates: Partial<SupplierFiltersState>) => {
+      startTransition(() => {
+        navigate({
+          search: ((prev: Record<string, unknown>) => ({
+            ...prev,
+            ...updates,
+            page: 1,
+          })) as never,
+        });
+      });
+    },
+    [navigate],
+  );
 
-	const handleFiltersChange = useCallback(
-		(updates: Partial<SupplierFiltersState>) => {
-			setFilters((prev) => ({ ...prev, ...updates, page: 1 }));
-		},
-		[],
-	);
+  const handleClearFilters = useCallback(() => {
+    startTransition(() => {
+      navigate({
+        search: ((prev: Record<string, unknown>) => ({
+          ...prev,
+          searchQuery: "",
+          categoryId: "all",
+          district: "",
+          type: "all",
+          minRating: "0",
+          verified: false,
+          page: 1,
+        })) as never,
+      });
+    });
+  }, [navigate]);
 
-	const handleClearFilters = useCallback(() => {
-		setFilters(defaultFilters);
-	}, []);
-
-	return {
-		filters,
-		setFilters,
-		handleFiltersChange,
-		handleClearFilters,
-	};
+  return {
+    filters: search as SupplierFiltersState,
+    handleFiltersChange,
+    handleClearFilters,
+    isPending,
+  };
 }

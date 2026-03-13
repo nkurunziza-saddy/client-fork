@@ -1,234 +1,254 @@
 import {
-	RiAlertLine,
-	RiApps2Line,
-	RiFolder2Line,
-	RiShieldCheckLine,
-	RiUserLine,
+  RiAlertLine,
+  RiApps2Line,
+  RiFolder2Line,
+  RiHistoryLine,
+  RiShieldCheckLine,
 } from "@remixicon/react";
-import { useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { Await, getRouteApi, useNavigate } from "@tanstack/react-router";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
-	Empty,
-	EmptyHeader,
-	EmptyMedia,
-	EmptyTitle,
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
 } from "@/components/ui/empty";
-import { useGetCompaniesQuery } from "@/services/api/companies";
-import { useGetProductsQuery } from "@/services/api/products";
-import { useGetServicesQuery } from "@/services/api/services";
-import { useGetMarketplaceStatsQuery } from "@/services/api/stats";
 import { PageContainer, StatsGrid } from "@/shared/components";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { StatCard } from "@/shared/components/admin/stat-card";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatDate } from "@/shared/utils/format";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-import { StatCard } from "./stat-card";
+
+import {
+  type CompaniesListResult,
+  type Company,
+  type Product,
+  type ProductsListResult,
+  type Service,
+  type ServicesListResult,
+} from "@/types";
+
+const routeApi = getRouteApi("/admin/");
 
 function compact(value: number) {
-	if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
-	return `${value}`;
+  if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
+  return `${value}`;
 }
 
 export function AdminDashboard() {
-	const navigate = useNavigate();
-	const { data: stats } = useGetMarketplaceStatsQuery();
-	const { data: companiesResult } = useGetCompaniesQuery({
-		limit: 100,
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-	});
-	const { data: productsResult } = useGetProductsQuery({
-		limit: 100,
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-	});
-	const { data: servicesResult } = useGetServicesQuery({
-		limit: 100,
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-	});
+  const navigate = useNavigate();
+  const { stats, deferred } = routeApi.useLoaderData();
 
-	const companies = companiesResult?.data ?? [];
-	const products = productsResult?.data ?? [];
-	const services = servicesResult?.data ?? [];
+  return (
+    <PageContainer>
+      <PageHeader
+        title="Admin Panel"
+        subtitle="Admin dashboard"
+        badge="System Administrator"
+      />
 
-	const verifiedSuppliers =
-		Number(stats?.verifiedSuppliers) ||
-		companies.filter((company) => company.isVerified).length;
-	const activeProducts = products.filter((p) => p.isActive).length;
-	const activeServices = services.filter((s) => s.isActive).length;
-	const activeListings = activeProducts + activeServices;
-	const catalogItems = products.length + services.length;
-	const pendingReviewCount =
-		companies.filter((company) => !company.isVerified).length +
-		products.filter((p) => !p.isActive).length +
-		services.filter((s) => !s.isActive).length;
+      <Suspense fallback={<AdminPageSkeleton />}>
+        <Await promise={deferred}>
+          {({
+            companies,
+            products,
+            services,
+          }: {
+            companies: CompaniesListResult | undefined;
+            products: ProductsListResult | undefined;
+            services: ServicesListResult | undefined;
+          }) => {
+            const companiesData = companies?.data ?? [];
+            const productsData = products?.data ?? [];
+            const servicesData = services?.data ?? [];
 
-	const recentActivity = useMemo(() => {
-		const recentCompanies = companies.slice(0, 3).map((company) => ({
-			id: company.id,
-			type: "Supplier",
-			name: company.name,
-			status: company.isVerified ? "Verified" : "Pending verification",
-			date: company.createdAt,
-		}));
+            const verifiedSuppliers =
+              Number(stats?.verifiedSuppliers) ||
+              companiesData.filter((company: Company) => company.isVerified)
+                .length;
+            const activeProducts = productsData.filter(
+              (p: Product) => p.isActive,
+            ).length;
+            const activeServices = servicesData.filter(
+              (s: Service) => s.isActive,
+            ).length;
+            const activeListings = activeProducts + activeServices;
+            const catalogItems = productsData.length + servicesData.length;
+            const pendingReviewCount =
+              companiesData.filter((company: Company) => !company.isVerified)
+                .length +
+              productsData.filter((p: Product) => !p.isActive).length +
+              servicesData.filter((s: Service) => !s.isActive).length;
 
-		const recentProducts = products.slice(0, 3).map((p) => ({
-			id: p.id,
-			type: "Product",
-			name: p.name,
-			status: p.isActive ? "Active" : "Inactive",
-			date: p.createdAt,
-		}));
+            const recentActivity = [
+              ...companiesData.slice(0, 3).map((company: Company) => ({
+                id: company.id,
+                type: "Supplier",
+                name: company.name,
+                status: company.isVerified
+                  ? "Verified"
+                  : "Pending verification",
+                date: company.createdAt,
+              })),
+              ...productsData.slice(0, 3).map((p: Product) => ({
+                id: p.id,
+                type: "Product",
+                name: p.name,
+                status: p.isActive ? "Active" : "Inactive",
+                date: p.createdAt,
+              })),
+              ...servicesData.slice(0, 3).map((s: Service) => ({
+                id: s.id,
+                type: "Service",
+                name: s.name,
+                status: s.isActive ? "Active" : "Inactive",
+                date: s.createdAt,
+              })),
+            ]
+              .sort(
+                (a, b) =>
+                  new Date(b.date || 0).getTime() -
+                  new Date(a.date || 0).getTime(),
+              )
+              .slice(0, 6);
 
-		const recentServices = services.slice(0, 3).map((s) => ({
-			id: s.id,
-			type: "Service",
-			name: s.name,
-			status: s.isActive ? "Active" : "Inactive",
-			date: s.createdAt,
-		}));
+            return (
+              <>
+                <StatsGrid columns={4}>
+                  <StatCard
+                    label="Suppliers"
+                    value={compact(verifiedSuppliers)}
+                    icon={RiShieldCheckLine}
+                    bgColor="bg-success/5"
+                    color="text-success"
+                  />
+                  <StatCard
+                    label="Listings"
+                    value={compact(activeListings)}
+                    icon={RiApps2Line}
+                    bgColor="bg-info/5"
+                    color="text-info"
+                  />
+                  <StatCard
+                    label="Catalog"
+                    value={compact(catalogItems)}
+                    icon={RiFolder2Line}
+                    bgColor="bg-info/5"
+                    color="text-info"
+                  />
+                  <StatCard
+                    label="Review"
+                    value={compact(pendingReviewCount)}
+                    icon={RiAlertLine}
+                    bgColor="bg-warning/5"
+                    color="text-warning"
+                  />
+                </StatsGrid>
 
-		return [...recentCompanies, ...recentProducts, ...recentServices]
-			.sort(
-				(a, b) =>
-					new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime(),
-			)
-			.slice(0, 6);
-	}, [companies, products, services]);
+                <div className="grid grid-cols-1 gap-6 xl:grid-cols-3 mt-6">
+                  <Card
+                    title="Quick Operations"
+                    subtitle="Manage sections"
+                    className="xl:col-span-1"
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
+                        onClick={() =>
+                          navigate({ to: ROUTES.ADMIN.SUPPLIERS.INDEX })
+                        }
+                      >
+                        <RiShieldCheckLine className="mr-2 h-4 w-4" />
+                        Suppliers
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
+                        onClick={() => navigate({ to: ROUTES.ADMIN.PRODUCTS })}
+                      >
+                        <RiApps2Line className="mr-2 h-4 w-4" />
+                        Products
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
+                        onClick={() => navigate({ to: ROUTES.ADMIN.SERVICES })}
+                      >
+                        <RiFolder2Line className="mr-2 h-4 w-4" />
+                        Services
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
+                        onClick={() =>
+                          navigate({ to: ROUTES.ADMIN.CATEGORIES })
+                        }
+                      >
+                        <RiApps2Line className="mr-2 h-4 w-4" />
+                        Categories
+                      </Button>
+                    </div>
+                  </Card>
 
-	return (
-		<PageContainer>
-			<PageHeader
-				title="Admin Panel"
-				subtitle="Admin dashboard"
-				badge="System Administrator"
-			/>
-
-			<StatsGrid columns={4}>
-				<StatCard
-					label="Suppliers"
-					value={compact(verifiedSuppliers)}
-					icon={RiShieldCheckLine}
-					bgColor="bg-success/5"
-					color="text-success"
-				/>
-				<StatCard
-					label="Listings"
-					value={compact(activeListings)}
-					icon={RiApps2Line}
-					bgColor="bg-info/5"
-					color="text-info"
-				/>
-				<StatCard
-					label="Catalog"
-					value={compact(catalogItems)}
-					icon={RiFolder2Line}
-					bgColor="bg-info/5"
-					color="text-info"
-				/>
-				<StatCard
-					label="Review"
-					value={compact(pendingReviewCount)}
-					icon={RiAlertLine}
-					bgColor="bg-warning/5"
-					color="text-warning"
-				/>
-			</StatsGrid>
-
-			<div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-				<Card
-					title="Quick Operations"
-					subtitle="Manage sections"
-					className="xl:col-span-1"
-				>
-					<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
-						<Button
-							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-							onClick={() => navigate({ to: ROUTES.ADMIN.SUPPLIERS.INDEX })}
-						>
-							<RiUserLine className="mr-3 h-4 w-4" /> Manage Suppliers
-						</Button>
-						<Button
-							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-							onClick={() => navigate({ to: ROUTES.ADMIN.PRODUCTS })}
-						>
-							<RiFolder2Line className="mr-3 h-4 w-4" /> Manage Products
-						</Button>
-						<Button
-							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-							onClick={() => navigate({ to: ROUTES.ADMIN.SERVICES })}
-						>
-							<RiApps2Line className="mr-3 h-4 w-4" /> Review Services
-						</Button>
-						<Button
-							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-							onClick={() => navigate({ to: ROUTES.ADMIN.CATEGORIES })}
-						>
-							<RiShieldCheckLine className="mr-3 h-4 w-4" /> System Categories
-						</Button>
-					</div>
-				</Card>
-
-				<Card
-					title="Network Activity"
-					subtitle="Recent activity"
-					className="xl:col-span-2"
-					noPadding
-				>
-					{recentActivity.length === 0 ? (
-						<div className="py-12 px-6">
-							<Empty className="border-none bg-transparent p-0 gap-2">
-								<EmptyHeader>
-									<EmptyMedia variant="icon" className="mb-0">
-										<RiAlertLine className="w-4 h-4 text-muted-foreground/40" />
-									</EmptyMedia>
-									<EmptyTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
-										No activity yet
-									</EmptyTitle>
-								</EmptyHeader>
-							</Empty>
-						</div>
-					) : (
-						<div className="divide-y divide-border/40">
-							{recentActivity.map((item) => (
-								<div
-									key={`${item.type}-${item.id}`}
-									className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors group cursor-pointer"
-								>
-									<div className="flex flex-col gap-0.5">
-										<div className="flex items-center gap-2">
-											<span className="text-[8px] font-black text-primary uppercase tracking-[0.3em]">
-												{item.type}
-											</span>
-											<span className="w-1 h-1 bg-border rounded-full" />
-											<span className="text-[9px] font-mono font-bold text-muted-foreground/40">
-												{item.id.substring(0, 8)}
-											</span>
-										</div>
-										<p className="font-display font-black text-sm uppercase tracking-tight text-foreground group-hover:text-primary transition-colors">
-											{item.name}
-										</p>
-									</div>
-									<div className="text-right">
-										<p className="text-[10px] font-black text-foreground uppercase tracking-widest">
-											{item.status}
-										</p>
-										<p className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest">
-											{formatDate(item.date)}
-										</p>
-									</div>
-								</div>
-							))}
-						</div>
-					)}
-				</Card>
-			</div>
-		</PageContainer>
-	);
+                  <Card
+                    title="Recent Activity"
+                    subtitle="Latest marketplace updates"
+                    className="xl:col-span-2"
+                    noPadding
+                  >
+                    {recentActivity.length === 0 ? (
+                      <div className="py-12 px-6">
+                        <Empty className="p-0">
+                          <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                              <RiHistoryLine className="h-4 w-4 text-muted-foreground/40" />
+                            </EmptyMedia>
+                            <EmptyTitle className="text-sm font-black uppercase tracking-widest text-muted-foreground/40">
+                              No recent activity
+                            </EmptyTitle>
+                          </EmptyHeader>
+                        </Empty>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-border/40">
+                        {recentActivity.map((item) => (
+                          <div
+                            key={`${item.type}-${item.id}`}
+                            className="flex items-center justify-between px-6 py-4 hover:bg-muted/5 transition-colors group cursor-pointer"
+                          >
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-primary/60 px-1.5 py-0.5 bg-primary/5 border border-primary/10">
+                                  {item.type}
+                                </span>
+                                <span className="text-[10px] font-mono text-muted-foreground/40">
+                                  {formatDate(item.date)}
+                                </span>
+                              </div>
+                              <h4 className="text-sm font-display font-black uppercase tracking-tight text-foreground group-hover:text-primary transition-colors truncate">
+                                {item.name}
+                              </h4>
+                            </div>
+                            <div className="text-right shrink-0">
+                              <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">
+                                {item.status}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </Card>
+                </div>
+              </>
+            );
+          }}
+        </Await>
+      </Suspense>
+    </PageContainer>
+  );
 }

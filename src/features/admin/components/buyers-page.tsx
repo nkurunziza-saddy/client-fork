@@ -8,21 +8,12 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { useGetUsersQuery } from "@/services/api/users";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { StatCard } from "@/shared/components/admin/stat-card";
+import { formatDate } from "@/shared/utils/format";
 import { type BuyerRow, buyerColumns } from "../columns/buyers-columns";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-import { StatCard } from "./stat-card";
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
 
 export function AdminBuyersPage() {
 	const [pagination, setPagination] = useState({
@@ -95,13 +86,25 @@ export function AdminBuyersPage() {
 					<DataTable
 						columns={buyerColumns}
 						data={buyers}
-						filterColumn="name"
-						filterPlaceholder="Search by name..."
 						manualPagination
 						pageCount={usersResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}
 						state={{ pagination }}
-					/>
+					>
+						<DataTable.Toolbar>
+							<AdminTableToolbar
+								searchColumn="name"
+								searchPlaceholder="Search by name..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Verified", value: "verified" },
+									{ label: "Unverified", value: "unverified" },
+								]}
+							/>
+						</DataTable.Toolbar>
+						<DataTable.Content />
+						<DataTable.Pagination />
+					</DataTable>
 				)}
 			</Card>
 		</div>

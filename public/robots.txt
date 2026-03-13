@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /auth/
 
-Sitemap: https://afrikamarket.com/sitemap.xml
+Sitemap: https://afri-market-rep.vercel.app/sitemap.xml

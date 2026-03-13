@@ -3,9 +3,8 @@ import path from "path";
 
 const BASE_URL =
   process.env.VITE_APP_URL || "https://afri-market-rep.vercel.app";
-const API_URL =
-  `${process.env.VITE_API_URL}/api` || "http://localhost:3000/api";
-
+const API_URL = (process.env.VITE_API_URL || "http://localhost:3000") + "/api";
+console.log(API_URL);
 const STATIC_ROUTES = [
   "",
   "/about",
@@ -24,7 +23,7 @@ async function getDynamicRoutes() {
   console.log(`Attempting to fetch dynamic routes from: ${API_URL}`);
 
   try {
-    // Fetch products
+    // fetch products
     const productsRes = await fetch(`${API_URL}/products?limit=100`);
     if (!productsRes.ok) {
       console.warn(
@@ -33,13 +32,14 @@ async function getDynamicRoutes() {
     } else {
       const productsData = await productsRes.json();
       if (productsData.data) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         productsData.data.forEach((p: any) => {
           routes.push(`/products/${p.id}`);
         });
       }
     }
 
-    // Fetch suppliers
+    // fetch suppliers
     const suppliersRes = await fetch(`${API_URL}/companies?limit=100`);
     if (!suppliersRes.ok) {
       console.warn(
@@ -48,11 +48,13 @@ async function getDynamicRoutes() {
     } else {
       const suppliersData = await suppliersRes.json();
       if (suppliersData.data) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         suppliersData.data.forEach((s: any) => {
           routes.push(`/suppliers/${s.id}`);
         });
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.code === "ECONNREFUSED") {
       console.warn(

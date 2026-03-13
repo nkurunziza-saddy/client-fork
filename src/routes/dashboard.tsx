@@ -1,5 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { NotFound } from "@/shared/components/not-found";
+import { RouteError } from "@/shared/components/route-error";
+import { RouteLoading } from "@/shared/components/route-loading";
 import { ROLES } from "@/shared/constants";
 import { ROUTES } from "@/shared/constants/routes";
 import { store } from "@/store";
@@ -28,9 +31,12 @@ export const Route = createFileRoute("/dashboard")({
 	},
 	preload: false,
 	component: DashboardLayout,
+	pendingComponent: RouteLoading,
+	notFoundComponent: NotFound,
+	errorComponent: RouteError,
 	head: () => ({
 		meta: [
-			{ title: "Supplier Dashboard | AfrikaMarket" },
+			{ title: "Supplier Dashboard | Karibu" },
 			{ name: "robots", content: "noindex, nofollow" },
 		],
 	}),

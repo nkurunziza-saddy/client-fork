@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface ImageWithFallbackProps
@@ -35,7 +35,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
 
 	return (
 		<img
-			src={error ? fallbackSrc : src}
+			src={error || !src ? fallbackSrc : src}
 			alt={finalAlt}
 			onError={() => setError(true)}
 			className={cn(

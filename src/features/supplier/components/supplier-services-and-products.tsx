@@ -204,7 +204,10 @@ export default function SupplierServicesAndProducts() {
 					<div className="bg-card rounded-sm shadow-none p-8 text-center border border-border">
 						<Package size={48} className="mx-auto text-muted-foreground mb-4" />
 						<p className="text-muted-foreground">No products created yet</p>
-						<button className="mt-4 px-4 py-2 bg-success hover:bg-success/90 text-success-foreground rounded-sm transition-all font-bold uppercase tracking-wide">
+						<button
+							type="button"
+							className="mt-4 px-4 py-2 bg-success hover:bg-success/90 text-success-foreground rounded-sm transition-all font-bold uppercase tracking-wide"
+						>
 							Create Your First Product
 						</button>
 					</div>

@@ -1,7 +1,8 @@
 import { RiMapPinLine, RiStarFill } from "@remixicon/react";
 import { useRouter } from "@tanstack/react-router";
 import type React from "react";
-import { BaseCard } from "@/shared/components";
+import { ResourceCard } from "@/shared/components/catalog/resource-card";
+import { formatCurrency } from "@/shared/utils/format";
 import type { Service } from "@/types";
 
 interface ServiceCardProps {
@@ -13,7 +14,7 @@ interface ServiceCardProps {
 	onToggleWishlist?: (e: React.MouseEvent) => void;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({
+export const ServiceCard: React.FC<ServiceCardProps> = ({
 	service,
 	viewMode = "grid",
 	onSupplierClick,
@@ -31,7 +32,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 		}
 	};
 
-	const mainImage = service.images?.[0] || null;
+	const mainImage = service.images?.[0] || "";
 	const company = service.company;
 
 	const badges = service.priceType && (
@@ -42,12 +43,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
 	const footer = (
 		<div className="flex items-center justify-between">
-			<div>
+			<div className="flex flex-col">
 				<span className="text-[9px] block uppercase font-bold text-muted-foreground tracking-tighter mb-0.5 text-left">
 					Rate from
 				</span>
-				<span className="text-xs font-black">
-					{service.price ? `RWF ${service.price.toLocaleString()}` : "Contact"}
+				<span className="text-xs font-black text-foreground">
+					{service.price ? formatCurrency(service.price, "RWF") : "Contact"}
 				</span>
 			</div>
 			{company && (
@@ -71,7 +72,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 	);
 
 	return (
-		<BaseCard
+		<ResourceCard
 			id={service.id}
 			name={service.name}
 			image={mainImage}
@@ -108,8 +109,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 					</p>
 				)}
 			</div>
-		</BaseCard>
+		</ResourceCard>
 	);
 };
-
-export { ServiceCard };

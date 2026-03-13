@@ -10,7 +10,7 @@ export const AdminLayout = () => {
 		<SidebarLayout
 			sidebar={<AdminSidebar user={user} />}
 			user={user}
-			title="AfrikaMarket"
+			title="Karibu"
 			subtitle="Admin Control"
 		/>
 	);

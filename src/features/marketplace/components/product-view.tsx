@@ -1,266 +1,213 @@
-import {
-	RiArrowLeftLine,
-	RiBuilding4Line,
-	RiHistoryLine,
-	RiPriceTag3Line,
-} from "@remixicon/react";
 import { useRouter } from "@tanstack/react-router";
+import { Building2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useProductActions } from "@/hooks/use-product-actions";
 import { useGetProductByIdQuery } from "@/services/api/products";
+import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
+import { ResourceInquiryModal } from "@/shared/components/modals/resource-inquiry-modal";
+import { DetailPageSkeleton } from "@/shared/components/skeletons";
 import { MobileActions } from "./product/mobile-actions";
 import { ProductGallery } from "./product/product-gallery";
 import { ProductInfo } from "./product/product-info";
-import { ProductInquiryModal } from "./product/product-inquiry-modal";
 import { ProductSidebar } from "./product/product-sidebar";
 import { ProductTabsContent } from "./product/product-tabs-content";
 
 interface ProductViewProps {
-	productId: string;
-	onBack?: () => void;
-	onSupplierClick?: (supplierId: string) => void;
+  productId: string;
+  onBack?: () => void;
+  onSupplierClick?: (supplierId: string) => void;
 }
 
 export default function ProductView({
-	productId,
-	onBack,
-	onSupplierClick,
+  productId,
+  onBack,
+  onSupplierClick,
 }: ProductViewProps) {
-	const router = useRouter();
-	const [activeTab, setActiveTab] = useState("overview");
-	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState("overview");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-	const { data: product, isLoading } = useGetProductByIdQuery(productId);
+  const { data: product, isLoading } = useGetProductByIdQuery(productId);
 
-	const {
-		messageOpen: showContactModal,
-		setMessageOpen: setShowContactModal,
-		messageText: message,
-		setMessageText: setMessage,
-		isInWishlist,
-		handleToggleWishlist,
-		trackAndNavigate,
-		handleSubmitInquiry,
-	} = useProductActions(productId);
+  const {
+    messageOpen: showContactModal,
+    setMessageOpen: setShowContactModal,
+    isInWishlist,
+    handleToggleWishlist,
+    trackAndNavigate,
+    handleSubmitInquiry,
+  } = useProductActions(productId);
 
-	const handleBack = useCallback(() => {
-		router.history.back();
-	}, [router.history]);
+  const handleBack = useCallback(() => {
+    router.history.back();
+  }, [router.history]);
 
-	const images = useMemo(() => {
-		if (!product) return [];
-		if (product.variants?.length) {
-			const vImgs = product.variants.flatMap((v) => v.images || []);
-			if (vImgs.length > 0) return vImgs;
-		}
-		return product.images || [];
-	}, [product]);
+  const images = useMemo(() => {
+    if (!product) return [];
+    if (product.variants?.length) {
+      const vImgs = product.variants.flatMap((v) => v.images || []);
+      if (vImgs.length > 0) return vImgs;
+    }
+    return product.images || [];
+  }, [product]);
 
-	const keyFacts = useMemo(() => {
-		if (!product) return [];
-		const facts = [];
-		if (product.category?.name)
-			facts.push({ label: "Category", value: product.category.name });
-		const sku = (product as any).sku || product.variants?.[0]?.sku;
-		if (sku) facts.push({ label: "SKU", value: sku });
-		return facts;
-	}, [product]);
+  const keyFacts = useMemo(() => {
+    if (!product) return [];
+    const facts = [
+      { label: "ID", value: product.id },
+      { label: "Category", value: product.category?.name || "General" },
+    ];
+    const sku = product.variants?.[0]?.sku || product.id.substring(0, 8);
+    if (sku) facts.push({ label: "SKU", value: sku });
+    return facts;
+  }, [product]);
 
-	if (isLoading) {
-		return (
-			<div className="max-w-[1800px] mx-auto px-4 md:px-8 py-12 space-y-8">
-				<Skeleton className="h-8 w-48" />
-				<div className="grid md:grid-cols-12 gap-12">
-					<div className="md:col-span-5 aspect-4/5 bg-muted animate-pulse" />
-					<div className="md:col-span-7 space-y-6">
-						<Skeleton className="h-12 w-3/4" />
-						<Skeleton className="h-24 w-full" />
-						<div className="grid grid-cols-3 gap-4">
-							<Skeleton className="h-20 w-full" />
-							<Skeleton className="h-20 w-full" />
-							<Skeleton className="h-20 w-full" />
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+  const backHandler = onBack || handleBack;
 
-	if (!product)
-		return (
-			<div className="p-20 text-center uppercase font-black tracking-widest text-muted-foreground">
-				Product not found
-			</div>
-		);
+  if (isLoading) {
+    return <DetailPageSkeleton />;
+  }
 
-	const backHandler = onBack || handleBack;
+  if (!product)
+    return (
+      <Empty className="max-w-md w-full">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Building2 className="w-4 h-4 text-primary" />
+          </EmptyMedia>
+          <EmptyTitle className="text-xl font-display font-black uppercase">
+            Product not found
+          </EmptyTitle>
+          <EmptyDescription className="uppercase tracking-widest text-[10px]">
+            We couldn't find this product
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button
+            onClick={backHandler}
+            className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+          >
+            Go Back
+          </Button>
+        </EmptyContent>
+      </Empty>
+    );
 
-	return (
-		<div className="min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24">
-			<MobileActions
-				productName={product.name}
-				phone={(product.company as any)?.phone}
-				isInWishlist={isInWishlist}
-				onToggleWishlist={handleToggleWishlist}
-				onContactClick={() => setShowContactModal(true)}
-				trackAndNavigate={trackAndNavigate}
-			/>
+  const primaryVariant = product.variants?.[0];
 
-			{/* Top sticky header with product name */}
-			<div className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-[56px] z-30 py-3 md:py-4 px-4 md:px-8">
-				<div className="max-w-[1800px] mx-auto flex items-center justify-between gap-4">
-					<div className="flex items-center gap-3 overflow-hidden">
-						<Button
-							variant="ghost"
-							size="icon-sm"
-							onClick={backHandler}
-							className="shrink-0"
-						>
-							<RiArrowLeftLine className="size-4" />
-						</Button>
-						<div className="h-4 w-px bg-border/60 shrink-0" />
-						<h1 className="font-display font-black uppercase text-xs md:text-sm tracking-widest truncate text-foreground">
-							{product.name}
-						</h1>
-					</div>
-					<Badge className="shrink-0 bg-primary/10 text-primary border-primary/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-none uppercase hidden sm:block">
-						{product.category?.name || "Material"}
-					</Badge>
-				</div>
-			</div>
+  return (
+    <DetailsPageLayout
+      title={product.name}
+      badgeText={product.category?.name || "Product"}
+      onBack={backHandler}
+      mobileActions={
+        <MobileActions
+          productName={product.name}
+          phone={product.company?.phone}
+          isInWishlist={isInWishlist}
+          onToggleWishlist={handleToggleWishlist}
+          onContactClick={() => setShowContactModal(true)}
+          trackAndNavigate={trackAndNavigate}
+        />
+      }
+      headerAction={
+        <Button
+          onClick={() => setShowContactModal(true)}
+          className="hidden md:inline-flex h-8 px-4 rounded-none text-[10px] font-black uppercase tracking-[0.2em]"
+        >
+          Order Inquiry
+        </Button>
+      }
+      gallery={
+        <ProductGallery
+          images={images}
+          name={product.name}
+          selectedImageIndex={selectedImageIndex}
+          onImageSelect={setSelectedImageIndex}
+        />
+      }
+      info={
+        <ProductInfo
+          name={product.name}
+          description={product.description}
+          price={primaryVariant?.price ?? 0}
+          priceType={product.priceType}
+          stock={primaryVariant?.stock ?? 0}
+          views={product.views}
+          onInquire={() => setShowContactModal(true)}
+        />
+      }
+      tabs={
+        <div className="space-y-6">
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-display font-black text-foreground uppercase tracking-tight">
+              Product Details
+            </h2>
+            <div className="flex-1 h-px bg-border/40" />
+          </div>
 
-			<div className="max-w-[1800px] mx-auto p-4 md:p-8 space-y-12">
-				{/* Standard Product Layout */}
-				<div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start pt-4 md:pt-8">
-					{/* Left Column: Visuals */}
-					<div className="lg:col-span-6 xl:col-span-5">
-						<ProductGallery
-							name={product.name}
-							images={images}
-							selectedImageIndex={selectedImageIndex}
-							onImageSelect={setSelectedImageIndex}
-						/>
-					</div>
-
-					{/* Right Column: Key Details & Actions */}
-					<div className="lg:col-span-6 xl:col-span-7 space-y-10">
-						<ProductInfo
-							name={product.name}
-							description={product.description}
-							price={Number(product.price || 0)}
-							unit={product.unit || product.variants?.[0]?.unit}
-							priceType={product.priceType}
-							stock={product.stock}
-							views={product.views}
-							onInquire={() => setShowContactModal(true)}
-						/>
-
-						{/* Quick Specs Row */}
-						<div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-border/40 border border-border/40 overflow-hidden shadow-sm">
-							<div className="bg-background p-4 flex flex-col gap-1">
-								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-									<RiPriceTag3Line size={12} className="text-primary" />
-									Category
-								</span>
-								<span className="text-[11px] font-bold uppercase truncate">
-									{product.category?.name || "General Material"}
-								</span>
-							</div>
-							<div className="bg-background p-4 flex flex-col gap-1">
-								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-									<RiHistoryLine size={12} className="text-primary" />
-									Views
-								</span>
-								<span className="text-[11px] font-bold uppercase">
-									{product.views || 0}
-								</span>
-							</div>
-							<div className="bg-background p-4 flex flex-col gap-1 col-span-2 md:col-span-1">
-								<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-									<RiBuilding4Line size={12} className="text-primary" />
-									Supplier
-								</span>
-								<span className="text-[11px] font-bold uppercase truncate">
-									{product.company?.name || "Verified Provider"}
-								</span>
-							</div>
-						</div>
-
-						{/* Provider Section */}
-						<div className="pt-2">
-							<ProductSidebar
-								company={product.company as any}
-								productName={product.name}
-								onSupplierClick={(id) =>
-									onSupplierClick
-										? onSupplierClick(id)
-										: router.navigate({ to: `/suppliers/${id}` })
-								}
-							/>
-						</div>
-					</div>
-				</div>
-
-				{/* Detailed Tabs Section */}
-				<div className="pt-12 border-t border-border/40">
-					<Tabs
-						defaultValue="overview"
-						value={activeTab}
-						onValueChange={setActiveTab}
-						className="w-full"
-					>
-						<div className="relative mb-8">
-							<TabsList
-								variant="line"
-								className="w-full justify-start overflow-x-auto scrollbar-hide no-scrollbar flex-nowrap border-b border-border/20 rounded-none bg-transparent h-auto p-0 gap-6 sm:gap-12"
-							>
-								<TabsTrigger
-									value="overview"
-									className="uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] px-0 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary bg-transparent"
-								>
-									General Info
-								</TabsTrigger>
-								<TabsTrigger
-									value="specs"
-									className="uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] px-0 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary bg-transparent"
-								>
-									Technical Specs
-								</TabsTrigger>
-								<TabsTrigger
-									value="reviews"
-									className="uppercase text-[9px] sm:text-[10px] font-black tracking-[0.2em] px-0 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary bg-transparent"
-								>
-									Customer Reviews
-								</TabsTrigger>
-							</TabsList>
-							{/* Fade indicator for scroll */}
-							<div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none sm:hidden" />
-						</div>
-
-						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-							<ProductTabsContent
-								description={product.description || ""}
-								keyFacts={[...keyFacts, { label: "ID", value: product.id }]}
-								variantName={product.variants?.[0]?.name}
-								variantSku={product.variants?.[0]?.sku}
-							/>
-						</div>
-					</Tabs>
-				</div>
-			</div>
-
-			<ProductInquiryModal
-				isOpen={showContactModal}
-				onOpenChange={setShowContactModal}
-				productName={product.name}
-				messageText={message}
-				setMessageText={setMessage}
-				onSubmit={handleSubmitInquiry}
-			/>
-		</div>
-	);
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList className="w-full justify-start rounded-none bg-transparent border-b border-border/40 h-auto p-0 gap-8">
+              <TabsTrigger
+                value="overview"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 py-4 text-[10px] font-black uppercase tracking-widest"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger
+                value="specifications"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 py-4 text-[10px] font-black uppercase tracking-widest"
+              >
+                Specifications
+              </TabsTrigger>
+              <TabsTrigger
+                value="reviews"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 py-4 text-[10px] font-black uppercase tracking-widest"
+              >
+                Reviews
+              </TabsTrigger>
+            </TabsList>
+            <div className="mt-8">
+              <ProductTabsContent
+                description={product.description || ""}
+                keyFacts={keyFacts}
+                variantName={primaryVariant?.name}
+                variantSku={primaryVariant?.sku}
+              />
+            </div>
+          </Tabs>
+        </div>
+      }
+      sidebar={
+        <ProductSidebar
+          company={product.company}
+          productName={product.name}
+          onSupplierClick={onSupplierClick || (() => {})}
+        />
+      }
+      modals={
+        <ResourceInquiryModal
+          isOpen={showContactModal}
+          onOpenChange={setShowContactModal}
+          onSubmit={handleSubmitInquiry}
+          resourceName={product.name}
+          resourceType="PRODUCT"
+        />
+      }
+    />
+  );
 }

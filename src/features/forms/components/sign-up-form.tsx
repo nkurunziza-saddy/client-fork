@@ -12,7 +12,10 @@ import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getFormFieldErrors } from "@/lib/utils";
+import { useLazyCheckEmailQuery } from "@/services/api/users";
 import { FormField } from "@/shared/components";
+import { signUpSchema } from "@/shared/schemas/auth";
 
 interface SignUpFormProps {
 	role: "user" | "provider";
@@ -34,7 +37,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-	const [passwordError, setPasswordError] = useState<string | null>(null);
+	const [checkEmail] = useLazyCheckEmailQuery();
 
 	const form = useForm({
 		defaultValues: {
@@ -43,12 +46,10 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 			password: "",
 			confirmPassword: "",
 		},
+		validators: {
+			onChange: signUpSchema,
+		},
 		onSubmit: async ({ value }) => {
-			if (value.password !== value.confirmPassword) {
-				setPasswordError("Passwords do not match.");
-				return;
-			}
-			setPasswordError(null);
 			onSubmit({
 				name: value.name,
 				email: value.email,
@@ -67,23 +68,39 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 			}}
 			className="w-full space-y-6"
 		>
-			{(serverError || passwordError) && (
-				<Alert
-					variant="destructive"
-					className="rounded-none border-destructive/20 bg-destructive/5"
-				>
-					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
-						{serverError || passwordError}
-					</AlertDescription>
-				</Alert>
-			)}
+			<form.Subscribe
+				selector={(state) => state.errors}
+				children={(errors) => {
+					const formError = errors.length > 0 ? errors[0]?.toString() : null;
+					return (
+						(serverError || formError) && (
+							<Alert
+								variant="destructive"
+								className="rounded-none border-destructive/20 bg-destructive/5"
+							>
+								<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
+									{serverError || formError}
+								</AlertDescription>
+							</Alert>
+						)
+					);
+				}}
+			/>
+
 			<div className="space-y-4">
-				<form.Field name="name">
-					{(field) => (
-						<FormField label="Full Name" required>
+				<form.Field
+					name="name"
+					children={(field) => (
+						<FormField
+							label="Full Name"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<div className="relative group">
 								<RiUserLine className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
 								<Input
+									id={field.name}
 									name={field.name}
 									value={field.state.value}
 									onBlur={field.handleBlur}
@@ -91,19 +108,38 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 									type="text"
 									className="pl-12 h-14 bg-muted/10 border-border/40 focus:border-primary/40 rounded-none transition-all text-sm shadow-none focus:ring-0"
 									placeholder="John Doe"
-									required
 								/>
 							</div>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 
-				<form.Field name="email">
-					{(field) => (
-						<FormField label="Email Address" required>
+				<form.Field
+					name="email"
+					asyncDebounceMs={500}
+					validators={{
+						onChangeAsync: async ({ value }: { value: string }) => {
+							if (!value || !value.includes("@")) return undefined;
+							try {
+								const res = await checkEmail(value).unwrap();
+								if (!res.available) return "Email is already registered";
+								return undefined;
+							} catch {
+								return undefined;
+							}
+						},
+					}}
+					children={(field) => (
+						<FormField
+							label="Email Address"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<div className="relative group">
 								<RiMailLine className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
 								<Input
+									id={field.name}
 									name={field.name}
 									value={field.state.value}
 									onBlur={field.handleBlur}
@@ -111,31 +147,37 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 									type="email"
 									className="pl-12 h-14 bg-muted/10 border-border/40 focus:border-primary/40 rounded-none transition-all text-sm shadow-none focus:ring-0"
 									placeholder="name@company.com"
-									required
 								/>
+								{field.state.meta.isValidating && (
+									<div className="absolute right-4 top-1/2 -translate-y-1/2">
+										<div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+									</div>
+								)}
 							</div>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 
-				<form.Field name="password">
-					{(field) => (
-						<FormField label="Password" required>
+				<form.Field
+					name="password"
+					children={(field) => (
+						<FormField
+							label="Password"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<div className="relative group">
 								<RiLockLine className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
 								<Input
+									id={field.name}
 									name={field.name}
 									value={field.state.value}
 									onBlur={field.handleBlur}
-									onChange={(e) => {
-										field.handleChange(e.target.value);
-										if (passwordError) setPasswordError(null);
-									}}
+									onChange={(e) => field.handleChange(e.target.value)}
 									type={showPassword ? "text" : "password"}
 									className="pl-12 h-14 bg-muted/10 border-border/40 focus:border-primary/40 rounded-none transition-all text-sm shadow-none focus:ring-0"
 									placeholder="Min 8 characters"
-									required
-									minLength={8}
 								/>
 								<button
 									type="button"
@@ -151,26 +193,28 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 							</div>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 
-				<form.Field name="confirmPassword">
-					{(field) => (
-						<FormField label="Confirm Password" required>
+				<form.Field
+					name="confirmPassword"
+					children={(field) => (
+						<FormField
+							label="Confirm Password"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<div className="relative group">
 								<RiLockLine className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
 								<Input
+									id={field.name}
 									name={field.name}
 									value={field.state.value}
 									onBlur={field.handleBlur}
-									onChange={(e) => {
-										field.handleChange(e.target.value);
-										if (passwordError) setPasswordError(null);
-									}}
+									onChange={(e) => field.handleChange(e.target.value)}
 									type={showConfirmPassword ? "text" : "password"}
 									className="pl-12 h-14 bg-muted/10 border-border/40 focus:border-primary/40 rounded-none transition-all text-sm shadow-none focus:ring-0"
 									placeholder="Confirm your password"
-									required
-									minLength={8}
 								/>
 								<button
 									type="button"
@@ -186,17 +230,26 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 							</div>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 			</div>
 
-			<Button
-				type="submit"
-				disabled={isLoading}
-				className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] rounded-none border-none bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
-			>
-				{isLoading ? "Creating Account..." : "Create Account"}
-				{!isLoading && <RiArrowRightLine className="ml-2 w-5 h-5" />}
-			</Button>
+			<form.Subscribe
+				selector={(state) => [state.canSubmit, state.isSubmitting]}
+				children={([canSubmit, isSubmitting]) => (
+					<Button
+						type="submit"
+						disabled={!canSubmit || isLoading || isSubmitting}
+						className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] rounded-none border-none bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+					>
+						{isLoading || isSubmitting
+							? "Creating Account..."
+							: "Create Account"}
+						{!isLoading && !isSubmitting && (
+							<RiArrowRightLine className="ml-2 w-5 h-5" />
+						)}
+					</Button>
+				)}
+			/>
 		</form>
 	);
 };

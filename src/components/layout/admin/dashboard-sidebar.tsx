@@ -63,7 +63,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 				<div className="flex items-center gap-3">
 					<div>
 						<h1 className="text-lg font-heading font-bold uppercase tracking-widest leading-none">
-							AfrikaMarket
+							Karibu
 						</h1>
 						<p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mt-1 leading-none">
 							Provider

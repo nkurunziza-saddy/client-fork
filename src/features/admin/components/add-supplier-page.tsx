@@ -9,15 +9,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SupplierProvisionForm } from "@/features/forms/components/supplier-provision-form";
 import { useCreateCompanyMutation } from "@/services/api/companies";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import type { SupplierProvisionValues } from "@/shared/schemas/business";
 
 export function AdminAddSupplierPage() {
 	const navigate = useNavigate();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [createCompany, { isLoading }] = useCreateCompanyMutation();
 
-	const handleSubmit = async (values: any) => {
+	const handleSubmit = async (values: SupplierProvisionValues) => {
 		try {
 			const created = await createCompany({
 				name: values.companyName,

@@ -30,7 +30,7 @@ export function useAdminProfile() {
 				email: profile.email || "",
 				phone: profile.phoneNumber || "",
 				location: "Kigali, Rwanda", // Default if not in profile
-				bio: "Platform administrator managing AfrikaMarket operations.",
+				bio: "Platform administrator managing Karibu operations.",
 				avatar: profile.image || "/logo.svg",
 			});
 		}

@@ -31,6 +31,7 @@ export function SupplierDetailsPage() {
 						Supplier Not Found
 					</h2>
 					<button
+						type="button"
 						onClick={handleBack}
 						className="text-[10px] font-black text-primary uppercase tracking-[0.3em] hover:underline"
 					>

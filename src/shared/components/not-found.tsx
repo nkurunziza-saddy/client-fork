@@ -51,7 +51,7 @@ export const NotFound: React.FC = () => {
 
 			<div className="absolute bottom-8 left-0 right-0 text-center">
 				<span className="text-[8px] font-black text-muted-foreground/30 uppercase tracking-[0.5em]">
-					AFRIKAMARKET // 404 ERROR
+					Karibu {"//"} 404 ERROR
 				</span>
 			</div>
 		</div>

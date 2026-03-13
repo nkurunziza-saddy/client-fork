@@ -39,7 +39,7 @@ function CalendarChevron({
 }: React.SVGAttributes<SVGElement> & {
 	orientation?: "left" | "right" | "up" | "down";
 }) {
-	const { children: _, ...rest } = props as any;
+	const { children: _, ...rest } = props as React.SVGAttributes<SVGElement>;
 
 	if (orientation === "left") {
 		return <RiArrowLeftSLine className={cn("size-4", className)} {...rest} />;
@@ -65,9 +65,12 @@ function CalendarWeekNumber({
 	);
 }
 
-const CalendarDayButtonWithLocale = ({ locale, ...props }: any) => (
-	<CalendarDayButton locale={locale} {...props} />
-);
+const CalendarDayButtonWithLocale = ({
+	locale,
+	...props
+}: React.ComponentProps<typeof CalendarDayButton> & {
+	locale?: Partial<Locale>;
+}) => <CalendarDayButton locale={locale} {...props} />;
 
 function Calendar({
 	className,

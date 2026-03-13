@@ -45,7 +45,7 @@ const BestSellers: React.FC = () => {
 					{listings.map((prod) => (
 						<ProductCard
 							key={prod.id}
-							product={prod as any}
+							product={{ ...prod, itemType: "PRODUCT" }}
 							onClick={() =>
 								navigate({
 									to: "/products/$productId",

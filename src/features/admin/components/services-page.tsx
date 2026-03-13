@@ -8,22 +8,13 @@ import {
 	useGetServicesQuery,
 } from "@/services/api/services";
 import { ActionModal } from "@/shared/components/action-modal";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 import { PageContainer } from "@/shared/components/page-container";
+import { formatDate } from "@/shared/utils/format";
 import type { ServiceRow } from "@/types";
 import { getServiceColumns } from "../columns/services-columns";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-
-function toDateLabel(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
 
 export function AdminServicesPage() {
 	const navigate = useNavigate();
@@ -55,7 +46,7 @@ export function AdminServicesPage() {
 			supplier: service.company?.name ?? "Unknown supplier",
 			supplierId: service.company?.id ?? "",
 			status: service.isActive ? "active" : "inactive",
-			createdDate: toDateLabel(service.createdAt),
+			createdDate: formatDate(service.createdAt),
 			views: Number(service.views) || 0,
 		}));
 	}, [servicesResult]);
@@ -79,17 +70,17 @@ export function AdminServicesPage() {
 					navigate({
 						to: "/services/$serviceId",
 						params: { serviceId: id },
-					} as any),
+					}),
 				onViewProvider: (id) =>
 					navigate({
 						to: "/suppliers/$supplierId",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onEdit: (id) =>
 					navigate({
 						to: "/admin/suppliers/$supplierId/edit",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onDelete: (s) =>
 					setDeleteModal({
 						isOpen: true,
@@ -101,10 +92,14 @@ export function AdminServicesPage() {
 	);
 
 	return (
-		<PageContainer>
+		<PageContainer isFluid className="space-y-6">
 			<PageHeader title="Services" subtitle="Manage catalog services" />
 
-			<Card noPadding>
+			<Card
+				title="Service Directory"
+				subtitle="Search and review catalog services"
+				noPadding
+			>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
 						Loading services...
@@ -113,13 +108,25 @@ export function AdminServicesPage() {
 					<DataTable
 						columns={columns}
 						data={services}
-						filterColumn="name"
-						filterPlaceholder="Search services..."
 						manualPagination
 						pageCount={servicesResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}
 						state={{ pagination }}
-					/>
+					>
+						<DataTable.Toolbar>
+							<AdminTableToolbar
+								searchColumn="name"
+								searchPlaceholder="Search services..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Active", value: "active" },
+									{ label: "Inactive", value: "inactive" },
+								]}
+							/>
+						</DataTable.Toolbar>
+						<DataTable.Content />
+						<DataTable.Pagination />
+					</DataTable>
 				)}
 			</Card>
 

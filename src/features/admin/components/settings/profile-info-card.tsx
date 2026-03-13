@@ -2,11 +2,20 @@ import { RiCloseLine, RiSaveLine, RiUserLine } from "@remixicon/react";
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import { Card as AdminCard } from "@/shared/components/admin/card";
+
+interface ProfileFormData {
+	fullName: string;
+	avatar: string;
+	email: string;
+	phone: string;
+	location: string;
+	bio: string;
+}
 
 interface ProfileInfoCardProps {
 	isEditing: boolean;
-	formData: any;
+	formData: ProfileFormData;
 	isUpdating?: boolean;
 	onEdit: () => void;
 	onCancel: () => void;
@@ -47,7 +56,10 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 									}}
 								/>
 							</div>
-							<button className="absolute bottom-0 right-0 bg-primary text-primary-foreground p-2 rounded-sm hover:bg-primary/90 transition-all shadow-lg translate-y-1/4 translate-x-1/4 border border-background">
+							<button
+								type="button"
+								className="absolute bottom-0 right-0 bg-primary text-primary-foreground p-2 rounded-sm hover:bg-primary/90 transition-all shadow-lg translate-y-1/4 translate-x-1/4 border border-background"
+							>
 								<RiUserLine size={16} />
 							</button>
 						</div>
@@ -97,10 +109,14 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 				{isEditing ? (
 					<div className="space-y-6">
 						<div className="space-y-2">
-							<label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+							<label
+								htmlFor="fullName"
+								className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1"
+							>
 								Full Name
 							</label>
 							<input
+								id="fullName"
 								type="text"
 								name="fullName"
 								value={formData.fullName}
@@ -110,10 +126,14 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 						</div>
 
 						<div className="space-y-2">
-							<label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+							<label
+								htmlFor="email"
+								className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1"
+							>
 								Email Address
 							</label>
 							<input
+								id="email"
 								type="email"
 								name="email"
 								value={formData.email}
@@ -124,10 +144,14 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 							<div className="space-y-2">
-								<label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+								<label
+									htmlFor="phone"
+									className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1"
+								>
 									Phone Number
 								</label>
 								<input
+									id="phone"
 									type="tel"
 									name="phone"
 									value={formData.phone}
@@ -137,10 +161,14 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 							</div>
 
 							<div className="space-y-2">
-								<label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+								<label
+									htmlFor="location"
+									className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1"
+								>
 									Location
 								</label>
 								<input
+									id="location"
 									type="text"
 									name="location"
 									value={formData.location}
@@ -151,10 +179,14 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 						</div>
 
 						<div className="space-y-2">
-							<label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+							<label
+								htmlFor="bio"
+								className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1"
+							>
 								Bio
 							</label>
 							<textarea
+								id="bio"
 								name="bio"
 								value={formData.bio}
 								onChange={onInputChange}

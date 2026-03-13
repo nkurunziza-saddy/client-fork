@@ -53,8 +53,8 @@ export function AuthLayout() {
 								))}
 							</div>
 							<p className="text-background italic mb-4 font-light opacity-90">
-								"AfrikaMarket has completely transformed how we source
-								materials. The reliability and speed are unmatched."
+								"Karibu has completely transformed how we source materials. The
+								reliability and speed are unmatched."
 							</p>
 							<div className="flex items-center gap-3">
 								<div className="w-10 h-10 rounded-full bg-muted/20 border border-background/20 overflow-hidden">
@@ -81,7 +81,7 @@ export function AuthLayout() {
 				</div>
 
 				<div className="relative z-10 text-[10px] uppercase tracking-widest text-background/40 font-bold flex justify-between items-center">
-					<span>© 2026 AfrikaMarket Systems</span>
+					<span>© 2026 Karibu Systems</span>
 					<span className="flex items-center gap-2">
 						<div className="w-2 h-2 rounded-full bg-success animate-pulse" />
 						Online

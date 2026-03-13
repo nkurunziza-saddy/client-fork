@@ -13,7 +13,7 @@ export const useWishlist = () => {
 
 	// Load wishlist from localStorage on mount
 	useEffect(() => {
-		const savedWishlist = localStorage.getItem("afrikamarket-wishlist");
+		const savedWishlist = localStorage.getItem("karibu-wishlist");
 		if (savedWishlist) {
 			try {
 				setWishlistItems(JSON.parse(savedWishlist));
@@ -25,10 +25,7 @@ export const useWishlist = () => {
 
 	// Save wishlist to localStorage whenever it changes
 	useEffect(() => {
-		localStorage.setItem(
-			"afrikamarket-wishlist",
-			JSON.stringify(wishlistItems),
-		);
+		localStorage.setItem("karibu-wishlist", JSON.stringify(wishlistItems));
 	}, [wishlistItems]);
 
 	const addToWishlist = (

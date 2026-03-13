@@ -4,16 +4,17 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { getFormFieldErrors } from "@/lib/utils";
 import { FormField } from "@/shared/components";
+import {
+	type CategoryFormValues,
+	categoryOptions,
+} from "@/shared/schemas/business";
 
 interface CategoryFormProps {
-	onSubmit: (values: any) => void;
+	onSubmit: (values: CategoryFormValues) => void;
 	onCancel: () => void;
-	initialValues?: {
-		name: string;
-		description: string;
-		icon?: string;
-	};
+	initialValues?: Partial<CategoryFormValues>;
 	mode: "add" | "edit";
 	serverError?: string;
 }
@@ -21,16 +22,18 @@ interface CategoryFormProps {
 export const CategoryForm: React.FC<CategoryFormProps> = ({
 	onSubmit,
 	onCancel,
-	initialValues = {
-		name: "",
-		description: "",
-		icon: "",
-	},
+	initialValues,
 	mode,
 	serverError,
 }) => {
 	const form = useForm({
-		defaultValues: initialValues,
+		...categoryOptions,
+		defaultValues: {
+			...categoryOptions.defaultValues,
+			name: initialValues?.name ?? "",
+			description: initialValues?.description ?? "",
+			icon: initialValues?.icon ?? "",
+		},
 		onSubmit: async ({ value }) => {
 			onSubmit(value);
 		},
@@ -58,15 +61,20 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			<form.Field
 				name="name"
 				children={(field) => (
-					<FormField label="Category Name" required>
+					<FormField
+						label="Category Name"
+						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+						isTouched={field.state.meta.isTouched}
+					>
 						<Input
+							id={field.name}
 							name={field.name}
 							value={field.state.value}
 							onBlur={field.handleBlur}
 							onChange={(e) => field.handleChange(e.target.value)}
 							className="h-12 text-sm bg-background font-bold uppercase tracking-wider rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
 							placeholder="ENTER NAME..."
-							required
 						/>
 					</FormField>
 				)}
@@ -75,8 +83,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			<form.Field
 				name="description"
 				children={(field) => (
-					<FormField label="Description" required>
+					<FormField
+						label="Description"
+						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+						isTouched={field.state.meta.isTouched}
+					>
 						<Textarea
+							id={field.name}
 							name={field.name}
 							value={field.state.value}
 							onBlur={field.handleBlur}
@@ -84,7 +98,6 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							rows={3}
 							className="text-sm resize-none bg-background font-medium uppercase tracking-wider rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
 							placeholder="ENTER DESCRIPTION..."
-							required
 						/>
 					</FormField>
 				)}
@@ -94,8 +107,13 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 				<form.Field
 					name="icon"
 					children={(field) => (
-						<FormField label="Icon Reference">
+						<FormField
+							label="Icon Reference"
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<Input
+								id={field.name}
 								name={field.name}
 								value={field.state.value}
 								onBlur={field.handleBlur}
@@ -117,12 +135,22 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 				>
 					Cancel
 				</Button>
-				<Button
-					type="submit"
-					className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-widest shadow-lg shadow-primary/20 border-none"
-				>
-					{mode === "add" ? "Create Category" : "Save Changes"}
-				</Button>
+				<form.Subscribe
+					selector={(state) => [state.canSubmit, state.isSubmitting]}
+					children={([canSubmit, isSubmitting]) => (
+						<Button
+							type="submit"
+							disabled={!canSubmit || isSubmitting}
+							className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-widest shadow-lg shadow-primary/20 border-none"
+						>
+							{isSubmitting
+								? "Saving..."
+								: mode === "add"
+									? "Create Category"
+									: "Save Changes"}
+						</Button>
+					)}
+				/>
 			</div>
 		</form>
 	);

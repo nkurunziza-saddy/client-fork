@@ -153,6 +153,20 @@
 			background-position: -200% 0;
 		}
 	}
+
+	@keyframes progress-bar {
+		0% {
+			transform: translateX(-100%);
+		}
+		50% {
+			transform: translateX(-30%);
+		}
+		100% {
+			transform: translateX(0%);
+		}
+	}
+
+	--animate-progress-bar: progress-bar 2s ease-in-out infinite;
 }
 
 @layer base {
@@ -170,7 +184,9 @@
 
 @layer utilities {
 	.industrial-grain {
-		position: relative;
+		&:not(.fixed):not(.absolute):not(.sticky) {
+			position: relative;
+		}
 	}
 	.industrial-grain::before {
 		content: "";

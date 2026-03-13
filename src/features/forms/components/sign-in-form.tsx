@@ -12,10 +12,12 @@ import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getFormFieldErrors } from "@/lib/utils";
 import { FormField } from "@/shared/components";
+import { type SignInFormValues, signInSchema } from "@/shared/schemas/auth";
 
 interface SignInFormProps {
-	onSubmit: (data: { email: string; password?: string }) => void;
+	onSubmit: (data: SignInFormValues) => void;
 	isLoading?: boolean;
 	serverError?: string;
 	showResendVerification?: boolean;
@@ -36,6 +38,9 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 		defaultValues: {
 			email: "",
 			password: "",
+		},
+		validators: {
+			onChange: signInSchema,
 		},
 		onSubmit: async ({ value }) => {
 			onSubmit(value);
@@ -74,12 +79,19 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 				</Alert>
 			)}
 
-			<form.Field name="email">
-				{(field) => (
-					<FormField label="Email Address" required>
+			<form.Field
+				name="email"
+				children={(field) => (
+					<FormField
+						label="Email Address"
+						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+						isTouched={field.state.meta.isTouched}
+					>
 						<div className="relative">
 							<RiMailLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 							<Input
+								id={field.name}
 								name={field.name}
 								value={field.state.value}
 								onBlur={field.handleBlur}
@@ -87,18 +99,20 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 								type="email"
 								placeholder="name@company.com"
 								className="pl-10 h-12 shadow-none rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-								required
 							/>
 						</div>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
-			<form.Field name="password">
-				{(field) => (
+			<form.Field
+				name="password"
+				children={(field) => (
 					<FormField
 						label="Password"
 						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+						isTouched={field.state.meta.isTouched}
 						headerActions={
 							<Link
 								to="/auth/forgot-password"
@@ -111,6 +125,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 						<div className="relative">
 							<RiLockLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 							<Input
+								id={field.name}
 								name={field.name}
 								value={field.state.value}
 								onBlur={field.handleBlur}
@@ -118,7 +133,6 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 								type={showPassword ? "text" : "password"}
 								placeholder="••••••••"
 								className="pl-10 h-12 shadow-none rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-								required
 							/>
 							<button
 								type="button"
@@ -134,16 +148,23 @@ export const SignInForm: React.FC<SignInFormProps> = ({
 						</div>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
-			<Button
-				type="submit"
-				className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 border-none rounded-none"
-				disabled={isLoading}
-			>
-				{isLoading ? "Signing In..." : "Sign In"}
-				{!isLoading && <RiArrowRightLine className="ml-2 w-4 h-4" />}
-			</Button>
+			<form.Subscribe
+				selector={(state) => [state.canSubmit, state.isSubmitting]}
+				children={([canSubmit, isSubmitting]) => (
+					<Button
+						type="submit"
+						className="w-full h-14 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 border-none rounded-none"
+						disabled={!canSubmit || isLoading || isSubmitting}
+					>
+						{isLoading || isSubmitting ? "Signing In..." : "Sign In"}
+						{!isLoading && !isSubmitting && (
+							<RiArrowRightLine className="ml-2 w-4 h-4" />
+						)}
+					</Button>
+				)}
+			/>
 		</form>
 	);
 };

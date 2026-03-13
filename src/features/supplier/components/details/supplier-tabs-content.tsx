@@ -132,6 +132,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 									const price = firstPrice(product);
 									return (
 										<button
+											type="button"
 											key={product.id}
 											onClick={() => onProductClick(product)}
 											className="flex gap-4 p-4 border border-border bg-background group hover:border-primary/40 transition-colors text-left w-full rounded-none"

@@ -8,11 +8,12 @@ import {
 	useUpdateAuctionStatusMutation,
 } from "@/services/api/auctions";
 import { ActionModal } from "@/shared/components/action-modal";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 import { PageContainer } from "@/shared/components/page-container";
 import type { Auction, AuctionStatus } from "@/types";
 import { getAuctionColumns } from "../columns/auctions-columns";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
 
 export function AdminAuctionsPage() {
 	const navigate = useNavigate();
@@ -68,7 +69,7 @@ export function AdminAuctionsPage() {
 					navigate({
 						to: "/admin/suppliers/$supplierId",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onApprove: (auction) =>
 					setStatusModal({
 						isOpen: true,
@@ -86,13 +87,17 @@ export function AdminAuctionsPage() {
 	);
 
 	return (
-		<PageContainer>
+		<PageContainer isFluid className="space-y-6">
 			<PageHeader
 				title="Auctions"
 				subtitle="Review and moderate supplier auctions"
 			/>
 
-			<Card noPadding>
+			<Card
+				title="Auction Pipeline"
+				subtitle="Track review status for auctions"
+				noPadding
+			>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
 						Loading auctions...
@@ -101,13 +106,26 @@ export function AdminAuctionsPage() {
 					<DataTable
 						columns={columns}
 						data={auctions}
-						filterColumn="title"
-						filterPlaceholder="Search auctions..."
 						manualPagination
 						pageCount={auctionsResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}
 						state={{ pagination }}
-					/>
+					>
+						<DataTable.Toolbar>
+							<AdminTableToolbar
+								searchColumn="title"
+								searchPlaceholder="Search auctions..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Pending", value: "PENDING" },
+									{ label: "Approved", value: "APPROVED" },
+									{ label: "Rejected", value: "REJECTED" },
+								]}
+							/>
+						</DataTable.Toolbar>
+						<DataTable.Content />
+						<DataTable.Pagination />
+					</DataTable>
 				)}
 			</Card>
 

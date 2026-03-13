@@ -1,82 +1,106 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useAuctionsParams } from "./use-auctions-params";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
 const DEFAULT_PRICE_MAX = 100_000_000;
 
 export function useAuctionsFilters() {
-	const [filters, setFilters] = useAuctionsParams();
+  const search = useSearch({ strict: false });
+  const navigate = useNavigate();
+  const [isPending, startTransition] = useTransition();
 
-	const [searchInput, setSearchInput] = useState(filters.q);
-	const [priceRange, setPriceRange] = useState<[number, number]>([
-		filters.minPrice ? Number(filters.minPrice) : 0,
-		filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
-	]);
+  const [searchInput, setSearchInput] = useState(search.q || "");
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    search.minPrice ? Number(search.minPrice) : 0,
+    search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+  ]);
 
-	// Sync state if filters change (e.g. from URL or reset)
-	useEffect(() => {
-		setSearchInput(filters.q);
-	}, [filters.q]);
+  // Sync state if filters change (e.g. from URL or reset)
+  useEffect(() => {
+    setSearchInput(search.q || "");
+  }, [search.q]);
 
-	useEffect(() => {
-		setPriceRange([
-			filters.minPrice ? Number(filters.minPrice) : 0,
-			filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
-		]);
-	}, [filters.minPrice, filters.maxPrice]);
+  useEffect(() => {
+    setPriceRange([
+      search.minPrice ? Number(search.minPrice) : 0,
+      search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+    ]);
+  }, [search.minPrice, search.maxPrice]);
 
-	const patchFilters = useCallback(
-		(patch: Partial<typeof filters>) => {
-			setFilters({ ...filters, ...patch });
-		},
-		[filters, setFilters],
-	);
+  const patchFilters = useCallback(
+    (patch: Record<string, unknown>) => {
+      startTransition(() => {
+        navigate({
+          search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }),
+        } as never);
+      });
+    },
+    [navigate],
+  );
 
-	const resetFilters = useCallback(() => {
-		setFilters({
-			q: "",
-			minPrice: "",
-			maxPrice: "",
-			sortBy: "createdAt",
-			sortOrder: "DESC",
-			page: 1,
-		});
-	}, [setFilters]);
+  const resetFilters = useCallback(() => {
+    startTransition(() => {
+      navigate({
+        search: ((prev: Record<string, unknown>) => ({
+          ...prev,
+          q: "",
+          minPrice: "",
+          maxPrice: "",
+          sortBy: "createdAt",
+          sortOrder: "DESC",
+          page: 1,
+        })) as never,
+      });
+    });
+  }, [navigate]);
 
-	const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
-	useEffect(() => {
-		if (searchInput === filters.q) return; // Skip if already synced
+  const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => {
+    if (searchInput === (search.q || "")) return;
 
-		clearTimeout(searchDebounce.current);
-		searchDebounce.current = setTimeout(() => {
-			setFilters({ q: searchInput, page: 1 });
-		}, 400);
-		return () => clearTimeout(searchDebounce.current);
-	}, [searchInput, filters.q, setFilters]);
+    clearTimeout(searchDebounce.current);
+    searchDebounce.current = setTimeout(() => {
+      startTransition(() => {
+        navigate({
+          search: (prev: Record<string, unknown>) => ({
+            ...prev,
+            q: searchInput,
+            page: 1,
+          }),
+        } as never);
+      });
+    }, 400);
+    return () => clearTimeout(searchDebounce.current);
+  }, [searchInput, search.q, navigate]);
 
-	const commitPrice = useCallback(() => {
-		setFilters({
-			minPrice: priceRange[0].toString(),
-			maxPrice: priceRange[1].toString(),
-			page: 1,
-		});
-	}, [priceRange, setFilters]);
+  const commitPrice = useCallback(() => {
+    startTransition(() => {
+      navigate({
+        search: ((prev: Record<string, unknown>) => ({
+          ...prev,
+          minPrice: priceRange[0].toString(),
+          maxPrice: priceRange[1].toString(),
+          page: 1,
+        })) as never,
+      });
+    });
+  }, [priceRange, navigate]);
 
-	const hasActiveFilters =
-		!!filters.q ||
-		!!filters.minPrice ||
-		!!filters.maxPrice ||
-		filters.sortBy !== "createdAt";
+  const hasActiveFilters =
+    !!search.q ||
+    !!search.minPrice ||
+    !!search.maxPrice ||
+    search.sortBy !== "createdAt";
 
-	return {
-		filters,
-		setFilters,
-		patchFilters,
-		resetFilters,
-		searchInput,
-		setSearchInput,
-		priceRange,
-		setPriceRange,
-		commitPrice,
-		hasActiveFilters,
-	};
+  return {
+    filters: search,
+    patchFilters,
+    resetFilters,
+    searchInput,
+    setSearchInput,
+    priceRange,
+    setPriceRange,
+    commitPrice,
+    hasActiveFilters,
+    isPending,
+  };
 }

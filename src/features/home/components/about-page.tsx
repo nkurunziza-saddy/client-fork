@@ -36,7 +36,7 @@ export function AboutPage() {
 					<div className="relative z-10">
 						<div className="inline-flex items-center px-4 py-1.5 border border-primary/30 rounded-none bg-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-[0.3em] mb-10">
 							<RiGlobeLine className="w-3.5 h-3.5 mr-2.5" />
-							About AfrikaMarket
+							About Karibu
 						</div>
 
 						<h1 className="text-5xl md:text-6xl font-display font-black text-white mb-8 leading-[0.9] tracking-tighter uppercase">
@@ -47,9 +47,9 @@ export function AboutPage() {
 						</h1>
 
 						<p className="text-lg text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed font-medium uppercase tracking-widest">
-							AfrikaMarket is the construction marketplace for Rwanda. We
-							verify, connect, and simplify the search for contractors and
-							suppliers through a trusted directory of verified providers.
+							Karibu is the construction marketplace for Rwanda. We verify,
+							connect, and simplify the search for contractors and suppliers
+							through a trusted directory of verified providers.
 						</p>
 					</div>
 				</section>

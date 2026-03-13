@@ -2,21 +2,12 @@ import { useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { useGetServicesQuery } from "@/services/api/services";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { formatDate } from "@/shared/utils/format";
 import type { AssignmentRow } from "@/types";
 import { getAssignmentColumns } from "../columns/assignments-columns";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
 
 export function AdminAssignmentsPage() {
 	const navigate = useNavigate();
@@ -47,8 +38,16 @@ export function AdminAssignmentsPage() {
 	const columns = useMemo(
 		() =>
 			getAssignmentColumns({
-				onViewSupplier: (id) => navigate({ to: `/suppliers/${id}` as any }),
-				onViewService: (id) => navigate({ to: `/services/${id}` as any }),
+				onViewSupplier: (id) =>
+					navigate({
+						to: "/suppliers/$supplierId",
+						params: { supplierId: id },
+					}),
+				onViewService: (id) =>
+					navigate({
+						to: "/services/$serviceId",
+						params: { serviceId: id },
+					}),
 			}),
 		[navigate],
 	);
@@ -70,13 +69,25 @@ export function AdminAssignmentsPage() {
 					<DataTable
 						columns={columns}
 						data={assignments}
-						filterColumn="service"
-						filterPlaceholder="Search services..."
 						manualPagination
 						pageCount={servicesResult?.meta?.totalPages || 0}
 						onPaginationChange={setPagination}
 						state={{ pagination }}
-					/>
+					>
+						<DataTable.Toolbar>
+							<AdminTableToolbar
+								searchColumn="service"
+								searchPlaceholder="Search services..."
+								statusColumn="status"
+								statusOptions={[
+									{ label: "Active", value: "active" },
+									{ label: "Inactive", value: "inactive" },
+								]}
+							/>
+						</DataTable.Toolbar>
+						<DataTable.Content />
+						<DataTable.Pagination />
+					</DataTable>
 				)}
 			</Card>
 		</div>

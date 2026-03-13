@@ -8,7 +8,14 @@ import {
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 
 interface Report {
 	id: string;
@@ -48,11 +55,19 @@ export const ModerationQueue: React.FC<ModerationQueueProps> = ({
 
 		<div className="space-y-6">
 			{reports.length === 0 ? (
-				<AdminCard>
-					<div className="rounded-sm border border-dashed border-border bg-muted/5 px-6 py-10 text-center text-sm text-muted-foreground">
-						No moderation alerts right now.
-					</div>
-				</AdminCard>
+				<Empty className="py-12 border border-dashed border-border/40 bg-muted/5 rounded-none">
+					<EmptyHeader>
+						<EmptyMedia variant="icon">
+							<RiFlagLine className="w-4 h-4 text-primary" />
+						</EmptyMedia>
+						<EmptyTitle className="text-xl font-display font-black uppercase">
+							Clear Queue
+						</EmptyTitle>
+						<EmptyDescription className="uppercase tracking-widest text-[10px]">
+							No moderation alerts right now.
+						</EmptyDescription>
+					</EmptyHeader>
+				</Empty>
 			) : (
 				reports.map((report) => (
 					<AdminCard

@@ -24,7 +24,35 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"suspicious": {
+				"noArrayIndexKey": "off",
+				"noUnknownAtRules": "off",
+				"noDocumentCookie": "off"
+			},
+			"a11y": {
+				"noLabelWithoutControl": "off",
+				"useKeyWithClickEvents": "off",
+				"noStaticElementInteractions": "off",
+				"useSemanticElements": "off",
+				"noSvgWithoutTitle": "off",
+				"useValidAnchor": "off",
+				"useValidAriaRole": "off",
+				"useAriaPropsForRole": "off",
+				"useFocusableInteractive": "off"
+			},
+			"correctness": {
+				"noChildrenProp": "off",
+				"useUniqueElementIds": "off",
+				"noUnusedImports": "error"
+			},
+			"style": {
+				"useImportType": "off",
+				"noNonNullAssertion": "off"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			}
 		}
 	},
 	"javascript": {

@@ -25,7 +25,7 @@ interface AdminSidebarProps {
 }
 
 const defaultCompany: NavHeaderInfo = {
-	name: "AfrikaMarket",
+	name: "Karibu",
 	logo: RiApps2Line,
 	plan: "Enterprise",
 };
@@ -79,7 +79,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
 
 	const sidebarUser = {
 		name: user?.name || "Admin",
-		email: user?.email || "admin@afrikamarket.com",
+		email: user?.email || "admin@karibu.com",
 		avatar: user?.avatar || "/avatars/admin.jpg",
 		role: user?.role,
 	};

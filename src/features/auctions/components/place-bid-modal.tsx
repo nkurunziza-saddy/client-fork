@@ -1,10 +1,12 @@
+import { useForm } from "@tanstack/react-form";
 import type React from "react";
-import { useState } from "react";
 import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { getFormFieldErrors } from "@/lib/utils";
 import { useStartAuctionChatMutation } from "@/services/api/messages";
+import { FormField } from "@/shared/components/form-field";
 import { ResponsiveModal } from "@/shared/components/responsive-modal";
 
 interface PlaceBidModalProps {
@@ -20,44 +22,58 @@ export const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 	isOpen,
 	onClose,
 }) => {
-	const [bidAmount, setBidAmount] = useState<string>("");
-	const [message, setMessage] = useState<string>("");
 	const [startAuctionChat, { isLoading }] = useStartAuctionChatMutation();
 
-	const handleSubmit = async () => {
-		const amountNum = Number(bidAmount);
-		if (!amountNum || amountNum <= 0) {
-			toast.error("Please enter a valid bid amount");
-			return;
-		}
+	const bidSchema = z.object({
+		bidAmount: z.string().refine(
+			(val) => {
+				const num = Number(val);
+				return !Number.isNaN(num) && num >= startingPrice;
+			},
+			{
+				message: `Bid must be at least ${startingPrice.toLocaleString()} RWF`,
+			},
+		),
+		message: z.string().optional(),
+	});
 
-		if (amountNum < startingPrice) {
-			toast.error(
-				`Your bid must be at least ${startingPrice.toLocaleString()} RWF`,
-			);
-			return;
-		}
+	type BidFormValues = z.infer<typeof bidSchema>;
 
-		try {
-			// Format the bid as a structured message so the supplier knows exactly what the user is offering
-			const content = `[BID NOTIFICATION]\nI am placing a bid of ${amountNum.toLocaleString()} RWF on this auction.\n\nMessage: ${message || "I am very interested in this item!"}`;
+	const form = useForm({
+		defaultValues: {
+			bidAmount: "",
+			message: "",
+		} as BidFormValues,
+		validators: {
+			onChange: bidSchema,
+		},
+		onSubmit: async ({ value }) => {
+			try {
+				const amountNum = Number(value.bidAmount);
+				const content = `[BID NOTIFICATION]\nI am placing a bid of ${amountNum.toLocaleString()} RWF on this auction.\n\nMessage: ${value.message || "I am very interested in this item!"}`;
 
-			await startAuctionChat({ auctionId, content }).unwrap();
-			toast.success("Bid placed successfully! The vendor has been notified.");
-			onClose();
-			setBidAmount("");
-			setMessage("");
-		} catch (error: any) {
-			toast.error(
-				error.data?.error?.message || "Please sign in to place a bid.",
-			);
-		}
-	};
+				await startAuctionChat({ auctionId, content }).unwrap();
+				toast.success("Bid placed successfully! The vendor has been notified.");
+				onClose();
+				form.reset();
+			} catch (error: unknown) {
+				const err = error as { data?: { error?: { message?: string } } };
+				toast.error(
+					err.data?.error?.message || "Please sign in to place a bid.",
+				);
+			}
+		},
+	});
 
 	return (
 		<ResponsiveModal
 			open={isOpen}
-			onOpenChange={onClose}
+			onOpenChange={(open) => {
+				if (!open) {
+					onClose();
+					form.reset();
+				}
+			}}
 			className="p-0 overflow-hidden"
 		>
 			<div className="flex flex-col">
@@ -71,30 +87,49 @@ export const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 				</div>
 
 				<div className="p-6 space-y-6">
-					<div className="space-y-3">
-						<Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-							Bid Amount (RWF)
-						</Label>
-						<Input
-							type="number"
-							value={bidAmount}
-							onChange={(e) => setBidAmount(e.target.value)}
-							placeholder={`Min: ${startingPrice.toLocaleString()}`}
-							className="h-12 rounded-none bg-background focus:ring-0 text-sm font-bold"
-						/>
-					</div>
+					<form.Field
+						name="bidAmount"
+						children={(field) => (
+							<FormField
+								label="Bid Amount (RWF)"
+								required
+								error={getFormFieldErrors(field.state.meta.errors)}
+								isTouched={field.state.meta.isTouched}
+							>
+								<Input
+									id={field.name}
+									name={field.name}
+									type="number"
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									placeholder={`Min: ${startingPrice.toLocaleString()}`}
+									className="h-12 rounded-none bg-background focus:ring-0 text-sm font-bold"
+								/>
+							</FormField>
+						)}
+					/>
 
-					<div className="space-y-3">
-						<Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-							Optional Message
-						</Label>
-						<textarea
-							value={message}
-							onChange={(e) => setMessage(e.target.value)}
-							placeholder="Add a message to the vendor..."
-							className="w-full h-32 p-4 border border-border/40 rounded-none text-sm focus:ring-1 focus:ring-primary outline-none resize-none bg-background"
-						/>
-					</div>
+					<form.Field
+						name="message"
+						children={(field) => (
+							<FormField
+								label="Optional Message"
+								error={getFormFieldErrors(field.state.meta.errors)}
+								isTouched={field.state.meta.isTouched}
+							>
+								<textarea
+									id={field.name}
+									name={field.name}
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									placeholder="Add a message to the vendor..."
+									className="w-full h-32 p-4 border border-border/40 rounded-none text-sm focus:ring-1 focus:ring-primary outline-none resize-none bg-background"
+								/>
+							</FormField>
+						)}
+					/>
 				</div>
 
 				<div className="p-6 bg-muted/20 border-t border-border/10 flex gap-3">
@@ -106,13 +141,18 @@ export const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 					>
 						Cancel
 					</Button>
-					<Button
-						className="flex-1 rounded-none h-12 text-[10px] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-						onClick={handleSubmit}
-						disabled={isLoading || !bidAmount}
-					>
-						{isLoading ? "Submitting..." : "Submit Bid"}
-					</Button>
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
+						children={([canSubmit, isSubmitting]) => (
+							<Button
+								className="flex-1 rounded-none h-12 text-[10px] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+								onClick={() => form.handleSubmit()}
+								disabled={!canSubmit || isLoading || isSubmitting}
+							>
+								{isLoading || isSubmitting ? "Submitting..." : "Submit Bid"}
+							</Button>
+						)}
+					/>
 				</div>
 			</div>
 		</ResponsiveModal>

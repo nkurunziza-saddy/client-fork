@@ -11,7 +11,7 @@ import { useGetMarketplaceStatsQuery } from "@/services/api/stats";
 export const MarketplaceStats: React.FC = () => {
 	const { data: stats } = useGetMarketplaceStatsQuery();
 
-	function formatNumber(val: any, appendPlus = true): string {
+	function formatNumber(val: number | string | undefined, appendPlus = true): string {
 		const num = Number(val);
 		if (val === undefined || Number.isNaN(num)) return "...";
 		if (num >= 1000) {
@@ -61,7 +61,7 @@ export const MarketplaceStats: React.FC = () => {
 						<span className="text-primary">Rwanda's Construction</span>
 					</h2>
 					<p className="text-lg text-background/60 leading-relaxed font-normal">
-						AfrikaMarket connects the entire construction industry, from local
+						Karibu connects the entire construction industry, from local
 						manufacturers to large-scale infrastructure projects.
 					</p>
 				</div>

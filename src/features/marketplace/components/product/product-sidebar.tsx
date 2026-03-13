@@ -49,7 +49,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 						</div>
 						<div className="space-y-1">
 							<h4 className="font-display font-black text-lg uppercase tracking-tighter text-foreground leading-[0.85]">
-								{company?.name ?? "AfrikaMarket Seller"}
+								{company?.name ?? "Karibu Seller"}
 							</h4>
 							<p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">
 								{company?.district ?? "Regional Supplier"}

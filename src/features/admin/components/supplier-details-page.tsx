@@ -1,18 +1,7 @@
-import {
-	RiAddLine,
-	RiCalendarLine,
-	RiDeleteBinLine,
-	RiEditLine,
-	RiLoader2Line,
-	RiMapPinLine,
-	RiShieldCheckLine,
-	RiStore2Line,
-	RiUserLine,
-} from "@remixicon/react";
+import { RiAddLine } from "@remixicon/react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -22,33 +11,29 @@ import {
 } from "@/services/api/companies";
 import { useGetProductsQuery } from "@/services/api/products";
 import { useGetServicesQuery } from "@/services/api/services";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 import { ConfirmationModal } from "@/shared/components/confirmation-modal";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-import { StatCard } from "./stat-card";
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const d = new Date(value);
-	if (Number.isNaN(d.getTime())) return "-";
-	return d.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
+import { formatDate } from "@/shared/utils/format";
+import { SupplierProductsTable } from "./supplier-products-table";
+import { SupplierProfile } from "./supplier-profile";
+import { SupplierServicesTable } from "./supplier-services-table";
+import { SupplierStats } from "./supplier-stats";
 
 export function AdminSupplierDetailsPage() {
 	const { supplierId } = useParams({ from: "/admin/suppliers/$supplierId/" });
 	const navigate = useNavigate();
 	const [deleteOpen, setDeleteOpen] = useState(false);
 	const [suspendOpen, setSuspendOpen] = useState(false);
+
 	const { data: company, isLoading: loadingCompany } =
 		useGetCompanyByIdQuery(supplierId);
 	const { data: productsResult, isLoading: loadingProducts } =
 		useGetProductsQuery({ companyId: supplierId, limit: 100 });
 	const { data: servicesResult, isLoading: loadingServices } =
 		useGetServicesQuery({ companyId: supplierId, limit: 100 });
+
 	const [deleteCompany, { isLoading: deleting }] = useDeleteCompanyMutation();
 	const [updateCompany, { isLoading: suspending }] = useUpdateCompanyMutation();
 
@@ -89,11 +74,7 @@ export function AdminSupplierDetailsPage() {
 	};
 
 	if (loading) {
-		return (
-			<div className="flex items-center justify-center p-24">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!company) {
@@ -138,126 +119,13 @@ export function AdminSupplierDetailsPage() {
 				</Button>
 			</div>
 
-			<Card>
-				<div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-					<div className="flex items-start gap-4">
-						<div className="flex h-14 w-14 items-center justify-center rounded-sm bg-primary text-xl font-heading font-bold text-primary-foreground">
-							{company.name.charAt(0)}
-						</div>
-						<div className="space-y-2">
-							<h1 className="text-2xl font-heading font-bold text-foreground">
-								{company.name}
-							</h1>
-							<div className="flex flex-wrap items-center gap-2">
-								<Badge
-									variant={company.isVerified ? "success" : "warning"}
-									className="uppercase text-[10px] tracking-wider"
-								>
-									{company.isVerified ? "Verified" : "Pending verification"}
-								</Badge>
-								<Badge
-									variant={company.isActive ? "default" : "secondary"}
-									className="uppercase text-[10px] tracking-wider"
-								>
-									{company.isActive ? "Active" : "Inactive"}
-								</Badge>
-							</div>
-							<p className="text-sm text-muted-foreground">
-								{company.description || "No description provided."}
-							</p>
-							<div className="flex items-center gap-3 text-xs text-muted-foreground">
-								<span className="flex items-center gap-1">
-									<RiMapPinLine size={14} />
-									{[company.district, company.province]
-										.filter(Boolean)
-										.join(", ") || "-"}
-								</span>
-								<span className="flex items-center gap-1">
-									<RiCalendarLine size={14} />
-									Joined {formatDate(company.createdAt)}
-								</span>
-							</div>
-						</div>
-					</div>
+			<SupplierProfile
+				company={company}
+				onSuspendClick={() => setSuspendOpen(true)}
+				onDeleteClick={() => setDeleteOpen(true)}
+			/>
 
-					<div className="flex flex-wrap gap-2">
-						<Button
-							variant="outline"
-							onClick={() =>
-								navigate({
-									to: `/admin/suppliers/${company.id}/products/new` as any,
-								})
-							}
-							className="h-10 rounded-sm"
-						>
-							<RiAddLine size={14} className="mr-2" /> Add Product
-						</Button>
-						<Button
-							variant="outline"
-							onClick={() =>
-								navigate({
-									to: `/admin/suppliers/${company.id}/services/new` as any,
-								})
-							}
-							className="h-10 rounded-sm"
-						>
-							<RiAddLine size={14} className="mr-2" /> Add Service
-						</Button>
-						<Button
-							variant="outline"
-							onClick={() =>
-								navigate({ to: `/admin/suppliers/${company.id}/edit` as any })
-							}
-							className="h-10 rounded-sm"
-						>
-							<RiEditLine size={14} className="mr-2" /> Edit
-						</Button>
-						<Button
-							onClick={() => setSuspendOpen(true)}
-							className="h-10 rounded-sm bg-warning text-warning-foreground hover:bg-warning/90"
-						>
-							Suspend
-						</Button>
-						<Button
-							onClick={() => setDeleteOpen(true)}
-							className="h-10 rounded-sm bg-destructive text-destructive-foreground hover:bg-destructive/90"
-						>
-							<RiDeleteBinLine size={14} className="mr-2" /> Delete
-						</Button>
-					</div>
-				</div>
-			</Card>
-
-			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-				<StatCard
-					label="Products"
-					value={supplierStats.productCount}
-					icon={RiStore2Line}
-					bgColor="bg-info/5"
-					color="text-info"
-				/>
-				<StatCard
-					label="Services"
-					value={supplierStats.serviceCount}
-					icon={RiUserLine}
-					bgColor="bg-info/5"
-					color="text-info"
-				/>
-				<StatCard
-					label="Visits"
-					value={supplierStats.visits}
-					icon={RiUserLine}
-					bgColor="bg-warning/5"
-					color="text-warning"
-				/>
-				<StatCard
-					label="Member Since"
-					value={supplierStats.memberSince}
-					icon={RiShieldCheckLine}
-					bgColor="bg-success/5"
-					color="text-success"
-				/>
-			</div>
+			<SupplierStats stats={supplierStats} />
 
 			<Card noPadding>
 				<Tabs defaultValue="products" className="w-full">
@@ -273,103 +141,14 @@ export function AdminSupplierDetailsPage() {
 					</div>
 
 					<TabsContent value="products" className="m-0 p-4">
-						{products.length === 0 ? (
-							<div className="rounded-sm border border-dashed border-border py-12 text-center text-muted-foreground">
-								No products found for this supplier.
-							</div>
-						) : (
-							<div className="overflow-x-auto">
-								<table className="w-full text-sm">
-									<thead>
-										<tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
-											<th className="py-3">Name</th>
-											<th className="py-3">Category</th>
-											<th className="py-3">Price</th>
-											<th className="py-3">Stock</th>
-											<th className="py-3">Status</th>
-										</tr>
-									</thead>
-									<tbody>
-										{products.map((product) => (
-											<tr
-												key={product.id}
-												onClick={() =>
-													navigate({
-														to: `/admin/suppliers/${supplierId}/product/${product.id}` as any,
-													})
-												}
-												className="cursor-pointer border-b border-border/50 hover:bg-muted/30"
-											>
-												<td className="py-3 font-medium">{product.name}</td>
-												<td className="py-3 text-muted-foreground">
-													{product.category?.name ?? "-"}
-												</td>
-												<td className="py-3">
-													RWF{" "}
-													{(product.variants?.[0]?.price ?? 0).toLocaleString()}
-												</td>
-												<td className="py-3">
-													{product.variants?.[0]?.stock ?? 0}
-												</td>
-												<td className="py-3">
-													<Badge
-														variant={product.isActive ? "success" : "secondary"}
-														className="uppercase text-[10px] tracking-wider"
-													>
-														{product.isActive ? "active" : "inactive"}
-													</Badge>
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-						)}
+						<SupplierProductsTable
+							products={products}
+							supplierId={supplierId}
+						/>
 					</TabsContent>
 
 					<TabsContent value="services" className="m-0 p-4">
-						{services.length === 0 ? (
-							<div className="rounded-sm border border-dashed border-border py-12 text-center text-muted-foreground">
-								No services found for this supplier.
-							</div>
-						) : (
-							<div className="overflow-x-auto">
-								<table className="w-full text-sm">
-									<thead>
-										<tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
-											<th className="py-3">Name</th>
-											<th className="py-3">Category</th>
-											<th className="py-3">Price</th>
-											<th className="py-3">Status</th>
-										</tr>
-									</thead>
-									<tbody>
-										{services.map((service) => (
-											<tr
-												key={service.id}
-												className="border-b border-border/50 hover:bg-muted/30"
-											>
-												<td className="py-3 font-medium">{service.name}</td>
-												<td className="py-3 text-muted-foreground">
-													{service.category?.name ?? "-"}
-												</td>
-												<td className="py-3">
-													RWF {(service.price ?? 0).toLocaleString()}
-												</td>
-												<td className="py-3">
-													<Badge
-														variant={service.isActive ? "success" : "secondary"}
-														className="uppercase text-[10px] tracking-wider"
-													>
-														{service.isActive ? "active" : "inactive"}
-													</Badge>
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-						)}
+						<SupplierServicesTable services={services} />
 					</TabsContent>
 				</Tabs>
 			</Card>

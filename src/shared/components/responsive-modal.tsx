@@ -1,4 +1,6 @@
+import { RiCloseLine } from "@remixicon/react";
 import type * as React from "react";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -9,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import {
 	Drawer,
+	DrawerClose,
 	DrawerContent,
 	DrawerDescription,
 	DrawerHeader,
@@ -26,6 +29,9 @@ interface ResponsiveModalProps {
 	description?: string;
 	trigger?: React.ReactElement;
 	className?: string;
+	showCloseButton?: boolean;
+	footer?: React.ReactNode;
+	size?: "sm" | "md" | "lg" | "xl";
 }
 
 export function ResponsiveModal({
@@ -36,29 +42,53 @@ export function ResponsiveModal({
 	description,
 	trigger,
 	className,
+	showCloseButton = true,
+	footer,
+	size = "sm",
 }: ResponsiveModalProps) {
 	const isMobile = useIsMobile();
+	const dialogSizeClass = {
+		sm: "sm:max-w-[425px]",
+		md: "sm:max-w-[520px]",
+		lg: "sm:max-w-[640px]",
+		xl: "sm:max-w-[720px]",
+	}[size];
 
 	if (isMobile) {
 		return (
 			<Drawer open={open} onOpenChange={onOpenChange}>
 				{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-				<DrawerContent className={cn("px-4 pb-8", className)}>
-					{(title || description) && (
+				<DrawerContent className={cn("px-4 pb-8 safe-area-bottom", className)}>
+					{(title || description || showCloseButton) && (
 						<DrawerHeader className="text-left px-0 mb-4">
-							{title && (
-								<DrawerTitle className="font-display font-black uppercase text-xl tracking-tighter">
-									{title}
-								</DrawerTitle>
-							)}
-							{description && (
-								<DrawerDescription className="text-xs uppercase font-bold tracking-widest opacity-60">
-									{description}
-								</DrawerDescription>
-							)}
+							<div className="flex items-start justify-between gap-4">
+								<div className="space-y-2">
+									{title && (
+										<DrawerTitle className="font-display font-black uppercase text-xl tracking-tighter">
+											{title}
+										</DrawerTitle>
+									)}
+									{description && (
+										<DrawerDescription className="text-xs uppercase font-bold tracking-widest opacity-60">
+											{description}
+										</DrawerDescription>
+									)}
+								</div>
+								{showCloseButton && (
+									<DrawerClose asChild>
+										<Button variant="ghost" size="icon-sm" className="mt-1">
+											<RiCloseLine />
+											<span className="sr-only">Close</span>
+										</Button>
+									</DrawerClose>
+								)}
+							</div>
 						</DrawerHeader>
 					)}
 					{children}
+					{footer && (
+						<div className="mt-6 border-t border-border/30 pt-4">{footer}</div>
+					)}
 				</DrawerContent>
 			</Drawer>
 		);
@@ -69,9 +99,11 @@ export function ResponsiveModal({
 			{trigger && <DialogTrigger render={trigger} />}
 			<DialogContent
 				className={cn(
-					"sm:max-w-[425px] rounded-none border-border industrial-grain",
+					"rounded-none border-border industrial-grain",
+					dialogSizeClass,
 					className,
 				)}
+				showCloseButton={showCloseButton}
 			>
 				{(title || description) && (
 					<DialogHeader className="space-y-4 mb-4">
@@ -88,6 +120,9 @@ export function ResponsiveModal({
 					</DialogHeader>
 				)}
 				{children}
+				{footer && (
+					<div className="mt-6 border-t border-border/30 pt-4">{footer}</div>
+				)}
 			</DialogContent>
 		</Dialog>
 	);
