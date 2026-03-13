@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import type { CatalogFilters, ListingType } from "@/types";
 
@@ -11,6 +11,7 @@ export function useMarketplaceFilters(
 ) {
 	const search = useSearch({ strict: false }) as any;
 	const navigate = useNavigate();
+	const [isPending, startTransition] = useTransition();
 
 	const [searchInput, setSearchInput] = useState(search.searchQuery || "");
 	const [priceRange, setPriceRange] = useState<[number, number]>([
@@ -32,37 +33,41 @@ export function useMarketplaceFilters(
 
 	const patchFilters = useCallback(
 		(patch: Partial<CatalogFilters>) => {
-			navigate({
-				search: (prev: any) => {
-					const next = { ...prev, ...patch };
-					if (patch.type != null && patch.type !== prev.type) {
-						onTypeChange?.(patch.type as ListingType);
-					}
-					return next;
-				},
-			} as any);
+			startTransition(() => {
+				navigate({
+					search: (prev: any) => {
+						const next = { ...prev, ...patch };
+						if (patch.type != null && patch.type !== prev.type) {
+							onTypeChange?.(patch.type as ListingType);
+						}
+						return next;
+					},
+				} as any);
+			});
 		},
 		[navigate, onTypeChange],
 	);
 
 	const resetFilters = useCallback(() => {
-		navigate({
-			search: (prev: any) => ({
-				...prev,
-				searchQuery: "",
-				categoryId: "all",
-				type: "all",
-				district: "",
-				minPrice: undefined,
-				maxPrice: undefined,
-				onlyInStock: false,
-				companyType: "all",
-				sortBy: "createdAt",
-				sortOrder: "DESC",
-				page: 1,
-			}),
-		} as any);
-		onTypeChange?.("all");
+		startTransition(() => {
+			navigate({
+				search: (prev: any) => ({
+					...prev,
+					searchQuery: "",
+					categoryId: "all",
+					type: "all",
+					district: "",
+					minPrice: undefined,
+					maxPrice: undefined,
+					onlyInStock: false,
+					companyType: "all",
+					sortBy: "createdAt",
+					sortOrder: "DESC",
+					page: 1,
+				}),
+			} as any);
+			onTypeChange?.("all");
+		});
 	}, [navigate, onTypeChange]);
 
 	const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -71,22 +76,26 @@ export function useMarketplaceFilters(
 
 		clearTimeout(searchDebounce.current);
 		searchDebounce.current = setTimeout(() => {
-			navigate({
-				search: (prev: any) => ({ ...prev, searchQuery: searchInput, page: 1 }),
-			} as any);
+			startTransition(() => {
+				navigate({
+					search: (prev: any) => ({ ...prev, searchQuery: searchInput, page: 1 }),
+				} as any);
+			});
 		}, 400);
 		return () => clearTimeout(searchDebounce.current);
 	}, [searchInput, search.searchQuery, navigate]);
 
 	const commitPrice = useCallback(() => {
-		navigate({
-			search: (prev: any) => ({
-				...prev,
-				minPrice: priceRange[0],
-				maxPrice: priceRange[1],
-				page: 1,
-			}),
-		} as any);
+		startTransition(() => {
+			navigate({
+				search: (prev: any) => ({
+					...prev,
+					minPrice: priceRange[0],
+					maxPrice: priceRange[1],
+					page: 1,
+				}),
+			} as any);
+		});
 	}, [priceRange, navigate]);
 
 	const hasActiveFilters =
@@ -108,5 +117,6 @@ export function useMarketplaceFilters(
 		setPriceRange,
 		commitPrice,
 		hasActiveFilters,
+		isPending,
 	};
 }

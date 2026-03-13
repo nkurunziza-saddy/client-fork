@@ -10,22 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/shared/components/admin/card";
 import type { Company } from "@/types";
+import { formatDate } from "@/shared/utils/format";
 
 interface SupplierProfileProps {
 	company: Company;
 	onSuspendClick: () => void;
 	onDeleteClick: () => void;
-}
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const d = new Date(value);
-	if (Number.isNaN(d.getTime())) return "-";
-	return d.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
 }
 
 export function SupplierProfile({ company, onSuspendClick, onDeleteClick }: SupplierProfileProps) {

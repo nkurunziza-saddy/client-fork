@@ -8,6 +8,10 @@ export const formatCurrency = (value: number | string, currency = "RWF") => {
 	return `${currency} ${num.toLocaleString()}`;
 };
 
+/**
+ * Standard date formatter
+ * Default: Nov 15, 2023
+ */
 export const formatDate = (
 	value?: string | Date,
 	options: Intl.DateTimeFormatOptions = {
@@ -20,6 +24,26 @@ export const formatDate = (
 	const date = typeof value === "string" ? new Date(value) : value;
 	if (Number.isNaN(date.getTime())) return "—";
 	return date.toLocaleDateString("en-US", options);
+};
+
+/**
+ * Date and Time formatter
+ * Default: Nov 15, 2023, 2:30 PM
+ */
+export const formatDateTime = (
+	value?: string | Date,
+	options: Intl.DateTimeFormatOptions = {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+	},
+) => {
+	if (!value) return "—";
+	const date = typeof value === "string" ? new Date(value) : value;
+	if (Number.isNaN(date.getTime())) return "—";
+	return date.toLocaleString("en-US", options);
 };
 
 export const formatRelativeTime = (value?: string | Date) => {

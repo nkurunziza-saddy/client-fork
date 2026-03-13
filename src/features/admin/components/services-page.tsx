@@ -14,17 +14,7 @@ import { getServiceColumns } from "../columns/services-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
 import { Card } from "@/shared/components/admin/card";
 import { PageHeader } from "@/shared/components/admin/page-header";
-
-function toDateLabel(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
+import { formatDate } from "@/shared/utils/format";
 
 export function AdminServicesPage() {
 	const navigate = useNavigate();
@@ -56,7 +46,7 @@ export function AdminServicesPage() {
 			supplier: service.company?.name ?? "Unknown supplier",
 			supplierId: service.company?.id ?? "",
 			status: service.isActive ? "active" : "inactive",
-			createdDate: toDateLabel(service.createdAt),
+			createdDate: formatDate(service.createdAt),
 			views: Number(service.views) || 0,
 		}));
 	}, [servicesResult]);
@@ -118,9 +108,13 @@ export function AdminServicesPage() {
 					<DataTable
 						columns={columns}
 						data={services}
-						renderToolbar={(table) => (
+						manualPagination
+						pageCount={servicesResult?.meta?.totalPages || 0}
+						onPaginationChange={setPagination}
+						state={{ pagination }}
+					>
+						<DataTable.Toolbar>
 							<AdminTableToolbar
-								table={table}
 								searchColumn="name"
 								searchPlaceholder="Search services..."
 								statusColumn="status"
@@ -129,12 +123,10 @@ export function AdminServicesPage() {
 									{ label: "Inactive", value: "inactive" },
 								]}
 							/>
-						)}
-						manualPagination
-						pageCount={servicesResult?.meta?.totalPages || 0}
-						onPaginationChange={setPagination}
-						state={{ pagination }}
-					/>
+						</DataTable.Toolbar>
+						<DataTable.Content />
+						<DataTable.Pagination />
+					</DataTable>
 				)}
 			</Card>
 

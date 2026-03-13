@@ -31,6 +31,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useDataTable } from "@/components/ui/data-table";
 
 type StatusOption = {
 	label: string;
@@ -38,7 +39,7 @@ type StatusOption = {
 };
 
 interface AdminTableToolbarProps<TData> {
-	table: Table<TData>;
+	table?: Table<TData>;
 	searchColumn?: string;
 	searchPlaceholder?: string;
 	statusColumn?: string;
@@ -47,13 +48,16 @@ interface AdminTableToolbarProps<TData> {
 }
 
 export function AdminTableToolbar<TData>({
-	table,
+	table: tableProp,
 	searchColumn,
 	searchPlaceholder = "Search...",
 	statusColumn,
 	statusOptions = [],
 	className,
 }: AdminTableToolbarProps<TData>) {
+	const tableContext = useDataTable();
+	const table = tableProp || tableContext;
+
 	const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 	const searchColumnInstance = searchColumn
 		? table.getColumn(searchColumn)

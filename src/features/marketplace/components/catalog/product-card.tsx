@@ -1,8 +1,8 @@
 import { RiShieldCheckLine, RiStarLine } from "@remixicon/react";
 import { useRouter } from "@tanstack/react-router";
 import type React from "react";
-import { BaseCard } from "@/shared/components";
-
+import { ResourceCard } from "@/shared/components/catalog/resource-card";
+import { formatCurrency } from "@/shared/utils/format";
 import type { MarketplaceItem } from "@/types";
 
 interface ProductCardProps {
@@ -14,7 +14,7 @@ interface ProductCardProps {
 	onToggleWishlist?: (e: React.MouseEvent) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
+export const ProductCard: React.FC<ProductCardProps> = ({
 	product,
 	viewMode = "grid",
 	onSupplierClick,
@@ -72,13 +72,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
 				}
 			}}
 		>
-			<div className="flex items-start gap-2 overflow-hidden text-left">
+			<div className="flex items-start gap-2 overflow-hidden text-left text-foreground/80 hover:text-primary transition-colors">
 				<div className="w-5 h-5 md:w-7 md:h-7 bg-muted/20 border border-border/10 flex items-center justify-center rounded-none shrink-0 text-[10px] font-bold text-primary">
 					{company.name?.charAt(0)}
 				</div>
 				<div className="flex flex-col min-w-0">
 					<div className="flex items-center gap-1">
-						<span className="text-[9px] md:text-[10px] font-bold text-foreground/80 truncate group-hover/comp:text-primary transition-colors uppercase tracking-tight">
+						<span className="text-[9px] md:text-[10px] font-bold uppercase tracking-tight truncate">
 							{company.name}
 						</span>
 						{company.isVerified && (
@@ -99,7 +99,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 	);
 
 	return (
-		<BaseCard
+		<ResourceCard
 			id={product.id}
 			name={product.name}
 			image={img}
@@ -116,7 +116,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 				<div className="flex flex-col">
 					<div className="flex items-end gap-1.5">
 						<div className="text-sm font-bold text-foreground font-display tracking-tight">
-							RWF {price.toLocaleString()}
+							{formatCurrency(price, 'RWF')}
 						</div>
 						<div className="text-[9px] text-muted-foreground/40 font-bold uppercase tracking-widest mb-px">
 							/ {unit}
@@ -124,7 +124,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 					</div>
 					{discount > 0 && (
 						<div className="text-[9px] font-bold text-muted-foreground/30 line-through mt-0.5 uppercase tracking-widest leading-none">
-							RWF {basePrice.toLocaleString()}
+							{formatCurrency(basePrice, 'RWF')}
 						</div>
 					)}
 				</div>
@@ -147,8 +147,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
 					</p>
 				)}
 			</div>
-		</BaseCard>
+		</ResourceCard>
 	);
 };
-
-export { ProductCard };

@@ -7,17 +7,7 @@ import { getAssignmentColumns } from "../columns/assignments-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
 import { Card } from "@/shared/components/admin/card";
 import { PageHeader } from "@/shared/components/admin/page-header";
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
+import { formatDate } from "@/shared/utils/format";
 
 export function AdminAssignmentsPage() {
 	const navigate = useNavigate();
@@ -71,9 +61,13 @@ export function AdminAssignmentsPage() {
 					<DataTable
 						columns={columns}
 						data={assignments}
-						renderToolbar={(table) => (
+						manualPagination
+						pageCount={servicesResult?.meta?.totalPages || 0}
+						onPaginationChange={setPagination}
+						state={{ pagination }}
+					>
+						<DataTable.Toolbar>
 							<AdminTableToolbar
-								table={table}
 								searchColumn="service"
 								searchPlaceholder="Search services..."
 								statusColumn="status"
@@ -82,12 +76,10 @@ export function AdminAssignmentsPage() {
 									{ label: "Inactive", value: "inactive" },
 								]}
 							/>
-						)}
-						manualPagination
-						pageCount={servicesResult?.meta?.totalPages || 0}
-						onPaginationChange={setPagination}
-						state={{ pagination }}
-					/>
+						</DataTable.Toolbar>
+						<DataTable.Content />
+						<DataTable.Pagination />
+					</DataTable>
 				)}
 			</Card>
 		</div>

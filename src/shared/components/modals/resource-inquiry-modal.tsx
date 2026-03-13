@@ -7,18 +7,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { FormField } from "@/shared/components/form-field";
 import { ResponsiveModal } from "@/shared/components/responsive-modal";
 
-interface ProductInquiryModalProps {
+interface ResourceInquiryModalProps {
 	isOpen: boolean;
 	onOpenChange: (open: boolean) => void;
-	productName: string;
+	resourceName: string;
+	resourceType: "PRODUCT" | "SERVICE" | "AUCTION";
 	onSubmit: (message: string) => void;
+	isLoading?: boolean;
 }
 
-export const ProductInquiryModal: React.FC<ProductInquiryModalProps> = ({
+export const ResourceInquiryModal: React.FC<ResourceInquiryModalProps> = ({
 	isOpen,
 	onOpenChange,
-	productName,
+	resourceName,
+	resourceType,
 	onSubmit,
+	isLoading = false,
 }) => {
 	const form = useForm({
 		defaultValues: {
@@ -33,6 +37,24 @@ export const ProductInquiryModal: React.FC<ProductInquiryModalProps> = ({
 		},
 	});
 
+	const labels = {
+		PRODUCT: {
+			title: "Material Inquiry",
+			description: `Initiate a professional inquiry regarding "${resourceName}".`,
+			submit: "Submit Inquiry",
+		},
+		SERVICE: {
+			title: "Service Quote Request",
+			description: `Request a professional quote for "${resourceName}".`,
+			submit: "Request Quote",
+		},
+		AUCTION: {
+			title: "Auction Inquiry",
+			description: `Ask a question about the auction item "${resourceName}".`,
+			submit: "Send Message",
+		},
+	}[resourceType];
+
 	return (
 		<ResponsiveModal
 			open={isOpen}
@@ -40,8 +62,8 @@ export const ProductInquiryModal: React.FC<ProductInquiryModalProps> = ({
 				onOpenChange(open);
 				if (!open) form.reset();
 			}}
-			title="Material Inquiry"
-			description={`Initiate a professional inquiry regarding "${productName}".`}
+			title={labels.title}
+			description={labels.description}
 		>
 			<form
 				onSubmit={(e) => {
@@ -88,9 +110,9 @@ export const ProductInquiryModal: React.FC<ProductInquiryModalProps> = ({
 							<Button
 								type="submit"
 								className="rounded-none text-[10px] uppercase font-black tracking-widest h-11 px-8 bg-primary text-primary-foreground order-1 sm:order-2"
-								disabled={!canSubmit || isSubmitting}
+								disabled={!canSubmit || isSubmitting || isLoading}
 							>
-								{isSubmitting ? "Sending..." : "Submit Inquiry"}
+								{isSubmitting || isLoading ? "Sending..." : labels.submit}
 							</Button>
 						)}
 					/>

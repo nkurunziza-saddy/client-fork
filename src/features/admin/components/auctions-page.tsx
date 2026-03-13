@@ -106,9 +106,13 @@ export function AdminAuctionsPage() {
 					<DataTable
 						columns={columns}
 						data={auctions}
-						renderToolbar={(table) => (
+						manualPagination
+						pageCount={auctionsResult?.meta?.totalPages || 0}
+						onPaginationChange={setPagination}
+						state={{ pagination }}
+					>
+						<DataTable.Toolbar>
 							<AdminTableToolbar
-								table={table}
 								searchColumn="title"
 								searchPlaceholder="Search auctions..."
 								statusColumn="status"
@@ -118,12 +122,10 @@ export function AdminAuctionsPage() {
 									{ label: "Rejected", value: "REJECTED" },
 								]}
 							/>
-						)}
-						manualPagination
-						pageCount={auctionsResult?.meta?.totalPages || 0}
-						onPaginationChange={setPagination}
-						state={{ pagination }}
-					/>
+						</DataTable.Toolbar>
+						<DataTable.Content />
+						<DataTable.Pagination />
+					</DataTable>
 				)}
 			</Card>
 

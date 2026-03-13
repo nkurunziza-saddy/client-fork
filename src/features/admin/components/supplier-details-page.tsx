@@ -19,17 +19,7 @@ import { SupplierProfile } from "./supplier-profile";
 import { SupplierStats } from "./supplier-stats";
 import { SupplierProductsTable } from "./supplier-products-table";
 import { SupplierServicesTable } from "./supplier-services-table";
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const d = new Date(value);
-	if (Number.isNaN(d.getTime())) return "-";
-	return d.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
+import { formatDate } from "@/shared/utils/format";
 
 export function AdminSupplierDetailsPage() {
 	const { supplierId } = useParams({ from: "/admin/suppliers/$supplierId/" });

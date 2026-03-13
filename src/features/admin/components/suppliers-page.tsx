@@ -15,14 +15,12 @@ import {
 	useUpdateCompanyMutation,
 } from "@/services/api/companies";
 import { ActionModal } from "@/shared/components/action-modal";
-import { PageContainer } from "@/shared/components/page-container";
 import { StatsGrid } from "@/shared/components/stats-grid";
 import type { SupplierRow } from "@/types";
 import { getSuppliersColumns } from "../columns/suppliers-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
-import { Card } from "@/shared/components/admin/card";
-import { PageHeader } from "@/shared/components/admin/page-header";
 import { StatCard } from "@/shared/components/admin/stat-card";
+import { ResourceManagementLayout } from "@/shared/components/layouts/resource-management-layout";
 
 export function AdminSuppliersPage() {
 	const navigate = useNavigate();
@@ -113,115 +111,112 @@ export function AdminSuppliersPage() {
 	);
 
 	return (
-		<PageContainer isFluid className="space-y-6">
-			<PageHeader
-				title="Suppliers"
-				subtitle="Manage verified supplier entities"
-				actions={
-					<Button
-						className="h-11 rounded-sm px-6 font-heading font-bold uppercase text-xs tracking-wider"
-						onClick={() => navigate({ to: "/admin/suppliers/new" })}
-					>
-						<RiAddLine className="mr-2 h-4 w-4" /> Add Supplier
-					</Button>
-				}
-			/>
-
-			<StatsGrid columns={3} className="mb-0">
-				<StatCard
-					label="Total Suppliers"
-					value={companiesResult?.meta?.total?.toString() || "0"}
-					icon={RiBuilding2Line}
-				/>
-				<StatCard
-					label="Active Suppliers"
-					value={suppliers
-						.filter((s) => s.status === "active")
-						.length.toString()}
-					icon={RiCheckboxCircleLine}
-					change="+2 this month"
-				/>
-				<StatCard
-					label="Verification Rate"
-					value={
-						suppliers.length > 0
-							? `${Math.round(
-									(suppliers.filter((s) => s.isVerified).length /
-										suppliers.length) *
-										100,
-								)}%`
-							: "0%"
-					}
-					icon={RiCheckboxCircleLine}
-				/>
-			</StatsGrid>
-
-			<Card
-				title="Supplier Directory"
-				subtitle="Search and manage supplier accounts"
-				noPadding
-			>
-				{isLoading ? (
-					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
-						Loading suppliers...
-					</div>
-				) : (
-					<DataTable
-						columns={columns}
-						data={suppliers}
-						renderToolbar={(table) => (
-							<AdminTableToolbar
-								table={table}
-								searchColumn="name"
-								searchPlaceholder="Search suppliers..."
-								statusColumn="status"
-								statusOptions={[
-									{ label: "Active", value: "active" },
-									{ label: "Suspended", value: "suspended" },
-								]}
-							/>
-						)}
-						manualPagination
-						pageCount={companiesResult?.meta?.totalPages || 0}
-						onPaginationChange={setPagination}
-						state={{ pagination }}
+		<ResourceManagementLayout
+			title="Suppliers"
+			subtitle="Manage verified supplier entities"
+			headerActions={
+				<Button
+					className="h-11 rounded-sm px-6 font-heading font-bold uppercase text-xs tracking-wider"
+					onClick={() => navigate({ to: "/admin/suppliers/new" })}
+				>
+					<RiAddLine className="mr-2 h-4 w-4" /> Add Supplier
+				</Button>
+			}
+			stats={
+				<StatsGrid columns={3}>
+					<StatCard
+						label="Total Suppliers"
+						value={companiesResult?.meta?.total?.toString() || "0"}
+						icon={RiBuilding2Line}
 					/>
-				)}
-			</Card>
+					<StatCard
+						label="Active Suppliers"
+						value={suppliers
+							.filter((s) => s.status === "active")
+							.length.toString()}
+						icon={RiCheckboxCircleLine}
+						change="+2 this month"
+					/>
+					<StatCard
+						label="Verification Rate"
+						value={
+							suppliers.length > 0
+								? `${Math.round(
+										(suppliers.filter((s) => s.isVerified).length /
+											suppliers.length) *
+											100,
+									)}%`
+								: "0%"
+						}
+						icon={RiCheckboxCircleLine}
+					/>
+				</StatsGrid>
+			}
+			cardTitle="Supplier Directory"
+			cardSubtitle="Search and manage supplier accounts"
+			isLoading={isLoading}
+			loadingText="Loading suppliers..."
+			content={
+				<DataTable
+					columns={columns}
+					data={suppliers}
+					manualPagination
+					pageCount={companiesResult?.meta?.totalPages || 0}
+					onPaginationChange={setPagination}
+					state={{ pagination }}
+				>
+					<DataTable.Toolbar>
+						<AdminTableToolbar
+							searchColumn="name"
+							searchPlaceholder="Search suppliers..."
+							statusColumn="status"
+							statusOptions={[
+								{ label: "Active", value: "active" },
+								{ label: "Suspended", value: "suspended" },
+							]}
+						/>
+					</DataTable.Toolbar>
+					<DataTable.Content />
+					<DataTable.Pagination />
+				</DataTable>
+			}
+			modals={
+				<>
+					<ActionModal
+						isOpen={deleteModal.isOpen}
+						title="Delete Supplier"
+						description={`Are you sure you want to delete "${deleteModal.supplierName}"? This action cannot be undone.`}
+						type="delete"
+						onConfirm={handleConfirmDelete}
+						onCancel={() =>
+							setDeleteModal({ isOpen: false, supplierId: "", supplierName: "" })
+						}
+						isLoading={deleting}
+					/>
 
-			<ActionModal
-				isOpen={deleteModal.isOpen}
-				title="Delete Supplier"
-				description={`Are you sure you want to delete "${deleteModal.supplierName}"? This action cannot be undone.`}
-				type="delete"
-				onConfirm={handleConfirmDelete}
-				onCancel={() =>
-					setDeleteModal({ isOpen: false, supplierId: "", supplierName: "" })
-				}
-				isLoading={deleting}
-			/>
-
-			<ActionModal
-				isOpen={suspendModal.isOpen}
-				title={
-					suppliers.find((s) => s.id === suspendModal.supplierId)?.status ===
-					"active"
-						? "Suspend Supplier"
-						: "Activate Supplier"
-				}
-				description={`Are you sure you want to ${suppliers.find((s) => s.id === suspendModal.supplierId)?.status === "active" ? "suspend" : "activate"} "${suspendModal.supplierName}"?`}
-				type={
-					suppliers.find((s) => s.id === suspendModal.supplierId)?.status ===
-					"active"
-						? "suspend"
-						: "info"
-				}
-				onConfirm={handleConfirmSuspend}
-				onCancel={() =>
-					setSuspendModal({ isOpen: false, supplierId: "", supplierName: "" })
-				}
-				isLoading={suspending}
-			/>
-		</PageContainer>
+					<ActionModal
+						isOpen={suspendModal.isOpen}
+						title={
+							suppliers.find((s) => s.id === suspendModal.supplierId)?.status ===
+							"active"
+								? "Suspend Supplier"
+								: "Activate Supplier"
+						}
+						description={`Are you sure you want to ${suppliers.find((s) => s.id === suspendModal.supplierId)?.status === "active" ? "suspend" : "activate"} "${suspendModal.supplierName}"?`}
+						type={
+							suppliers.find((s) => s.id === suspendModal.supplierId)?.status ===
+							"active"
+								? "suspend"
+								: "info"
+						}
+						onConfirm={handleConfirmSuspend}
+						onCancel={() =>
+							setSuspendModal({ isOpen: false, supplierId: "", supplierName: "" })
+						}
+						isLoading={suspending}
+					/>
+				</>
+			}
+		/>
 	);
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
 const DEFAULT_PRICE_MAX = 100_000_000;
@@ -6,6 +6,7 @@ const DEFAULT_PRICE_MAX = 100_000_000;
 export function useAuctionsFilters() {
 	const search = useSearch({ strict: false }) as any;
 	const navigate = useNavigate();
+	const [isPending, startTransition] = useTransition();
 
 	const [searchInput, setSearchInput] = useState(search.q || "");
 	const [priceRange, setPriceRange] = useState<[number, number]>([
@@ -27,25 +28,29 @@ export function useAuctionsFilters() {
 
 	const patchFilters = useCallback(
 		(patch: Partial<any>) => {
-			navigate({
-				search: (prev: any) => ({ ...prev, ...patch }),
-			} as any);
+			startTransition(() => {
+				navigate({
+					search: (prev: any) => ({ ...prev, ...patch }),
+				} as any);
+			});
 		},
 		[navigate],
 	);
 
 	const resetFilters = useCallback(() => {
-		navigate({
-			search: (prev: any) => ({
-				...prev,
-				q: "",
-				minPrice: "",
-				maxPrice: "",
-				sortBy: "createdAt",
-				sortOrder: "DESC",
-				page: 1,
-			}),
-		} as any);
+		startTransition(() => {
+			navigate({
+				search: (prev: any) => ({
+					...prev,
+					q: "",
+					minPrice: "",
+					maxPrice: "",
+					sortBy: "createdAt",
+					sortOrder: "DESC",
+					page: 1,
+				}),
+			} as any);
+		});
 	}, [navigate]);
 
 	const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -54,22 +59,26 @@ export function useAuctionsFilters() {
 
 		clearTimeout(searchDebounce.current);
 		searchDebounce.current = setTimeout(() => {
-			navigate({
-				search: (prev: any) => ({ ...prev, q: searchInput, page: 1 }),
-			} as any);
+			startTransition(() => {
+				navigate({
+					search: (prev: any) => ({ ...prev, q: searchInput, page: 1 }),
+				} as any);
+			});
 		}, 400);
 		return () => clearTimeout(searchDebounce.current);
 	}, [searchInput, search.q, navigate]);
 
 	const commitPrice = useCallback(() => {
-		navigate({
-			search: (prev: any) => ({
-				...prev,
-				minPrice: priceRange[0].toString(),
-				maxPrice: priceRange[1].toString(),
-				page: 1,
-			}),
-		} as any);
+		startTransition(() => {
+			navigate({
+				search: (prev: any) => ({
+					...prev,
+					minPrice: priceRange[0].toString(),
+					maxPrice: priceRange[1].toString(),
+					page: 1,
+				}),
+			} as any);
+		});
 	}, [priceRange, navigate]);
 
 	const hasActiveFilters =
@@ -88,5 +97,6 @@ export function useAuctionsFilters() {
 		setPriceRange,
 		commitPrice,
 		hasActiveFilters,
+		isPending,
 	};
 }

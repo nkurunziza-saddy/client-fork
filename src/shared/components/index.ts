@@ -1,5 +1,5 @@
 export * from "./action-modal";
-export * from "./catalog/base-card";
+export * from "./catalog/resource-card";
 export * from "./confirmation-modal";
 export * from "./form-field";
 export * from "./image-with-fallback";

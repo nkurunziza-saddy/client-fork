@@ -1,14 +1,7 @@
 import { useForm } from "@tanstack/react-form";
-import {
-  AlertCircleIcon,
-  ClockIcon,
-  ImageIcon,
-  UploadIcon,
-  XIcon,
-} from "lucide-react";
+import { ClockIcon } from "lucide-react";
 import type React from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -21,9 +14,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { useGetServiceCategoriesQuery } from "@/services/api/service-categories";
 import { FormField } from "@/shared/components/form-field";
-import { useFileUpload } from "@/shared/hooks/use-file-upload";
 import { getFormFieldErrors } from "@/lib/utils";
 import { serviceOptions, type ServiceFormValues } from "@/shared/schemas/business";
+import { ResourceFormLayout } from "@/shared/components/forms/resource-form-layout";
+import { ImageUploadSection } from "@/shared/components/forms/image-upload-section";
 
 interface ServiceFormProps {
   onSubmit: (values: ServiceFormValues) => void;
@@ -32,9 +26,6 @@ interface ServiceFormProps {
   isLoading?: boolean;
   serverError?: string;
 }
-
-const MAX_IMAGES = 8;
-const MAX_SIZE_MB = 5;
 
 export const ServiceForm: React.FC<ServiceFormProps> = ({
   onSubmit,
@@ -46,23 +37,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
   const { data: categoriesData } = useGetServiceCategoriesQuery({ limit: 100 });
   const categories = categoriesData?.data ?? [];
   const [uploadMedia, { isLoading: isUploading }] = useUploadMediaMutation();
-
-  const [
-    { files, isDragging, errors: uploadErrors },
-    {
-      handleDragLeave,
-      handleDragOver,
-      handleDrop,
-      openFileDialog,
-      removeFile,
-      getInputProps,
-    },
-  ] = useFileUpload({
-    accept: "image/png,image/jpeg,image/jpg,image/gif,image/webp",
-    maxFiles: MAX_IMAGES,
-    maxSize: MAX_SIZE_MB * 1024 * 1024,
-    multiple: true,
-  });
+  const [newFiles, setNewFiles] = useState<any[]>([]);
 
   const form = useForm({
     ...serviceOptions,
@@ -79,9 +54,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
     },
     onSubmit: async ({ value }) => {
       let newUploadedUrls: string[] = [];
-      const filesToUpload = files
+      const filesToUpload = newFiles
         .map((f) => f.file)
         .filter((f): f is File => f instanceof File);
+      
       if (filesToUpload.length > 0) {
         const formData = new FormData();
         for (const f of filesToUpload) {
@@ -104,404 +80,233 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
   });
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-      className="space-y-5"
-    >
-      {serverError && (
-        <Alert
-          variant="destructive"
-          className="rounded-none border-destructive/20 bg-destructive/5"
+    <form.Subscribe
+      selector={(state) => [state.canSubmit, state.isSubmitting]}
+      children={([canSubmit, isSubmitting]) => (
+        <ResourceFormLayout
+          onSubmit={() => form.handleSubmit()}
+          onCancel={onCancel}
+          canSubmit={canSubmit}
+          isSubmitting={isSubmitting || isUploading}
+          isLoading={isLoading}
+          serverError={serverError}
+          submitLabel={initialValues?.name ? "Save Changes" : "Create Service"}
+          submittingLabel={isUploading ? "Uploading Portfolio..." : "Saving..."}
         >
-          <AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
-            {serverError}
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <form.Field
-        name="name"
-        children={(field) => (
-          <FormField
-            label="Service Name"
-            required
-            error={getFormFieldErrors(field.state.meta.errors)}
-            isTouched={field.state.meta.isTouched}
-          >
-            <Input
-              id={field.name}
-              aria-label="Service Name"
-              name={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-              placeholder="e.g. Electrical Installation"
-            />
-          </FormField>
-        )}
-      />
-
-      <form.Field
-        name="categoryId"
-        children={(field) => (
-          <FormField
-            label="Category"
-            required
-            error={getFormFieldErrors(field.state.meta.errors)}
-            isTouched={field.state.meta.isTouched}
-          >
-            <Select
-              value={field.state.value}
-              onValueChange={(val) => field.handleChange(val ?? "")}
-            >
-              <SelectTrigger 
-                aria-label="Select Category"
-                className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
-              >
-                <SelectValue placeholder="Select service category" />
-              </SelectTrigger>
-              <SelectContent className="rounded-none border-border/40">
-                {categories.map((cat: { id: string; name: string }) => (
-                  <SelectItem
-                    key={cat.id}
-                    value={cat.id}
-                    className="rounded-none"
-                  >
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormField>
-        )}
-      />
-
-      <div className="grid grid-cols-2 gap-4">
-        <form.Field
-          name="priceType"
-          children={(field) => (
-            <FormField
-              label="Pricing Type"
-              required
-              error={getFormFieldErrors(field.state.meta.errors)}
-              isTouched={field.state.meta.isTouched}
-            >
-              <Select
-                value={field.state.value}
-                onValueChange={(val) => {
-                  if (val)
-                    field.handleChange(
-                      val as "FIXED" | "NEGOTIABLE" | "STARTS_AT",
-                    );
-                }}
-              >
-                <SelectTrigger 
-                  aria-label="Select Pricing Type"
-                  className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
-                >
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent className="rounded-none border-border/40">
-                  <SelectItem value="FIXED" className="rounded-none">
-                    Fixed Price
-                  </SelectItem>
-                  <SelectItem value="NEGOTIABLE" className="rounded-none">
-                    Negotiable
-                  </SelectItem>
-                  <SelectItem value="STARTS_AT" className="rounded-none">
-                    Starts At
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </FormField>
-          )}
-        />
-        <form.Field
-          name="price"
-          children={(field) => {
-            const priceType = form.getFieldValue("priceType");
-            const isNegotiable = priceType === "NEGOTIABLE";
-            return (
+          <form.Field
+            name="name"
+            children={(field) => (
               <FormField
-                label="Rate (RWF)"
-                required={!isNegotiable}
+                label="Service Name"
+                required
                 error={getFormFieldErrors(field.state.meta.errors)}
                 isTouched={field.state.meta.isTouched}
               >
                 <Input
                   id={field.name}
-                  aria-label="Rate"
                   name={field.name}
                   value={field.state.value}
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  disabled={isNegotiable}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                  placeholder={isNegotiable ? "N/A" : "0.00"}
+                  placeholder="e.g. Electrical Installation"
                 />
               </FormField>
-            );
-          }}
-        />
-      </div>
+            )}
+          />
 
-      <div className="grid grid-cols-2 gap-4">
-        <form.Field
-          name="duration"
-          children={(field) => (
-            <FormField
-              label="Duration"
-              required
-              error={getFormFieldErrors(field.state.meta.errors)}
-              isTouched={field.state.meta.isTouched}
-            >
-              <div className="relative group">
-                <ClockIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
-                <Input
+          <form.Field
+            name="categoryId"
+            children={(field) => (
+              <FormField
+                label="Category"
+                required
+                error={getFormFieldErrors(field.state.meta.errors)}
+                isTouched={field.state.meta.isTouched}
+              >
+                <Select
+                  value={field.state.value}
+                  onValueChange={(val) => field.handleChange(val ?? "")}
+                >
+                  <SelectTrigger 
+                    aria-label="Select Category"
+                    className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
+                  >
+                    <SelectValue placeholder="Select service category" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-none border-border/40">
+                    {categories.map((cat: { id: string; name: string }) => (
+                      <SelectItem
+                        key={cat.id}
+                        value={cat.id}
+                        className="rounded-none"
+                      >
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormField>
+            )}
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <form.Field
+              name="priceType"
+              children={(field) => (
+                <FormField
+                  label="Pricing Type"
+                  required
+                  error={getFormFieldErrors(field.state.meta.errors)}
+                  isTouched={field.state.meta.isTouched}
+                >
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(val) => {
+                      if (val)
+                        field.handleChange(
+                          val as "FIXED" | "NEGOTIABLE" | "STARTS_AT",
+                        );
+                    }}
+                  >
+                    <SelectTrigger 
+                      aria-label="Select Pricing Type"
+                      className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
+                    >
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-none border-border/40">
+                      <SelectItem value="FIXED" className="rounded-none">
+                        Fixed Price
+                      </SelectItem>
+                      <SelectItem value="NEGOTIABLE" className="rounded-none">
+                        Negotiable
+                      </SelectItem>
+                      <SelectItem value="STARTS_AT" className="rounded-none">
+                        Starts At
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormField>
+              )}
+            />
+            <form.Field
+              name="price"
+              children={(field) => {
+                const priceType = form.getFieldValue("priceType");
+                const isNegotiable = priceType === "NEGOTIABLE";
+                return (
+                  <FormField
+                    label="Rate (RWF)"
+                    required={!isNegotiable}
+                    error={getFormFieldErrors(field.state.meta.errors)}
+                    isTouched={field.state.meta.isTouched}
+                  >
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      disabled={isNegotiable}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                      placeholder={isNegotiable ? "N/A" : "0.00"}
+                    />
+                  </FormField>
+                );
+              }}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <form.Field
+              name="duration"
+              children={(field) => (
+                <FormField
+                  label="Duration"
+                  required
+                  error={getFormFieldErrors(field.state.meta.errors)}
+                  isTouched={field.state.meta.isTouched}
+                >
+                  <div className="relative group">
+                    <ClockIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className="h-11 text-sm bg-background pl-10 rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                      placeholder="e.g. 2-3 days"
+                    />
+                  </div>
+                </FormField>
+              )}
+            />
+            <form.Field
+              name="discount"
+              children={(field) => (
+                <FormField
+                  label="Discount (%)"
+                  error={getFormFieldErrors(field.state.meta.errors)}
+                  isTouched={field.state.meta.isTouched}
+                >
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    type="number"
+                    min="0"
+                    max="100"
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                    placeholder="0"
+                  />
+                </FormField>
+              )}
+            />
+          </div>
+
+          <form.Field
+            name="description"
+            children={(field) => (
+              <FormField
+                label="Service Description"
+                required
+                error={getFormFieldErrors(field.state.meta.errors)}
+                isTouched={field.state.meta.isTouched}
+              >
+                <Textarea
                   id={field.name}
-                  aria-label="Duration"
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  className="h-11 text-sm bg-background pl-10 rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                  placeholder="e.g. 2-3 days"
+                  rows={4}
+                  className="text-sm resize-none bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                  placeholder="Describe your service in detail..."
                 />
-              </div>
-            </FormField>
-          )}
-        />
-        <form.Field
-          name="discount"
-          children={(field) => (
-            <FormField
-              label="Discount (%)"
-              error={getFormFieldErrors(field.state.meta.errors)}
-              isTouched={field.state.meta.isTouched}
-            >
-              <Input
-                id={field.name}
-                aria-label="Discount"
-                name={field.name}
-                value={field.state.value}
-                type="number"
-                min="0"
-                max="100"
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                placeholder="0"
+              </FormField>
+            )}
+          />
+
+          <form.Field
+            name="imageUrls"
+            mode="array"
+            children={(field) => (
+              <ImageUploadSection 
+                field={field} 
+                folder="services" 
+                onFilesChange={setNewFiles} 
               />
-            </FormField>
-          )}
-        />
-      </div>
-
-      <form.Field
-        name="description"
-        children={(field) => (
-          <FormField
-            label="Service Description"
-            required
-            error={getFormFieldErrors(field.state.meta.errors)}
-            isTouched={field.state.meta.isTouched}
-          >
-            <Textarea
-              id={field.name}
-              aria-label="Service Description"
-              name={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              rows={4}
-              className="text-sm resize-none bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-              placeholder="Describe your service in detail..."
-            />
-          </FormField>
-        )}
-      />
-
-      <div>
-        <form.Field
-          name="imageUrls"
-          mode="array"
-          children={(field) => {
-            const existingImages = field.state.value || [];
-            const remainingSlots = MAX_IMAGES - existingImages.length;
-
-            return (
-              <div className="space-y-4">
-                {existingImages.length > 0 && (
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2 ml-1">
-                      Existing Images ({existingImages.length})
-                    </label>
-                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                      {existingImages.map((url: string, i: number) => (
-                        <div
-                          key={url}
-                          className="relative aspect-square border border-border/40 bg-muted/20"
-                        >
-                          <img
-                            src={url}
-                            alt={`Existing ${i}`}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = "/image-fallback.svg";
-                            }}
-                          />
-                          <Button
-                            type="button"
-                            onClick={() => field.removeValue(i)}
-                            className="absolute -top-1.5 -right-1.5 size-5 rounded-none p-0 bg-destructive/80 hover:bg-destructive text-primary-foreground backdrop-blur-md border border-background"
-                          >
-                            <XIcon className="size-3" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <FormField
-                  label={`New Portfolio Images (up to ${remainingSlots} more)`}
-                  error={getFormFieldErrors(field.state.meta.errors)}
-                  isTouched={field.state.meta.isTouched}
-                >
-                  <div
-                    className="relative flex min-h-36 flex-col items-center not-data-files:justify-center overflow-hidden rounded-none border border-dashed border-border/40 p-3 transition-colors data-[dragging=true]:bg-accent/50"
-                    data-dragging={isDragging || undefined}
-                    data-files={files.length > 0 || undefined}
-                    onDragLeave={handleDragLeave}
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
-                  >
-                    <input
-                      {...getInputProps()}
-                      aria-label="Upload portfolio images"
-                      className="sr-only"
-                    />
-                    {files.length > 0 ? (
-                      <div className="flex w-full flex-col gap-3">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">
-                            {files.length} / {MAX_IMAGES} images selected
-                          </span>
-                          {files.length < MAX_IMAGES && (
-                            <Button
-                              type="button"
-                              onClick={openFileDialog}
-                              size="sm"
-                              variant="outline"
-                              className="h-7 text-[9px] font-black uppercase rounded-none border-border/40"
-                            >
-                              <UploadIcon className="size-3 mr-1" />
-                              Add More
-                            </Button>
-                          )}
-                        </div>
-                        <div className="grid grid-cols-4 gap-2">
-                          {files.map((file) => (
-                            <div
-                              className="relative aspect-square rounded-none border border-border/20 bg-muted overflow-hidden"
-                              key={file.id}
-                            >
-                              <img
-                                alt={file.file.name}
-                                className="size-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
-                                src={file.preview}
-                                onError={(e) => {
-                                  e.currentTarget.src = "/image-fallback.svg";
-                                }}
-                              />
-                              <Button
-                                type="button"
-                                aria-label="Remove image"
-                                className="-top-1.5 -right-1.5 absolute size-5 rounded-none border border-background shadow-none focus-visible:border-background bg-background/80 backdrop-blur-md"
-                                onClick={() => removeFile(file.id)}
-                                size="icon"
-                              >
-                                <XIcon className="size-3 text-primary" />
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center px-4 py-3 text-center">
-                        <div className="mb-2 flex size-10 shrink-0 items-center justify-center rounded-none border border-border/40 bg-background">
-                          <ImageIcon className="size-4 opacity-60" />
-                        </div>
-                        <p className="mb-1 font-black uppercase tracking-widest text-[10px]">
-                          Drop images here
-                        </p>
-                        <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-tighter">
-                          Showcase your work (max {MAX_SIZE_MB}MB)
-                        </p>
-                        <Button
-                          type="button"
-                          className="mt-3 h-8 text-[10px] font-black uppercase rounded-none"
-                          onClick={openFileDialog}
-                          variant="outline"
-                        >
-                          <UploadIcon className="size-3 mr-1 opacity-60" />
-                          Select Images
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </FormField>
-              </div>
-            );
-          }}
-        />
-        {uploadErrors.length > 0 && (
-          <div
-            className="flex items-center gap-1 text-destructive text-[10px] font-black uppercase tracking-widest mt-1.5"
-            role="alert"
-          >
-            <AlertCircleIcon className="size-3 shrink-0" />
-            <span>{uploadErrors[0]}</span>
-          </div>
-        )}
-      </div>
-
-      <div className="flex gap-3 pt-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          className="flex-1 rounded-none border border-border/40 h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em]"
-        >
-          Cancel
-        </Button>
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
-            <Button
-              type="submit"
-              disabled={!canSubmit || isLoading || isUploading || isSubmitting}
-              className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-            >
-              {isUploading || isSubmitting
-                ? "Uploading..."
-                : isLoading
-                  ? "Saving..."
-                  : initialValues?.name
-                    ? "Save Changes"
-                    : "Create Service"}
-            </Button>
-          )}
-        />
-      </div>
-    </form>
+            )}
+          />
+        </ResourceFormLayout>
+      )}
+    />
   );
 };

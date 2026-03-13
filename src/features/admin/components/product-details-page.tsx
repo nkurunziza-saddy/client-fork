@@ -21,17 +21,7 @@ import {
 import { ConfirmationModal } from "@/shared/components/confirmation-modal";
 import { Card } from "@/shared/components/admin/card";
 import { PageHeader } from "@/shared/components/admin/page-header";
-
-function formatDate(value?: string) {
-	if (!value) return "-";
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "-";
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
+import { formatDate } from "@/shared/utils/format";
 
 export function AdminProductDetailsPage() {
 	const { supplierId, productId } = useParams({

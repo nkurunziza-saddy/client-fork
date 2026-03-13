@@ -1,4 +1,5 @@
 import type { Company, HeroWidgetItem, Product, Service } from "@/types";
+import { formatCurrency } from "./format";
 
 export interface HeroFeaturedProduct {
   id: string;
@@ -13,8 +14,6 @@ export interface HeroFeaturedProduct {
   reviews: number;
   tag: string;
 }
-
-const formatRwf = (value: number): string => `RWF ${value.toLocaleString()}`;
 
 const getProductPrimaryVariant = (product: Product) => product.variants?.[0];
 
@@ -35,9 +34,9 @@ export const mapProductToHeroFeaturedProduct = (
     name: product.name,
     image: variant?.images?.[0],
     category: product.category?.name || "General",
-    price: formatRwf(discountedPrice),
+    price: formatCurrency(discountedPrice, "RWF"),
     originalPrice:
-      discountPercent > 0 && basePrice > 0 ? formatRwf(basePrice) : undefined,
+      discountPercent > 0 && basePrice > 0 ? formatCurrency(basePrice, "RWF") : undefined,
     discount:
       discountPercent > 0 ? `-${Math.round(discountPercent)}%` : undefined,
     supplier: product.company?.name || "Unknown Supplier",

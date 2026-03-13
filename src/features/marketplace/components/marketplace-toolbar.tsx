@@ -9,10 +9,10 @@ interface MarketplaceToolbarProps {
   onViewModeChange: (mode: "grid" | "list") => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  filterButton?: React.ReactNode;
   onToggleFilters?: () => void;
   showFilters?: boolean;
   searchPlaceholder?: string;
+  hideFilterButton?: boolean;
   className?: string;
 }
 
@@ -21,17 +21,16 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
   onViewModeChange,
   searchQuery,
   onSearchChange,
-  filterButton,
   onToggleFilters,
   showFilters,
   searchPlaceholder = "SEARCH...",
+  hideFilterButton = false,
   className,
 }) => {
   return (
-    <div className={cn("flex flex-col gap-4 mb-8", className)}>
+    <div className={cn("flex flex-col gap-4", className)}>
       <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 grow">
-          {filterButton}
           <div className="relative flex-1 group">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center">
               {searchQuery ? (
@@ -58,7 +57,7 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {onToggleFilters && (
+          {onToggleFilters && !hideFilterButton && (
             <Button
               variant="outline"
               size="sm"
