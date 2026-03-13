@@ -8,12 +8,17 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { useSupplierActions } from "@/hooks/use-supplier-actions";
+import { useGetCompanyByIdQuery } from "@/services/api/companies";
+import { useGetProductsQuery } from "@/services/api/products";
 import type { Product } from "@/types";
 import { Building2 } from "lucide-react";
 import { SupplierActions } from "./details/supplier-actions";
 import { SupplierContactModal } from "./details/supplier-contact-modal";
 import { SupplierHeader } from "./details/supplier-header";
 import { SupplierTabsContent } from "./details/supplier-tabs-content";
+import { DetailPageSkeleton } from "@/shared/components/skeletons";
+import { RiArrowLeftLine } from "@remixicon/react";
 
 type SupplierItem = Product;
 
