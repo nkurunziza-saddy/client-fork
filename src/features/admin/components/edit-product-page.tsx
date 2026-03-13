@@ -13,8 +13,8 @@ import {
 	useGetProductByIdQuery,
 	useUpdateProductMutation,
 } from "@/services/api/products";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 
 export function AdminEditProductPage() {
 	const { supplierId, productId } = useParams({

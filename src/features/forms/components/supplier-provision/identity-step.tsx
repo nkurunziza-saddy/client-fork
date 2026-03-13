@@ -2,7 +2,7 @@ import type React from "react";
 import { Input } from "@/components/ui/input";
 import { getFormFieldErrors } from "@/lib/utils";
 import { useLazyCheckCompanyNameQuery } from "@/services/api/companies";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 import { FormField } from "@/shared/components/form-field";
 interface IdentityStepProps {
 	form: any;

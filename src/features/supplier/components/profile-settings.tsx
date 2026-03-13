@@ -15,7 +15,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 import { cn } from "@/lib/utils";
 
 interface ProfileSettingsProps {

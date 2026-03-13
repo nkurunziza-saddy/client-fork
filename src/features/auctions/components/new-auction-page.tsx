@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Card } from "@/features/admin/components/card";
-import { PageHeader } from "@/features/admin/components/page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 import { AuctionForm } from "@/features/forms/components/auction-form";
 import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useCreateAuctionMutation } from "@/services/api/auctions";

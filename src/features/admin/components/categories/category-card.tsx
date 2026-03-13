@@ -12,7 +12,7 @@ import {
 } from "@remixicon/react";
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 
 interface Category {
   id: string;

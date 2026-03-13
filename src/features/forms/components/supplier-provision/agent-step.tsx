@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFormFieldErrors } from "@/lib/utils";
 import { useLazyCheckPhoneQuery } from "@/services/api/users";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 import { FormField } from "@/shared/components/form-field";
 
 interface AgentStepProps {

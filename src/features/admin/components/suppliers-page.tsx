@@ -19,10 +19,10 @@ import { PageContainer } from "@/shared/components/page-container";
 import { StatsGrid } from "@/shared/components/stats-grid";
 import type { SupplierRow } from "@/types";
 import { getSuppliersColumns } from "../columns/suppliers-columns";
-import { AdminTableToolbar } from "./admin-table-toolbar";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-import { StatCard } from "./stat-card";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { StatCard } from "@/shared/components/admin/stat-card";
 
 export function AdminSuppliersPage() {
 	const navigate = useNavigate();

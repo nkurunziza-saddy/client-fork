@@ -12,8 +12,8 @@ import {
 	useGetCompanyByIdQuery,
 	useUpdateCompanyMutation,
 } from "@/services/api/companies";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 
 export function AdminEditSupplierPage() {
 	const navigate = useNavigate();

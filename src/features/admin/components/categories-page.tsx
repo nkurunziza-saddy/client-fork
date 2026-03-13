@@ -16,8 +16,8 @@ import {
 	useGetProductCategoriesQuery,
 	useUpdateProductCategoryMutation,
 } from "@/services/api/product-categories";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 import { CategoryCard } from "./categories/category-card";
 import { ActionModal } from "@/shared/components/action-modal";
 import { CategoryForm } from "@/features/forms/components/category-form";

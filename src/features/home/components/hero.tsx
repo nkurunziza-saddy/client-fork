@@ -2,10 +2,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
-import { ArrowRight, Search, Star } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
 	Carousel,
 	CarouselContent,
@@ -31,203 +29,18 @@ import { useGetProductCategoriesQuery } from "@/services/api/product-categories"
 import { useGetProductsQuery } from "@/services/api/products";
 import { useGetServicesQuery } from "@/services/api/services";
 import { useGetMarketplaceStatsQuery } from "@/services/api/stats";
-import { ImageWithFallback } from "@/shared/components/image-with-fallback";
-import type { Company, HeroWidgetItem, Product, Service } from "@/types";
+import type { HeroWidgetItem } from "@/types";
 import { HeroWidget } from "./hero-widget";
+import { FeaturedProductCard } from "./featured-product-card";
+import {
+  type HeroFeaturedProduct,
+  mapCompanyToWidgetItem,
+  mapProductToHeroFeaturedProduct,
+  mapProductToWidgetItem,
+  mapServiceToWidgetItem,
+} from "@/shared/utils/transformers";
 
 const DEFAULT_SEARCH_CATEGORY = "All Categories";
-
-interface HeroFeaturedProduct {
-  id: string;
-  name: string;
-  image?: string;
-  category: string;
-  price: string;
-  originalPrice?: string;
-  discount?: string;
-  supplier: string;
-  rating: number;
-  reviews: number;
-  tag: string;
-}
-
-const formatRwf = (value: number): string => `RWF ${value.toLocaleString()}`;
-
-const getProductPrimaryVariant = (product: Product) => product.variants?.[0];
-
-const mapProductToHeroFeaturedProduct = (
-  product: Product,
-): HeroFeaturedProduct => {
-  const variant = getProductPrimaryVariant(product);
-  const basePrice = Number(variant?.price ?? 0);
-  const discountPercent = Number(variant?.discount ?? 0);
-  const discountedPrice =
-    discountPercent > 0
-      ? Math.max(Math.round(basePrice * (1 - discountPercent / 100)), 0)
-      : basePrice;
-  const supplierRating = Number(product.company?.rating ?? 0);
-
-  return {
-    id: product.id,
-    name: product.name,
-    image: variant?.images?.[0],
-    category: product.category?.name || "General",
-    price: formatRwf(discountedPrice),
-    originalPrice:
-      discountPercent > 0 && basePrice > 0 ? formatRwf(basePrice) : undefined,
-    discount:
-      discountPercent > 0 ? `-${Math.round(discountPercent)}%` : undefined,
-    supplier: product.company?.name || "Unknown Supplier",
-    rating: Number.isFinite(supplierRating) ? supplierRating : 0,
-    reviews: Number(product.views ?? 0),
-    tag: product.isFeatured ? "FEATURED" : "LIVE",
-  };
-};
-
-const mapCompanyToWidgetItem = (company: Company): HeroWidgetItem => ({
-  id: company.id,
-  type: "supplier",
-  name: company.name,
-  image: company.logoUrl,
-  subtext: company.type || company.district || "Supplier",
-  rating: Number(company.averageRating || 0),
-  label: company.isVerified ? "VERIFIED" : "SUPPLIER",
-});
-
-const mapProductToWidgetItem = (product: Product): HeroWidgetItem => {
-  const variant = getProductPrimaryVariant(product);
-  const price = Number(variant?.price ?? 0);
-  const discount = Number(variant?.discount ?? 0);
-  const discountedPrice =
-    discount > 0
-      ? Math.max(Math.round(price * (1 - discount / 100)), 0)
-      : price;
-
-  return {
-    id: product.id,
-    type: "product",
-    name: product.name,
-    image: variant?.images?.[0],
-    price: discountedPrice,
-    label: discount > 0 ? `${Math.round(discount)}% OFF` : undefined,
-    subtext: product.category?.name || "Product",
-  };
-};
-
-const mapServiceToWidgetItem = (service: Service): HeroWidgetItem => {
-  const servicePrice =
-    service.priceType === "NEGOTIABLE"
-      ? "Negotiable"
-      : service.priceType === "STARTS_AT" && service.price != null
-        ? `From RWF ${Number(service.price).toLocaleString()}`
-        : service.price != null
-          ? Number(service.price)
-          : "Quote";
-
-  return {
-    id: service.id,
-    type: "service",
-    name: service.name,
-    image: service.images?.[0],
-    subtext: service.category?.name || service.company?.name || "Service",
-    price: servicePrice,
-  };
-};
-
-// featured product card component
-const FeaturedProductCard: React.FC<{
-  product: HeroFeaturedProduct;
-  isActive?: boolean;
-}> = ({ product, isActive = true }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div
-      className={`absolute inset-0 transition-opacity duration-1000 ${
-        isActive
-          ? "opacity-100 pointer-events-auto scale-100"
-          : "opacity-0 pointer-events-none scale-105"
-      } transition-transform`}
-    >
-      <div className="absolute inset-0">
-        <ImageWithFallback
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-industrial via-industrial/40 to-transparent" />
-        <div className="absolute inset-0 bg-industrial/20" />
-      </div>
-
-      {/* Top Bar with Badges */}
-      <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start z-20">
-        <Badge className="bg-primary text-primary-foreground border-none text-[9px] font-black tracking-[0.2em] px-2.5 py-1.5 h-auto rounded-none uppercase shadow-xl">
-          {product.tag}
-        </Badge>
-        {product.discount && (
-          <div className="bg-success text-success-foreground text-[9px] font-black rounded-none px-2 py-1 uppercase tracking-widest shadow-xl">
-            {product.discount}
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Content Area */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-8 pt-10 md:pt-20 pb-12 bg-gradient-to-t from-industrial to-transparent">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-6 h-px bg-primary" />
-          <p className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">
-            {product.category}
-          </p>
-        </div>
-
-        <h3 className="text-white font-black text-xl md:text-3xl lg:text-4xl leading-tight mb-3 uppercase tracking-tighter">
-          {product.name}
-        </h3>
-
-        <div className="flex items-center gap-1.5 mb-5 opacity-70">
-          <div className="flex items-center gap-0.5">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className={`w-2 h-2 ${
-                  star <= Math.floor(product.rating)
-                    ? "fill-warning text-warning"
-                    : "fill-white/20 text-white/20"
-                }`}
-              />
-            ))}
-          </div>
-          <span className="text-white text-[8px] font-black uppercase tracking-widest">
-            {product.rating > 0 ? product.rating : "N/A"} · {product.reviews}{" "}
-            VIEWS
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between gap-4 pt-4">
-          <div className="inline-flex flex-col gap-0.5 border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-sm">
-            <span className="text-white font-black text-xl md:text-2xl tracking-tighter">
-              {product.price}
-            </span>
-            {product.originalPrice && (
-              <span className="text-white/60 text-[9px] line-through font-bold">
-                {product.originalPrice}
-              </span>
-            )}
-          </div>
-          <Button
-            onClick={() => navigate({ to: "/products" })}
-            className="bg-background hover:bg-muted text-foreground rounded-none h-10 px-6 text-[9px] font-black tracking-[0.2em] uppercase gap-2 group border-none"
-          >
-            VIEW{" "}
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// hero component
 
 const searchSchema = z.object({
 	query: z.string().optional().default(""),
@@ -254,8 +67,7 @@ const Hero: React.FC = () => {
 		},
 	});
 
-	const [carouselApi, setCarouselApi] =
-		React.useState<UseEmblaCarouselType[1]>(undefined);
+	const [carouselApi, setCarouselApi] = React.useState<UseEmblaCarouselType[1]>(undefined);
 	const [carouselIndex, setCarouselIndex] = React.useState(0);
 	const [carouselCount, setCarouselCount] = React.useState(0);
   const { data: featuredProductsResult } = useGetProductsQuery({
@@ -369,22 +181,16 @@ const Hero: React.FC = () => {
 		};
 	}, [carouselApi]);
 
-
   return (
     <section className="relative pt-2 md:pt-4 pb-4 md:pb-6 bg-background industrial-grain">
       <div className="max-w-[1800px] mx-auto px-0 md:px-6">
-        {/* Unified Hero Container */}
         <div className="relative overflow-hidden border-y md:border border-border/20 shadow-xl mb-2 md:mb-3 bg-industrial flex flex-col md:flex-row shadow-primary/5 min-h-[340px] md:min-h-[380px]">
-          {/* Background Decorations */}
           <div
             className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none"
-            style={{
-              maskImage: "linear-gradient(to bottom right, black, transparent)",
-            }}
+            style={{ maskImage: "linear-gradient(to bottom right, black, transparent)" }}
           />
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,var(--color-primary)_0%,transparent_40%)] opacity-[0.08] pointer-events-none" />
 
-          {/* search panel */}
           <div className="relative z-20 flex flex-col justify-center px-6 py-7 md:px-10 md:py-7 flex-1 md:max-w-[55%]">
             <div className="flex items-center gap-4 mb-3 md:mb-4 relative">
               <span className="inline-flex items-center gap-3 text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">
@@ -486,13 +292,8 @@ const Hero: React.FC = () => {
 							</InputGroup>
 						</form>
           </div>
-          {/* featured products carousel */}
 					<div className="relative md:w-[45%] min-h-[240px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
-						<Carousel
-							setApi={setCarouselApi}
-							opts={{ loop: true }}
-							className="h-full"
-						>
+						<Carousel setApi={setCarouselApi} opts={{ loop: true }} className="h-full">
 							<CarouselContent className="ml-0 h-full">
 								{featuredProducts.map((product: HeroFeaturedProduct) => (
 									<CarouselItem key={product.id} className="pl-0 h-full">
@@ -524,7 +325,6 @@ const Hero: React.FC = () => {
 					</div>
         </div>
 
-        {/* widgets grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 px-4 md:px-0 relative z-20 pb-3 md:pb-0">
           <HeroWidget
             title="Top Manufacturers"

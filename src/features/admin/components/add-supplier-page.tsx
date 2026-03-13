@@ -9,8 +9,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SupplierProvisionForm } from "@/features/forms/components/supplier-provision-form";
 import { useCreateCompanyMutation } from "@/services/api/companies";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 
 export function AdminAddSupplierPage() {
 	const navigate = useNavigate();

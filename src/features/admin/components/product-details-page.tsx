@@ -19,8 +19,8 @@ import {
 	useGetProductByIdQuery,
 } from "@/services/api/products";
 import { ConfirmationModal } from "@/shared/components/confirmation-modal";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 
 function formatDate(value?: string) {
 	if (!value) return "-";

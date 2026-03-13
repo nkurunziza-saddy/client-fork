@@ -3,7 +3,7 @@ import { Package } from "lucide-react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Card as AdminCard } from "@/features/admin/components/card";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 
 export const SystemActions: React.FC = () => (
 	<div className="space-y-8">

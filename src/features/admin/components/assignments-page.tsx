@@ -4,9 +4,9 @@ import { DataTable } from "@/components/ui/data-table";
 import { useGetServicesQuery } from "@/services/api/services";
 import type { AssignmentRow } from "@/types";
 import { getAssignmentColumns } from "../columns/assignments-columns";
-import { AdminTableToolbar } from "./admin-table-toolbar";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 
 function formatDate(value?: string) {
 	if (!value) return "-";

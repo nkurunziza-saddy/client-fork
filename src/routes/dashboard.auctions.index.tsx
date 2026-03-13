@@ -4,9 +4,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/features/admin/components/card";
-import { PageHeader } from "@/features/admin/components/page-header";
-import { StatCard } from "@/features/admin/components/stat-card";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { StatCard } from "@/shared/components/admin/stat-card";
 import {
 	useDeleteAuctionMutation,
 	useGetAuctionsQuery,

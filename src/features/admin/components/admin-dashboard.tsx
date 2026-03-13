@@ -17,9 +17,9 @@ import {
 import { PageContainer, StatsGrid } from "@/shared/components";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatDate } from "@/shared/utils/format";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
-import { StatCard } from "./stat-card";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { StatCard } from "@/shared/components/admin/stat-card";
 import { AdminPageSkeleton } from "@/shared/components/skeletons";
 
 const routeApi = getRouteApi("/admin/");

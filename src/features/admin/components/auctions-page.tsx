@@ -11,9 +11,9 @@ import { ActionModal } from "@/shared/components/action-modal";
 import { PageContainer } from "@/shared/components/page-container";
 import type { Auction, AuctionStatus } from "@/types";
 import { getAuctionColumns } from "../columns/auctions-columns";
-import { AdminTableToolbar } from "./admin-table-toolbar";
-import { Card } from "./card";
-import { PageHeader } from "./page-header";
+import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
 
 export function AdminAuctionsPage() {
 	const navigate = useNavigate();
