@@ -32,12 +32,22 @@ function buildProductsQuery(params: ProductsQueryParams): string {
 	return `/products?${sp.toString()}`;
 }
 
+export interface NormalizedProductsResult extends ProductsListResult {
+	byId: Record<string, Product>;
+}
+
 export const productsApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
-		getProducts: builder.query<ProductsListResult, ProductsQueryParams>({
+		getProducts: builder.query<NormalizedProductsResult, ProductsQueryParams>({
 			query: (params = {}) => buildProductsQuery(params as ProductsQueryParams),
-			transformResponse: (response: ApiResponse<Product[]>) =>
-				unwrapListResponse(response) as ProductsListResult,
+			transformResponse: (response: ApiResponse<Product[]>) => {
+				const res = unwrapListResponse(response) as ProductsListResult;
+				const byId: Record<string, Product> = {};
+				for (const item of res.data) {
+					byId[item.id] = item;
+				}
+				return { ...res, byId };
+			},
 			providesTags: (result) =>
 				result
 					? [
@@ -117,14 +127,23 @@ export const {
 	useRemoveProductVariantMutation,
 } = productsApi;
 
-const selectProductsResult = (result: ProductsListResult | undefined) => result;
+const EMPTY_ARRAY: any[] = [];
+const EMPTY_OBJECT: any = {};
+
+const selectProductsResult = (state: any, params: ProductsQueryParams) => 
+	productsApi.endpoints.getProducts.select(params)(state);
 
 export const selectProductsData = createSelector(
 	[selectProductsResult],
-	(result) => result?.data ?? [],
+	(result) => result.data?.data ?? EMPTY_ARRAY,
 );
 
 export const selectProductsMeta = createSelector(
 	[selectProductsResult],
-	(result) => result?.meta,
+	(result) => result.data?.meta ?? EMPTY_OBJECT,
+);
+
+export const selectProductById = createSelector(
+	[selectProductsResult, (_state, _params, id: string) => id],
+	(result, id) => result.data?.byId?.[id],
 );

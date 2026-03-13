@@ -31,34 +31,34 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 				<div className="flex flex-wrap items-center gap-3">
 					<div className="flex items-center gap-1.5 bg-muted/30 px-2 py-0.5 border border-border/10">
 						<Eye className="w-3 h-3 text-muted-foreground" />
-						<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
+						<span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.18em]">
 							{views} Views
 						</span>
 					</div>
 					{stock > 0 ? (
 						<div className="flex items-center gap-1.5 bg-success/10 px-2 py-0.5 border border-success/20">
 							<Package className="w-3 h-3 text-success" />
-							<span className="text-[9px] font-black text-success uppercase tracking-widest">
+							<span className="text-[10px] font-semibold text-success uppercase tracking-[0.18em]">
 								{stock} In Stock
 							</span>
 						</div>
 					) : (
 						<div className="flex items-center gap-1.5 bg-destructive/10 px-2 py-0.5 border border-destructive/20">
 							<Package className="w-3 h-3 text-destructive" />
-							<span className="text-[9px] font-black text-destructive uppercase tracking-widest">
+							<span className="text-[10px] font-semibold text-destructive uppercase tracking-[0.18em]">
 								Out of Stock
 							</span>
 						</div>
 					)}
 					<div className="flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 border border-primary/10">
 						<ShieldCheck className="w-3 h-3 text-primary" />
-						<span className="text-[9px] font-black text-primary uppercase tracking-widest">
+						<span className="text-[10px] font-semibold text-primary uppercase tracking-[0.18em]">
 							Verified
 						</span>
 					</div>
 				</div>
 
-				<h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-black uppercase text-foreground tracking-tight leading-tight">
+				<h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-black text-foreground tracking-tight leading-[1.05]">
 					{name}
 				</h1>
 			</div>
@@ -66,7 +66,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 			{/* Price Section - Prominent & Simple */}
 			<div className="py-6 border-y border-border/40">
 				<div className="flex flex-col gap-1">
-					<span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+					<span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.2em]">
 						{priceType === "NEGOTIABLE"
 							? "Quotation Model"
 							: "Current Listing Price"}
@@ -87,7 +87,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 							)}
 						</span>
 						{priceType !== "NEGOTIABLE" && (
-							<span className="text-xs text-muted-foreground font-black uppercase tracking-widest">
+							<span className="text-xs text-muted-foreground font-semibold uppercase tracking-[0.2em]">
 								/ {unit ?? "Unit"}
 							</span>
 						)}
@@ -99,7 +99,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 			<div className="space-y-4">
 				<div className="flex items-center gap-2 text-muted-foreground">
 					<div className="w-6 h-px bg-border" />
-					<span className="text-[9px] font-black uppercase tracking-[0.3em]">
+					<span className="text-[10px] font-semibold uppercase tracking-[0.2em]">
 						Brief Overview
 					</span>
 				</div>

@@ -60,6 +60,19 @@ export const usersApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ["Users"],
 		}),
+
+		checkEmail: builder.query<{ available: boolean }, string>({
+			query: (email) => `/users/check-email?email=${encodeURIComponent(email)}`,
+			transformResponse: (response: ApiResponse<{ available: boolean }>) =>
+				response.data ?? { available: true },
+		}),
+
+		checkPhone: builder.query<{ available: boolean }, string>({
+			query: (phoneNumber) =>
+				`/users/check-registration?phoneNumber=${encodeURIComponent(phoneNumber)}`,
+			transformResponse: (response: ApiResponse<{ available: boolean }>) =>
+				response.data ?? { available: true },
+		}),
 	}),
 });
 
@@ -69,4 +82,6 @@ export const {
 	useGetUsersQuery,
 	useGetUserByIdQuery,
 	useDeleteUserMutation,
+	useLazyCheckEmailQuery,
+	useLazyCheckPhoneQuery,
 } = usersApi;

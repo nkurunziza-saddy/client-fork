@@ -1,36 +1,37 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import type { SupplierFiltersState } from "@/types";
 
-const defaultFilters: SupplierFiltersState = {
-	searchQuery: "",
-	categoryId: "all",
-	district: "",
-	type: "all",
-	minRating: "0",
-	verified: false,
-	page: 1,
-};
-
-export function useSupplierFilters(initialSearchQuery = "") {
-	const [filters, setFilters] = useState<SupplierFiltersState>({
-		...defaultFilters,
-		searchQuery: initialSearchQuery,
-	});
+export function useSupplierFilters() {
+	const search = useSearch({ strict: false }) as any;
+	const navigate = useNavigate();
 
 	const handleFiltersChange = useCallback(
 		(updates: Partial<SupplierFiltersState>) => {
-			setFilters((prev) => ({ ...prev, ...updates, page: 1 }));
+			navigate({
+				search: (prev: any) => ({ ...prev, ...updates, page: 1 }),
+			} as any);
 		},
-		[],
+		[navigate],
 	);
 
 	const handleClearFilters = useCallback(() => {
-		setFilters(defaultFilters);
-	}, []);
+		navigate({
+			search: (prev: any) => ({
+				...prev,
+				searchQuery: "",
+				categoryId: "all",
+				district: "",
+				type: "all",
+				minRating: "0",
+				verified: false,
+				page: 1,
+			}),
+		} as any);
+	}, [navigate]);
 
 	return {
-		filters,
-		setFilters,
+		filters: search as SupplierFiltersState,
 		handleFiltersChange,
 		handleClearFilters,
 	};

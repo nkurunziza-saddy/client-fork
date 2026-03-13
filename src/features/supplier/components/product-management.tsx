@@ -23,7 +23,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Card as AdminCard } from "@/features/admin/components/card";
-import { ProductForm } from "@/features/forms/components/product-form";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
+import { ProductForm, type ProductFormValues } from "@/features/forms/components/product-form";
 import { cn } from "@/lib/utils";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
 import {
@@ -63,28 +71,19 @@ const ProductManagement: React.FC = () => {
 		);
 	}, [products, searchQuery]);
 
-	const handleCreate = async (values: {
-		name: string;
-		categoryId: string;
-		description: string;
-		price: string;
-		priceType: string;
-		stock: string;
-		unit: string;
-		imageUrls: string[];
-	}) => {
+	const handleCreate = async (values: ProductFormValues) => {
 		if (!company?.id) return;
 		try {
 			await createProduct({
 				name: values.name,
-				description: values.description,
+				description: values.description || "",
 				categoryId: values.categoryId,
 				companyId: company.id,
 				price: parseFloat(values.price) || 0,
-				priceType: (values.priceType as any) || "FIXED",
+				priceType: values.priceType,
 				stock: parseInt(values.stock, 10) || 0,
-				unit: values.unit || "unit",
-				images: values.imageUrls,
+				unit: values.unit,
+				images: values.imageUrls || [],
 			}).unwrap();
 			toast.success("Product created");
 			setShowAddProduct(false);
@@ -92,6 +91,7 @@ const ProductManagement: React.FC = () => {
 			toast.error("Failed to create product");
 		}
 	};
+
 
 	const handleDelete = async (id: string) => {
 		try {
@@ -297,23 +297,29 @@ const ProductManagement: React.FC = () => {
 						})}
 					</div>
 
-					{filteredProducts.length === 0 && (
-						<div className="text-center py-20 bg-muted/5 border border-dashed border-border rounded-sm">
-							<RiPackageLine className="w-16 h-16 text-muted-foreground/20 mx-auto mb-6" />
-							<h3 className="text-xl font-heading font-bold text-foreground mb-2 uppercase tracking-widest">
-								No Products Yet
-							</h3>
-							<p className="text-muted-foreground text-xs uppercase font-bold tracking-wider mb-8">
-								Add your first product listing to get started
-							</p>
-							<Button
-								onClick={() => setShowAddProduct(true)}
-								className="rounded-sm h-12 px-8 font-heading font-bold uppercase tracking-widest shadow-none"
-							>
-								Create First Product
-							</Button>
-						</div>
-					)}
+					{filteredProducts.length === 0 ? (
+						<Empty className="py-20 bg-muted/5 border border-dashed border-border rounded-none">
+							<EmptyHeader>
+								<EmptyMedia variant="icon">
+									<RiPackageLine className="w-4 h-4 text-primary" />
+								</EmptyMedia>
+								<EmptyTitle className="text-xl font-display font-black uppercase">
+									No Products Yet
+								</EmptyTitle>
+								<EmptyDescription className="uppercase tracking-widest text-[10px]">
+									Add your first product listing to get started
+								</EmptyDescription>
+							</EmptyHeader>
+							<EmptyContent>
+								<Button
+									onClick={() => setShowAddProduct(true)}
+									className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest shadow-none"
+								>
+									Create First Product
+								</Button>
+							</EmptyContent>
+						</Empty>
+					) : null}
 
 					{meta && meta.totalPages > 1 && (
 						<div className="flex justify-center gap-2 mt-8 pt-6 border-t border-border">

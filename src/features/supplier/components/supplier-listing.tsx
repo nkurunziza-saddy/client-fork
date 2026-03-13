@@ -1,8 +1,5 @@
 import {
 	Building2,
-	Grid,
-	List,
-	Search,
 	SlidersHorizontal,
 	X,
 } from "lucide-react";
@@ -25,18 +22,18 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
-import { Input } from "@/components/ui/input";
 import { useSupplierFilters } from "@/hooks/use-supplier-filters";
 import { cn } from "@/lib/utils";
 import { useGetCompaniesQuery } from "@/services/api/companies";
 import { useGetCompanyCategoriesQuery } from "@/services/api/company-categories";
 import type { Company } from "@/types";
+import { MarketplaceToolbar } from "@/features/marketplace/components/marketplace-toolbar";
 import { SupplierCard } from "./listing/supplier-card";
 import { SupplierFilterPanel } from "./listing/supplier-filter-panel";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SupplierListingProps {
 	onSupplierClick?: (supplierId: string) => void;
-	initialSearchQuery?: string;
 }
 
 const PAGE_SIZE = 12;
@@ -52,14 +49,13 @@ const COMPANY_TYPES = [
 
 const SupplierListing: React.FC<SupplierListingProps> = ({
 	onSupplierClick,
-	initialSearchQuery = "",
 }) => {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const [showFilters, setShowFilters] = useState(true);
 	const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
 	const { filters, handleFiltersChange, handleClearFilters } =
-		useSupplierFilters(initialSearchQuery);
+		useSupplierFilters();
 
 	const { data: listData, isLoading } = useGetCompaniesQuery({
 		page: filters.page,
@@ -104,89 +100,6 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 							</div>
 						</div>
 
-						<div className="flex items-center gap-2 md:gap-3">
-							<Drawer
-								open={isMobileFiltersOpen}
-								onOpenChange={setIsMobileFiltersOpen}
-							>
-								<DrawerTrigger asChild>
-									<Button
-										variant="outline"
-										size="sm"
-										className="lg:hidden rounded-none border-border/40 h-9 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
-									>
-										<SlidersHorizontal className="w-3.5 h-3.5" />
-										Filters
-										{hasActiveFilters && (
-											<span className="w-1.5 h-1.5 rounded-full bg-primary" />
-										)}
-									</Button>
-								</DrawerTrigger>
-								<DrawerContent className="bg-background flex flex-col">
-									<DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
-										<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
-											<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
-											Supplier Filters
-										</DrawerTitle>
-									</DrawerHeader>
-									<div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
-										<SupplierFilterPanel
-											filters={filters}
-											categories={categories}
-											onFilterChange={handleFiltersChange}
-										/>
-									</div>
-									{hasActiveFilters && (
-										<div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
-											<Button
-												variant="ghost"
-												size="sm"
-												className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
-												onClick={() => {
-													handleClearFilters();
-													setIsMobileFiltersOpen(false);
-												}}
-											>
-												Reset All Filters
-											</Button>
-										</div>
-									)}
-								</DrawerContent>
-							</Drawer>
-
-							<Button
-								variant="outline"
-								size="sm"
-								className={cn(
-									"hidden lg:flex rounded-none border-border/40 h-9 font-black uppercase text-[10px] tracking-widest",
-									showFilters &&
-										"bg-foreground text-background border-foreground hover:bg-foreground/90",
-								)}
-								onClick={() => setShowFilters(!showFilters)}
-							>
-								<SlidersHorizontal className="w-3.5 h-3.5 mr-2" />
-								{showFilters ? "Hide Filters" : "Show Filters"}
-							</Button>
-
-							<div className="flex items-center bg-muted/20 border border-border/10 p-0.5 rounded-none hidden sm:flex h-9">
-								<Button
-									variant={viewMode === "grid" ? "secondary" : "ghost"}
-									size="icon"
-									className="rounded-none h-8 w-8 data-[state=active]:bg-background"
-									onClick={() => setViewMode("grid")}
-								>
-									<Grid className="w-3.5 h-3.5" />
-								</Button>
-								<Button
-									variant={viewMode === "list" ? "secondary" : "ghost"}
-									size="icon"
-									className="rounded-none h-8 w-8"
-									onClick={() => setViewMode("list")}
-								>
-									<List className="w-3.5 h-3.5" />
-								</Button>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -226,18 +139,77 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 					<div className="flex-1 min-w-0">
 						{/* Toolbar */}
 						<div className="flex flex-col gap-4 mb-8">
-							<div className="flex flex-row gap-3 items-center">
-								<div className="relative flex-1 group">
-									<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
-									<Input
-										placeholder="Search..."
-										className="pl-11 bg-muted/10 border-border/40 rounded-none focus:ring-0 focus:border-primary/60 h-10 w-full font-display font-bold uppercase tracking-wider text-[10px] transition-all"
-										value={filters.searchQuery}
-										onChange={(e) =>
-											handleFiltersChange({ searchQuery: e.target.value })
-										}
-									/>
-								</div>
+							<MarketplaceToolbar
+								viewMode={viewMode}
+								onViewModeChange={setViewMode}
+								searchQuery={filters.searchQuery}
+								onSearchChange={(val) =>
+									handleFiltersChange({ searchQuery: val })
+								}
+								searchPlaceholder="SEARCH SUPPLIERS..."
+								onToggleFilters={() => setShowFilters(!showFilters)}
+								showFilters={showFilters}
+								filterButton={
+									<Drawer
+										open={isMobileFiltersOpen}
+										onOpenChange={setIsMobileFiltersOpen}
+									>
+										<DrawerTrigger asChild>
+											<Button
+												variant="outline"
+												size="sm"
+												className="lg:hidden rounded-none border-border/40 h-10 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
+											>
+												<SlidersHorizontal className="w-3.5 h-3.5" />
+												Filters
+												{hasActiveFilters && (
+													<span className="w-1.5 h-1.5 rounded-full bg-primary" />
+												)}
+											</Button>
+										</DrawerTrigger>
+										<DrawerContent className="bg-background flex flex-col">
+											<DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
+												<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
+													<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+													Supplier Filters
+												</DrawerTitle>
+											</DrawerHeader>
+											<div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
+												<SupplierFilterPanel
+													filters={filters}
+													categories={categories}
+													onFilterChange={handleFiltersChange}
+												/>
+											</div>
+											{hasActiveFilters && (
+												<div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
+													<Button
+														variant="ghost"
+														size="sm"
+														className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
+														onClick={() => {
+															handleClearFilters();
+															setIsMobileFiltersOpen(false);
+														}}
+													>
+														Reset All Filters
+													</Button>
+												</div>
+											)}
+										</DrawerContent>
+									</Drawer>
+								}
+							/>
+
+							<div className="flex flex-wrap items-center justify-between gap-2 text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60">
+								<span>
+									Showing {companies.length} of {meta?.total ?? companies.length}{" "}
+									suppliers
+								</span>
+								<span className="hidden sm:inline">
+									Page {meta?.page ?? filters.page} /{" "}
+									{meta?.totalPages ?? 1}
+								</span>
 							</div>
 
 							{/* Active Filters Badges */}
@@ -321,9 +293,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 								)}
 							>
 								{Array.from({ length: 12 }).map((_, i) => (
-									<div
+									<Skeleton
 										key={`supplier-skeleton-${i}`}
-										className="h-72 rounded-none border border-border/10 bg-muted/5 animate-pulse"
+										className="h-72 rounded-none border border-border/10"
 									/>
 								))}
 							</div>

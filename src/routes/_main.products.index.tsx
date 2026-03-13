@@ -1,11 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MarketplacePage } from "@/features/marketplace/components/marketplace-page";
+import { marketplaceSearchSchema } from "@/features/marketplace/schemas";
+import { RouteError } from "@/shared/components/route-error";
+import { RouteLoading } from "@/shared/components/route-loading";
+import { NotFound } from "@/shared/components/not-found";
+import { createSeoMeta } from "@/shared/utils/seo";
 import { productsApi } from "@/services/api/products";
 import { store } from "@/store";
-import { createSeoMeta } from "@/shared/utils/seo";
 
 export const Route = createFileRoute("/_main/products/")({
-	component: () => <MarketplacePage forcedType="PRODUCT" />,
+	validateSearch: marketplaceSearchSchema,
+	staleTime: 60_000, // 1 minute
+	gcTime: 300_000, // 5 minutes
+	component: () => <MarketplacePage forcedType="PRODUCT" from="/_main/products/" />,
+	pendingComponent: RouteLoading,
+	errorComponent: RouteError,
+	notFoundComponent: NotFound,
 	head: () =>
 		createSeoMeta({
 			title: "Wholesale Products Marketplace",
@@ -18,41 +28,28 @@ export const Route = createFileRoute("/_main/products/")({
 				"wholesale food Africa",
 			],
 		}),
-	validateSearch: (
-		search: Record<string, unknown>,
-	): {
-		category?: string;
-		categoryId?: string;
-		companyId?: string;
-		district?: string;
-		minPrice?: number;
-		maxPrice?: number;
-		inStock?: boolean;
-		query?: string;
-		type?: string;
-		searchQuery?: string;
-		onlyInStock?: boolean;
-		companyType?: string;
-		sortBy?: string;
-		sortOrder?: string;
-	} => {
-		return {
-			category: (search.category as string) || undefined,
-			categoryId: (search.categoryId as string) || undefined,
-			type: (search.type as string) || undefined,
-			searchQuery: (search.searchQuery as string) || undefined,
-			district: (search.district as string) || undefined,
-			minPrice: search.minPrice ? Number(search.minPrice) : undefined,
-			maxPrice: search.maxPrice ? Number(search.maxPrice) : undefined,
-			onlyInStock: (search.onlyInStock as boolean) || undefined,
-			companyType: (search.companyType as string) || undefined,
-			sortBy: (search.sortBy as string) || undefined,
-			sortOrder: (search.sortOrder as string) || undefined,
-		};
-	},
-	loaderDeps: ({ search }) => search,
+	loaderDeps: ({ search }) => ({
+		page: search.page,
+		categoryId: search.categoryId || search.category,
+		searchQuery: search.searchQuery,
+		district: search.district,
+		minPrice: search.minPrice,
+		maxPrice: search.maxPrice,
+		sortBy: search.sortBy,
+		sortOrder: search.sortOrder,
+	}),
 	loader: ({ deps }) => {
-		const params = { page: 1, limit: 30, categoryId: deps.category };
-		store.dispatch(productsApi.endpoints.getProducts.initiate(params));
+		const params = {
+			page: deps.page,
+			limit: 30,
+			categoryId: deps.categoryId,
+			searchQuery: deps.searchQuery,
+			district: deps.district,
+			minPrice: deps.minPrice,
+			maxPrice: deps.maxPrice,
+			sortBy: deps.sortBy,
+			sortOrder: deps.sortOrder as any,
+		};
+		return store.dispatch(productsApi.endpoints.getProducts.initiate(params));
 	},
 });

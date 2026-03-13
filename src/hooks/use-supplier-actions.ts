@@ -7,7 +7,6 @@ import type { Company } from "@/types";
 
 export function useSupplierActions(company: Company | null | undefined) {
 	const [showContactModal, setShowContactModal] = useState(false);
-	const [message, setMessage] = useState("");
 	const [sendMessage, { isLoading: sendingInquiry }] = useSendMessageMutation();
 	const isAuthenticated = useSelector(
 		(state: RootState) => state.auth.isAuthenticated,
@@ -22,8 +21,7 @@ export function useSupplierActions(company: Company | null | undefined) {
 	}, [isAuthenticated]);
 
 	const handleSubmitInquiry = useCallback(
-		async (e?: React.FormEvent) => {
-			e?.preventDefault();
+		async (message: string) => {
 			if (!isAuthenticated) {
 				toast.error("Please sign in to send a message.");
 				return;
@@ -44,21 +42,18 @@ export function useSupplierActions(company: Company | null | undefined) {
 				}).unwrap();
 				toast.success("Inquiry sent.");
 				setShowContactModal(false);
-				setMessage("");
 			} catch (error) {
 				console.error(error);
 				toast.error("Failed to send inquiry.");
 			}
 		},
-		[message, company, sendMessage, isAuthenticated],
+		[company, sendMessage, isAuthenticated],
 	);
 
 	return {
 		showContactModal,
 		setShowContactModal,
 		handleOpenContactModal,
-		message,
-		setMessage,
 		handleSubmitInquiry,
 		sendingInquiry,
 	};

@@ -6,8 +6,10 @@ import type { MarketplaceItem } from "@/types";
 
 export function MarketplacePage({
 	forcedType,
+	from,
 }: {
 	forcedType?: "PRODUCT" | "SERVICE";
+	from: "/_main/products/" | "/_main/services/";
 }) {
 	const navigate = useNavigate();
 
@@ -41,6 +43,7 @@ export function MarketplacePage({
 			onSupplierClick={handleSupplierClick}
 			onProductClick={handleProductClick}
 			forcedType={forcedType}
+			from={from}
 		/>
 	);
 }

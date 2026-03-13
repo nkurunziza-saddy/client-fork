@@ -1,4 +1,4 @@
-import { Loader2 } from "lucide-react";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { useAdminProfile } from "@/hooks/use-admin-profile";
 import { PageHeader } from "./page-header";
 import { ActivityLogsCard } from "./settings/activity-logs-card";
@@ -29,14 +29,7 @@ export function AdminProfileSettingsPage() {
 	} = useAdminProfile();
 
 	if (isLoading) {
-		return (
-			<div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-				<Loader2 className="w-8 h-8 animate-spin text-primary" />
-				<p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-					Loading Settings...
-				</p>
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	return (

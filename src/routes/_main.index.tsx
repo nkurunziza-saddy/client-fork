@@ -8,18 +8,18 @@ export const Route = createFileRoute("/_main/")({
     createSeoMeta({
       title: "Wholesale Marketplace for African Suppliers",
       description:
-        "Discover and connect with trusted African wholesale suppliers. AfrikaMarket is the premier B2B marketplace for quality products from across the continent.",
+        "Discover and connect with trusted African wholesale suppliers. Karibu is the premier B2B marketplace for quality products from across the continent.",
       keywords: [
         "African wholesale",
         "B2B marketplace Africa",
         "African suppliers",
         "wholesale products Africa",
-        "AfrikaMarket",
+        "Karibu",
       ],
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        name: "AfrikaMarket",
+        name: "Karibu",
         url: "https://afri-market-rep.vercel.app",
         potentialAction: {
           "@type": "SearchAction",

@@ -5,7 +5,7 @@ export interface SEOOptions {
   url?: string;
   type?: string;
   keywords?: string[];
-  jsonLd?: Record<string, any>;
+  jsonLd?: Record<string, unknown>;
   canonical?: string;
 }
 
@@ -21,11 +21,14 @@ export function createSeoMeta(options: SEOOptions) {
     canonical,
   } = options;
 
-  const meta: any[] = [];
-  const links: any[] = [];
+  const meta: (
+    | Record<string, string | Record<string, unknown>>
+    | { title: string }
+  )[] = [];
+  const links: Record<string, string>[] = [];
 
   if (title) {
-    meta.push({ title: `${title} | AfrikaMarket` });
+    meta.push({ title: `${title} | Karibu` });
     meta.push({ property: "og:title", content: title });
     meta.push({ name: "twitter:title", content: title });
   }

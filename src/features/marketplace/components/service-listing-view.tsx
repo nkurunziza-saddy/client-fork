@@ -1,4 +1,9 @@
-import { SlidersHorizontal } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+	Building2,
+	ChevronLeft,
+	ChevronRight,
+} from "lucide-react";
 import type React from "react";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,27 +18,24 @@ import {
 import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters";
 import { cn } from "@/lib/utils";
 import {
-	selectServicesData,
-	selectServicesMeta,
 	useGetServicesQuery,
 } from "@/services/api/services";
+import type { MarketplaceItem } from "@/types";
 import { ServiceCard } from "./catalog/service-card";
 
-const PAGE_SIZE = 30;
-
-interface ServiceViewGridProps {
+interface ServiceListingViewProps {
 	viewMode: "grid" | "list";
-	showFilters: boolean;
 	isAuthenticated: boolean;
 	wishlistIds: Set<string>;
-	onToggleWishlist: (e: React.MouseEvent, item: any) => void;
-	onSupplierClick: (e: React.MouseEvent, companyId: string) => void;
-	onClick: (item: any) => void;
+	onToggleWishlist: (e: any, item: MarketplaceItem) => void;
+	onSupplierClick: (e: any, companyId: string) => void;
+	onClick: (item: MarketplaceItem) => void;
 }
 
-export const ServiceListingView: React.FC<ServiceViewGridProps> = ({
+const PAGE_SIZE = 12;
+
+export const ServiceListingView: React.FC<ServiceListingViewProps> = ({
 	viewMode,
-	showFilters,
 	isAuthenticated,
 	wishlistIds,
 	onToggleWishlist,
@@ -42,129 +44,122 @@ export const ServiceListingView: React.FC<ServiceViewGridProps> = ({
 }) => {
 	const { filters, patchFilters, resetFilters } = useMarketplaceFilters();
 
-	const { data: servicesData, isFetching } = useGetServicesQuery({
+	const sharedParams = useMemo(() => ({
 		page: filters.page,
 		limit: PAGE_SIZE,
-		query: filters.searchQuery.trim() || undefined,
+		query: (filters.searchQuery || "").trim() || undefined,
 		categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
-		district: filters.district.trim() || undefined,
+		district: (filters.district || "").trim() || undefined,
 		minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
 		maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
 		companyType:
 			filters.companyType === "all" ? undefined : filters.companyType,
 		sortBy: filters.sortBy,
-		sortOrder: filters.sortOrder,
-	});
+		sortOrder: filters.sortOrder as "ASC" | "DESC" | undefined,
+	}), [filters]);
+
+	const { data: servicesData, isFetching } = useGetServicesQuery(sharedParams);
 
 	const services = useMemo(
-		() => selectServicesData(servicesData),
+		() => (servicesData?.data || []).map(s => ({ ...s, itemType: "SERVICE" as const })),
 		[servicesData],
 	);
-	const meta = useMemo(() => selectServicesMeta(servicesData), [servicesData]);
+	const meta = servicesData?.meta;
 
 	if (isFetching && services.length === 0) {
 		return (
-			<div className="space-y-12">
-				<div
-					className={cn(
-						"grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6",
-						showFilters
-							? "xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6"
-							: "xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8",
-					)}
-				>
-					{Array.from({ length: 12 }).map((_, i) => (
-						<div
-							key={`serv-skeleton-${i}`}
-							className="h-72 bg-muted/5 animate-pulse"
-						/>
-					))}
-				</div>
-			</div>
-		);
-	}
-
-	if (services.length === 0) {
-		return (
-			<div className="py-20 flex justify-center">
-				<Empty className="max-w-md">
-					<EmptyHeader>
-						<EmptyMedia variant="icon">
-							<SlidersHorizontal className="w-4 h-4 text-primary" />
-						</EmptyMedia>
-						<EmptyTitle className="text-xl font-display font-black uppercase">
-							No Services Found
-						</EmptyTitle>
-						<EmptyDescription className="uppercase tracking-widest text-[10px]">
-							We couldn't find any services matching your current filters. Try
-							adjusting your search.
-						</EmptyDescription>
-					</EmptyHeader>
-					<EmptyContent>
-						<Button
-							onClick={resetFilters}
-							className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
-						>
-							Reset Filters
-						</Button>
-					</EmptyContent>
-				</Empty>
+			<div
+				className={cn(
+					"grid grid-cols-2 gap-4 md:gap-6",
+					viewMode === "grid"
+						? "lg:grid-cols-2 xl:grid-cols-3"
+						: "grid-cols-1",
+				)}
+			>
+				{Array.from({ length: 8 }).map((_, i) => (
+					<Skeleton
+						key={`skeleton-${i}`}
+						className="h-80 border border-border/10 rounded-none"
+					/>
+				))}
 			</div>
 		);
 	}
 
 	return (
-		<div className="space-y-12 w-full">
-			<div
-				className={cn(
-					viewMode === "grid"
-						? cn(
-								"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
-								showFilters
-									? "xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6"
-									: "xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8",
-							)
-						: "flex flex-col gap-6",
-					isFetching && "opacity-60",
-				)}
-			>
-				{services.map((service) => (
-					<ServiceCard
-						key={service.id}
-						service={service as any}
-						viewMode={viewMode}
-						isInWishlist={isAuthenticated && wishlistIds.has(service.id)}
-						onToggleWishlist={(e) =>
-							onToggleWishlist(e, { ...service, itemType: "SERVICE" })
-						}
-						onSupplierClick={(e) => onSupplierClick(e, service.company?.id)}
-						onClick={() => onClick({ ...service, itemType: "SERVICE" })}
-					/>
-				))}
-			</div>
+		<div className="space-y-10">
+			{services.length === 0 ? (
+				<div className="py-20 flex justify-center w-full">
+					<Empty className="max-w-md w-full">
+						<EmptyHeader>
+							<EmptyMedia variant="icon">
+								<Building2 className="w-4 h-4 text-primary" />
+							</EmptyMedia>
+							<EmptyTitle className="text-xl font-display font-black uppercase">
+								No Services Found
+							</EmptyTitle>
+							<EmptyDescription className="uppercase tracking-widest text-[10px]">
+								We couldn't find any professional services matching your current
+								filters.
+							</EmptyDescription>
+						</EmptyHeader>
+						<EmptyContent>
+							<Button
+								onClick={resetFilters}
+								className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+							>
+								Clear All Filters
+							</Button>
+						</EmptyContent>
+					</Empty>
+				</div>
+			) : (
+				<div
+					className={cn(
+						"grid gap-4 md:gap-6",
+						viewMode === "grid"
+							? "grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+							: "grid-cols-1",
+					)}
+				>
+					{services.map((item) => (
+						<ServiceCard
+							key={item.id}
+							service={item}
+							viewMode={viewMode}
+							isInWishlist={isAuthenticated && wishlistIds.has(item.id)}
+							onToggleWishlist={(e: any) => onToggleWishlist(e, item)}
+							onSupplierClick={(e: any) => onSupplierClick(e, item.company.id)}
+							onClick={() => onClick(item)}
+						/>
+					))}
+				</div>
+			)}
 
 			{meta && meta.totalPages > 1 && (
-				<div className="flex justify-center items-center gap-2 sm:gap-4 pt-6 md:pt-10 border-t border-border/20">
+				<div className="flex justify-center items-center gap-2 sm:gap-4 mt-12 pt-8 border-t border-border/20">
 					<Button
 						variant="outline"
 						size="sm"
+						className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
 						disabled={filters.page <= 1}
 						onClick={() => patchFilters({ page: filters.page - 1 })}
-						className="rounded-none h-9 sm:h-10 px-4 sm:px-6 uppercase text-[8px] sm:text-[9px] font-bold tracking-widest"
 					>
+						<ChevronLeft className="w-3.5 h-3.5 mr-1" />
 						Prev
 					</Button>
-					<span className="flex items-center text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 px-2">
+					<span className="flex items-center px-4 text-[9px] sm:text-[10px] font-display font-bold uppercase tracking-widest text-muted-foreground/30">
 						{meta.page} / {meta.totalPages}
 					</span>
 					<Button
 						variant="outline"
 						size="sm"
+						className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
 						disabled={filters.page >= meta.totalPages}
 						onClick={() => patchFilters({ page: filters.page + 1 })}
-						className="rounded-none h-9 sm:h-10 px-4 sm:px-6 uppercase text-[8px] sm:text-[9px] font-bold tracking-widest"
 					>
 						Next
+						<ChevronRight className="w-3.5 h-3.5 ml-1" />
 					</Button>
 				</div>
 			)}

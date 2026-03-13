@@ -28,7 +28,7 @@ export const PerformanceTrendsCard: React.FC<PerformanceTrendsCardProps> = ({
 						{ id: "views", label: "Views", icon: Eye },
 						{ id: "conversion", label: "Conversion", icon: TrendingUp },
 					].map((chart) => (
-						<button
+						<button type="button"
 							key={chart.id}
 							onClick={() => onActiveChartChange(chart.id as any)}
 							className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${

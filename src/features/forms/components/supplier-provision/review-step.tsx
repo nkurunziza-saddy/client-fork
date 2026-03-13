@@ -1,7 +1,6 @@
 import { RiCheckboxCircleLine } from "@remixicon/react";
 import type React from "react";
 import { Card as AdminCard } from "@/features/admin/components/card";
-
 interface ReviewStepProps {
 	form: any;
 }

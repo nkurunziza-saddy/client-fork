@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { apiSlice } from "@/services/api/api-entry";
+import { unwrapListResponse, unwrapResponse } from "@/services/api/utils";
 import type {
 	ApiResponse,
 	CompaniesListResult,
@@ -8,34 +9,25 @@ import type {
 	CreateCompanyInput,
 } from "@/types";
 
+export interface NormalizedCompaniesResult extends CompaniesListResult {
+	byId: Record<string, Company>;
+}
+
 export const companiesApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
-		getCompanies: builder.query<CompaniesListResult, CompaniesQueryParams>({
-			query: (params = {}) => {
-				const sp = new URLSearchParams();
-				if (params?.page != null) sp.set("page", String(params.page));
-				if (params?.limit != null) sp.set("limit", String(params.limit));
-				if (params?.query) sp.set("query", params.query);
-				if (params?.categoryId) sp.set("categoryId", params.categoryId);
-				if (params?.district) sp.set("district", params.district);
-				if (params?.type) sp.set("type", params.type);
-				if (params?.sortBy) sp.set("sortBy", params.sortBy);
-				if (params?.sortOrder) sp.set("sortOrder", params.sortOrder);
-				if (params?.minRating) sp.set("minRating", String(params.minRating));
-				if (params?.isVerified) sp.set("isVerified", String(true));
-				return `/companies?${sp.toString()}`;
+		getCompanies: builder.query<NormalizedCompaniesResult, CompaniesQueryParams>({
+			query: (params) => {
+				const filteredParams: any = { ...params };
+				if (filteredParams.isVerified === false) delete filteredParams.isVerified;
+				return { url: "/companies", params: filteredParams };
 			},
 			transformResponse: (response: ApiResponse<Company[]>) => {
-				const m = response.meta;
-				return {
-					data: response.data ?? [],
-					meta: {
-						total: m?.total ?? 0,
-						page: m?.page ?? 1,
-						limit: m?.limit ?? 10,
-						totalPages: m?.totalPages ?? 0,
-					},
-				};
+				const res = unwrapListResponse(response) as CompaniesListResult;
+				const byId: Record<string, Company> = {};
+				for (const item of res.data) {
+					byId[item.id] = item;
+				}
+				return { ...res, byId };
 			},
 			providesTags: (result) =>
 				result
@@ -52,29 +44,26 @@ export const companiesApi = apiSlice.injectEndpoints({
 		getCompanyById: builder.query<Company | null, string>({
 			query: (id) => `/companies/${id}`,
 			transformResponse: (response: ApiResponse<Company>) =>
-				response.data ?? null,
+				unwrapResponse(response),
 			providesTags: (_result, _err, id) => [{ type: "Suppliers", id }],
 		}),
 
 		getMyCompany: builder.query<Company | null, void>({
-			query: () => "/companies/my",
+			query: () => "/companies/my-company",
 			transformResponse: (response: ApiResponse<Company>) =>
-				response.data ?? null,
-			providesTags: ["Suppliers"],
+				unwrapResponse(response),
+			providesTags: (result) =>
+				result ? [{ type: "Suppliers", id: result.id }] : [],
 		}),
 
 		createCompany: builder.mutation<Company, CreateCompanyInput>({
-			query: (body) => ({
-				url: "/companies",
-				method: "POST",
-				body,
-			}),
-			invalidatesTags: ["Suppliers", { type: "Suppliers", id: "LIST" }],
+			query: (body) => ({ url: "/companies", method: "POST", body }),
+			invalidatesTags: [{ type: "Suppliers", id: "LIST" }],
 		}),
 
 		updateCompany: builder.mutation<
 			Company,
-			{ id: string; data: Partial<CreateCompanyInput> }
+			{ id: string; data: Partial<CreateCompanyInput & { isActive: boolean }> }
 		>({
 			query: ({ id, data }) => ({
 				url: `/companies/${id}`,
@@ -88,11 +77,24 @@ export const companiesApi = apiSlice.injectEndpoints({
 		}),
 
 		deleteCompany: builder.mutation<void, string>({
-			query: (id) => ({
-				url: `/companies/${id}`,
-				method: "DELETE",
-			}),
+			query: (id) => ({ url: `/companies/${id}`, method: "DELETE" }),
 			invalidatesTags: [{ type: "Suppliers", id: "LIST" }],
+		}),
+
+		checkEmail: builder.query<{ available: boolean }, string>({
+			query: (email) => `/companies/check-email?email=${email}`,
+		}),
+
+		checkPhone: builder.query<{ available: boolean }, string>({
+			query: (phone) => `/companies/check-phone?phone=${phone}`,
+		}),
+
+		checkCompanyName: builder.query<{ available: boolean }, string>({
+			query: (name) => `/companies/check-name?name=${name}`,
+		}),
+
+		checkCompanySlug: builder.query<{ available: boolean }, string>({
+			query: (slug) => `/companies/check-slug?slug=${slug}`,
 		}),
 	}),
 });
@@ -104,17 +106,33 @@ export const {
 	useCreateCompanyMutation,
 	useUpdateCompanyMutation,
 	useDeleteCompanyMutation,
+	useCheckEmailQuery,
+	useCheckPhoneQuery,
+	useCheckCompanyNameQuery,
+	useCheckCompanySlugQuery,
+	useLazyCheckEmailQuery,
+	useLazyCheckPhoneQuery,
+	useLazyCheckCompanyNameQuery,
+	useLazyCheckCompanySlugQuery,
 } = companiesApi;
 
-const selectCompaniesResult = (result: CompaniesListResult | undefined) =>
-	result;
+const EMPTY_ARRAY: any[] = [];
+const EMPTY_OBJECT: any = {};
+
+const selectCompaniesResult = (state: any, params: CompaniesQueryParams) => 
+	companiesApi.endpoints.getCompanies.select(params)(state);
 
 export const selectCompaniesData = createSelector(
 	[selectCompaniesResult],
-	(result) => result?.data ?? [],
+	(result) => result.data?.data ?? EMPTY_ARRAY,
 );
 
 export const selectCompaniesMeta = createSelector(
 	[selectCompaniesResult],
-	(result) => result?.meta,
+	(result) => result.data?.meta ?? EMPTY_OBJECT,
+);
+
+export const selectCompanyById = createSelector(
+	[selectCompaniesResult, (_state, _params, id: string) => id],
+	(result, id) => result.data?.byId?.[id],
 );

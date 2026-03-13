@@ -1,20 +1,7 @@
-import {
-	RiHeartFill,
-	RiHeartLine,
-	RiMessage2Line,
-	RiShareForwardLine,
-} from "@remixicon/react";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
+import { RiMessage2Line, RiShareForwardLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import { shareContent } from "@/lib/utils";
-import {
-	useAddToWishlistMutation,
-	useCheckCompanyWishlistQuery,
-	useRemoveFromWishlistMutation,
-} from "@/services/api/wishlist";
 import { ContactActions } from "@/shared/components/contact-actions";
-import type { RootState } from "@/store";
 import type { CompanyRef } from "@/types";
 
 interface SupplierActionsProps {
@@ -29,37 +16,6 @@ export const SupplierActions: React.FC<SupplierActionsProps> = ({
 	isMobile,
 }) => {
 	const phone = company?.phone || "";
-	const isAuthenticated = useSelector(
-		(state: RootState) => state.auth.isAuthenticated,
-	);
-
-	const { data: checkData } = useCheckCompanyWishlistQuery(company?.id ?? "", {
-		skip: !isAuthenticated || !company?.id,
-	});
-	const isSaved = checkData?.inWishlist ?? false;
-
-	const [addToWishlist] = useAddToWishlistMutation();
-	const [removeFromWishlist] = useRemoveFromWishlistMutation();
-
-	const handleToggleSave = async () => {
-		if (!isAuthenticated) {
-			toast.error("Please sign in to save suppliers to favorites.");
-			return;
-		}
-		if (!company?.id) return;
-		try {
-			if (isSaved) {
-				await removeFromWishlist({ id: company.id, type: "company" });
-				toast.success("Removed from wishlist");
-			} else {
-				await addToWishlist({ id: company.id, type: "company" });
-				toast.success("Saved to wishlist");
-			}
-		} catch {
-			toast.error("Failed to update wishlist");
-		}
-	};
-
 	const handleShare = () => {
 		shareContent({
 			title: company?.name || "Verified Supplier",
@@ -103,7 +59,7 @@ export const SupplierActions: React.FC<SupplierActionsProps> = ({
 	}
 
 	return (
-		<div className="items-center gap-4 pt-2 hidden md:flex">
+		<div className="items-center gap-3 pt-2 hidden md:flex">
 			<Button
 				size="lg"
 				className="rounded-none h-12 font-heading font-black uppercase tracking-widest text-[10px] px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all duration-300"
@@ -112,7 +68,6 @@ export const SupplierActions: React.FC<SupplierActionsProps> = ({
 				<RiMessage2Line size={16} className="mr-2" />
 				Send Inquiry
 			</Button>
-
 			<div className="flex items-center gap-2">
 				<ContactActions
 					phone={phone}
@@ -129,22 +84,6 @@ export const SupplierActions: React.FC<SupplierActionsProps> = ({
 					title="Share Profile"
 				>
 					<RiShareForwardLine size={20} />
-				</Button>
-				<Button
-					size="lg"
-					variant="outline"
-					className="rounded-none h-12 font-heading font-black uppercase tracking-widest text-[10px] px-6 gap-2 border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
-					onClick={handleToggleSave}
-				>
-					{isSaved ? (
-						<RiHeartFill
-							size={16}
-							className="text-primary group-hover:text-primary-foreground"
-						/>
-					) : (
-						<RiHeartLine size={16} />
-					)}
-					{isSaved ? "Saved to Favorites" : "Save to Favorites"}
 				</Button>
 			</div>
 		</div>

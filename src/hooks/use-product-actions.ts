@@ -14,7 +14,6 @@ import type { RootState } from "@/store";
 export function useProductActions(productId: string) {
 	const navigate = useNavigate();
 	const [messageOpen, setMessageOpen] = useState(false);
-	const [messageText, setMessageText] = useState("");
 
 	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 	const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
@@ -62,28 +61,25 @@ export function useProductActions(productId: string) {
 		removeFromWishlist,
 	]);
 
-	const handleSubmitInquiry = useCallback(async () => {
-		if (!messageText.trim()) return;
+	const handleSubmitInquiry = useCallback(async (message: string) => {
+		if (!message.trim()) return;
 		try {
 			await startProductChat({
 				productId,
-				content: messageText.trim(),
+				content: message.trim(),
 			}).unwrap();
 			toast.success("Inquiry sent successfully!");
 			setMessageOpen(false);
-			setMessageText("");
 			navigate({ to: "/messages" });
 		} catch (error) {
 			console.error(error);
 			toast.error("Inquiry delivery failed.");
 		}
-	}, [productId, messageText, startProductChat, navigate]);
+	}, [productId, startProductChat, navigate]);
 
 	return {
 		messageOpen,
 		setMessageOpen,
-		messageText,
-		setMessageText,
 		isInWishlist,
 		handleToggleWishlist,
 		trackAndNavigate,

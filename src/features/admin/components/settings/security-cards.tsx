@@ -45,7 +45,7 @@ export const PasswordCard: React.FC<PasswordCardProps> = ({
 							placeholder="CURRENT PASSWORD"
 							className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
 						/>
-						<button
+						<button type="button"
 							onClick={() => setShowPassword(!showPassword)}
 							className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
 						>
@@ -71,7 +71,7 @@ export const PasswordCard: React.FC<PasswordCardProps> = ({
 							placeholder="NEW PASSWORD"
 							className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
 						/>
-						<button
+						<button type="button"
 							onClick={() => setShowNewPassword(!showNewPassword)}
 							className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
 						>
@@ -136,7 +136,7 @@ export const AccountSecurityCard: React.FC<AccountSecurityCardProps> = ({
 								Add an extra layer of protection
 							</p>
 						</div>
-						<button
+						<button type="button"
 							onClick={() => onSecurityToggle("twoFactorAuth")}
 							className={`relative w-12 h-6 rounded-sm transition-all border ${
 								securitySettings.twoFactorAuth
@@ -163,7 +163,7 @@ export const AccountSecurityCard: React.FC<AccountSecurityCardProps> = ({
 								Get notified of new logins
 							</p>
 						</div>
-						<button
+						<button type="button"
 							onClick={() => onSecurityToggle("loginAlerts")}
 							className={`relative w-12 h-6 rounded-sm transition-all border ${
 								securitySettings.loginAlerts

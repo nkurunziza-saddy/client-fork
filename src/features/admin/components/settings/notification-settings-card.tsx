@@ -68,7 +68,7 @@ export const NotificationSettingsCard: React.FC<
 								{description}
 							</p>
 						</div>
-						<button
+						<button type="button"
 							onClick={() => onToggle(key)}
 							className={`relative w-12 h-6 rounded-sm transition-all border ${
 								notifications[key]

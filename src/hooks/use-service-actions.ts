@@ -15,7 +15,6 @@ import type { Service } from "@/types";
 export function useServiceActions(service: Service) {
 	const router = useRouter();
 	const [showContactModal, setShowContactModal] = useState(false);
-	const [message, setMessage] = useState("");
 
 	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 	const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
@@ -68,8 +67,7 @@ export function useServiceActions(service: Service) {
 	}, [router.history]);
 
 	const handleSubmitInquiry = useCallback(
-		async (e: React.FormEvent) => {
-			e.preventDefault();
+		async (message: string) => {
 			if (!message.trim()) {
 				toast.error("Please enter your inquiry message.");
 				return;
@@ -81,21 +79,18 @@ export function useServiceActions(service: Service) {
 				}).unwrap();
 				toast.success("Inquiry sent successfully!");
 				setShowContactModal(false);
-				setMessage("");
 				router.navigate({ to: "/messages" });
 			} catch (err) {
 				console.error(err);
 				toast.error("Failed to send inquiry.");
 			}
 		},
-		[message, service.id, startServiceChat, router],
+		[service.id, startServiceChat, router],
 	);
 
 	return {
 		showContactModal,
 		setShowContactModal,
-		message,
-		setMessage,
 		isInWishlist,
 		handleToggleWishlist,
 		trackAndNavigate,

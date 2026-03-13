@@ -1,9 +1,9 @@
 import {
 	RiArrowLeftSLine,
 	RiBuildingLine,
-	RiLoader2Line,
 	RiUserLine,
 } from "@remixicon/react";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -60,11 +60,7 @@ export function AdminEditSupplierPage() {
 	};
 
 	if (isLoading) {
-		return (
-			<div className="flex items-center justify-center p-20">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!company) {
@@ -104,7 +100,7 @@ export function AdminEditSupplierPage() {
 
 			<Card noPadding>
 				<div className="flex border-b-2 border-border">
-					<button
+					<button type="button"
 						onClick={() => setCurrentStep(1)}
 						className={`flex flex-1 items-center justify-center gap-3 border-r-2 border-border py-5 text-xs font-heading font-bold uppercase tracking-widest transition-all ${
 							currentStep === 1
@@ -115,7 +111,7 @@ export function AdminEditSupplierPage() {
 						<RiBuildingLine size={16} />
 						Company
 					</button>
-					<button
+					<button type="button"
 						onClick={() => setCurrentStep(2)}
 						className={`flex flex-1 items-center justify-center gap-3 py-5 text-xs font-heading font-bold uppercase tracking-widest transition-all ${
 							currentStep === 2

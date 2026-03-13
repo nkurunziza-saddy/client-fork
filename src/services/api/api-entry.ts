@@ -4,6 +4,7 @@ import type {
 	FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { REHYDRATE } from "redux-persist";
 import { getApiUrl } from "@/shared/config/env";
 import type { RootState } from "@/store";
 import { logout } from "@/store/slices/auth-slice";
@@ -42,9 +43,18 @@ const baseQueryWithReauth: BaseQueryFn<
 export const apiSlice = createApi({
 	reducerPath: "api",
 	baseQuery: baseQueryWithReauth,
+	extractRehydrationInfo(action, { reducerPath }) {
+		if (action.type === REHYDRATE) {
+			return (action.payload as any)?.[reducerPath];
+		}
+	},
+	// Global TTL: How long to keep unused data in the cache (5 minutes)
 	keepUnusedDataFor: 300,
-	refetchOnMountOrArgChange: 120,
+	// SWR config: Consider data stale after 30 seconds. 
+	// If mount occurs after 30s, fresh data is fetched in background while cached is returned immediately.
+	refetchOnMountOrArgChange: 30,
 	refetchOnReconnect: true,
+	refetchOnFocus: true,
 	tagTypes: [
 		"Users",
 		"Categories",

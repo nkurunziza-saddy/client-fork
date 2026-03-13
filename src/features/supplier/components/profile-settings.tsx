@@ -27,7 +27,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
 
   const [profileData, setProfileData] = useState({
     fullName: supplierData?.contactPerson || "John Habimana",
-    email: supplierData?.email || "john@afrikamarket.com",
+    email: supplierData?.email || "john@karibu.com",
     phone: supplierData?.phone || "+250 788 123 456",
     position: supplierData?.position || "Sales Manager",
     avatar: supplierData?.avatar || "/logo.svg",
@@ -64,6 +64,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
         <div className="bg-background border border-border/40 rounded-none overflow-hidden">
           {tabs.map((tab) => (
             <button
+              type="button"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
@@ -107,7 +108,10 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       e.currentTarget.src = "/image-fallback.svg";
                     }}
                   />
-                  <button className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2.5 rounded-sm hover:scale-110 transition-transform shadow-none border border-background">
+                  <button
+                    type="button"
+                    className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2.5 rounded-sm hover:scale-110 transition-transform shadow-none border border-background"
+                  >
                     <Camera className="w-4 h-4" />
                   </button>
                 </div>

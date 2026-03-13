@@ -16,17 +16,9 @@ import { useUploadMediaMutation } from "@/services/api/media";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
 import { FormField } from "@/shared/components/form-field";
 import { useFileUpload } from "@/shared/hooks/use-file-upload";
-
-export interface ProductFormValues {
-	name: string;
-	categoryId: string;
-	description: string;
-	price: string;
-	priceType: "FIXED" | "NEGOTIABLE" | "STARTS_AT";
-	stock: string;
-	unit: string;
-	imageUrls: string[];
-}
+import { getFormFieldErrors } from "@/lib/utils";
+import { productOptions, type ProductFormValues } from "@/shared/schemas/business";
+export type { ProductFormValues };
 
 interface ProductFormProps {
 	onSubmit: (values: ProductFormValues) => void;
@@ -69,16 +61,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 	});
 
 	const form = useForm({
+		...productOptions,
 		defaultValues: {
+			...productOptions.defaultValues,
 			name: initialValues?.name ?? "",
 			categoryId: initialValues?.categoryId ?? "",
 			description: initialValues?.description ?? "",
-			price: initialValues?.price ?? "",
+			price: initialValues?.price ?? "0",
 			priceType: initialValues?.priceType ?? "FIXED",
-			stock: initialValues?.stock ?? "",
+			stock: initialValues?.stock ?? "0",
 			unit: initialValues?.unit ?? "unit",
 			imageUrls: initialValues?.imageUrls ?? [],
-		} as ProductFormValues,
+		},
 		onSubmit: async ({ value }) => {
 			let newUploadedUrls: string[] = [];
 			const filesToUpload = files
@@ -100,7 +94,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			}
 			onSubmit({
 				...value,
-				imageUrls: [...value.imageUrls, ...newUploadedUrls],
+				imageUrls: [...(value.imageUrls || []), ...newUploadedUrls],
 			});
 		},
 	});
@@ -125,31 +119,45 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 				</Alert>
 			)}
 
-			<form.Field name="name">
-				{(field) => (
-					<FormField label="Product Name" required>
+			<form.Field
+				name="name"
+				children={(field) => (
+					<FormField
+						label="Product Name"
+						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+						isTouched={field.state.meta.isTouched}
+					>
 						<Input
+							id={field.name}
 							name={field.name}
 							value={field.state.value}
 							onBlur={field.handleBlur}
 							onChange={(e) => field.handleChange(e.target.value)}
 							className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
 							placeholder="Enter product name"
-							required
 						/>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
-			<form.Field name="categoryId">
-				{(field) => (
-					<FormField label="Category" required>
+			<form.Field
+				name="categoryId"
+				children={(field) => (
+					<FormField
+						label="Category"
+						required
+						error={getFormFieldErrors(field.state.meta.errors)}
+						isTouched={field.state.meta.isTouched}
+					>
 						<Select
 							value={field.state.value}
 							onValueChange={(val) => field.handleChange(val ?? "")}
-							required
 						>
-							<SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
+							<SelectTrigger 
+								aria-label="Select Category"
+								className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
+							>
 								<SelectValue placeholder="Select category" />
 							</SelectTrigger>
 							<SelectContent className="rounded-none border-border/40">
@@ -166,12 +174,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 						</Select>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
 			<div className="grid grid-cols-2 gap-4">
-				<form.Field name="priceType">
-					{(field) => (
-						<FormField label="Pricing Type" required>
+				<form.Field
+					name="priceType"
+					children={(field) => (
+						<FormField
+							label="Pricing Type"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<Select
 								value={field.state.value}
 								onValueChange={(val) => {
@@ -180,9 +194,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 											val as "FIXED" | "NEGOTIABLE" | "STARTS_AT",
 										);
 								}}
-								required
 							>
-								<SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
+								<SelectTrigger 
+									aria-label="Select Pricing Type"
+									className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
+								>
 									<SelectValue placeholder="Select type" />
 								</SelectTrigger>
 								<SelectContent className="rounded-none border-border/40">
@@ -199,40 +215,50 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 							</Select>
 						</FormField>
 					)}
-				</form.Field>
-				<form.Field name="price">
-					{(field) => (
-						<FormField
-							label="Price (RWF)"
-							required={form.getFieldValue("priceType") !== "NEGOTIABLE"}
-						>
-							<Input
-								name={field.name}
-								value={field.state.value}
-								type="number"
-								min="0"
-								step="0.01"
-								disabled={form.getFieldValue("priceType") === "NEGOTIABLE"}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-								placeholder={
-									form.getFieldValue("priceType") === "NEGOTIABLE"
-										? "N/A"
-										: "0.00"
-								}
-								required={form.getFieldValue("priceType") !== "NEGOTIABLE"}
-							/>
-						</FormField>
-					)}
-				</form.Field>
+				/>
+				<form.Field
+					name="price"
+					children={(field) => {
+						const priceType = form.getFieldValue("priceType");
+						const isNegotiable = priceType === "NEGOTIABLE";
+						return (
+							<FormField
+								label="Price (RWF)"
+								required={!isNegotiable}
+								error={getFormFieldErrors(field.state.meta.errors)}
+								isTouched={field.state.meta.isTouched}
+							>
+								<Input
+									id={field.name}
+									name={field.name}
+									value={field.state.value}
+									type="number"
+									min="0"
+									step="0.01"
+									disabled={isNegotiable}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+									placeholder={isNegotiable ? "N/A" : "0.00"}
+								/>
+							</FormField>
+						);
+					}}
+				/>
 			</div>
 
 			<div className="grid grid-cols-2 gap-4">
-				<form.Field name="stock">
-					{(field) => (
-						<FormField label="Stock Quantity" required>
+				<form.Field
+					name="stock"
+					children={(field) => (
+						<FormField
+							label="Stock Quantity"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<Input
+								id={field.name}
 								name={field.name}
 								value={field.state.value}
 								type="number"
@@ -241,32 +267,43 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 								onChange={(e) => field.handleChange(e.target.value)}
 								className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
 								placeholder="0"
-								required
 							/>
 						</FormField>
 					)}
-				</form.Field>
-				<form.Field name="unit">
-					{(field) => (
-						<FormField label="Unit" required>
+				/>
+				<form.Field
+					name="unit"
+					children={(field) => (
+						<FormField
+							label="Unit"
+							required
+							error={getFormFieldErrors(field.state.meta.errors)}
+							isTouched={field.state.meta.isTouched}
+						>
 							<Input
+								id={field.name}
 								name={field.name}
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
 								className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
 								placeholder="e.g. piece, kg, box"
-								required
 							/>
 						</FormField>
 					)}
-				</form.Field>
+				/>
 			</div>
 
-			<form.Field name="description">
-				{(field) => (
-					<FormField label="Description">
+			<form.Field
+				name="description"
+				children={(field) => (
+					<FormField
+						label="Description"
+						error={getFormFieldErrors(field.state.meta.errors)}
+						isTouched={field.state.meta.isTouched}
+					>
 						<Textarea
+							id={field.name}
 							name={field.name}
 							value={field.state.value}
 							onBlur={field.handleBlur}
@@ -277,11 +314,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 						/>
 					</FormField>
 				)}
-			</form.Field>
+			/>
 
 			<div>
-				<form.Field name="imageUrls">
-					{(field) => {
+				<form.Field
+					name="imageUrls"
+					mode="array"
+					children={(field) => {
 						const existingImages = field.state.value || [];
 						const remainingSlots = MAX_IMAGES - existingImages.length;
 
@@ -293,7 +332,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 											Existing Images ({existingImages.length})
 										</label>
 										<div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-											{existingImages.map((url, i) => (
+											{existingImages.map((url: string, i: number) => (
 												<div
 													key={url}
 													className="relative aspect-square border border-border/40 bg-muted/20"
@@ -308,13 +347,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 													/>
 													<Button
 														type="button"
-														onClick={() =>
-															field.handleChange(
-																existingImages.filter(
-																	(_, index) => index !== i,
-																),
-															)
-														}
+														onClick={() => field.removeValue(i)}
 														className="absolute -top-1.5 -right-1.5 size-5 rounded-none p-0 bg-destructive/80 hover:bg-destructive text-primary-foreground backdrop-blur-md border border-background"
 													>
 														<XIcon className="size-3" />
@@ -325,7 +358,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 									</div>
 								)}
 
-								<FormField label={`New Images (up to ${remainingSlots} more)`}>
+								<FormField
+									label={`New Images (up to ${remainingSlots} more)`}
+									error={getFormFieldErrors(field.state.meta.errors)}
+									isTouched={field.state.meta.isTouched}
+								>
 									<div
 										className="relative flex min-h-36 flex-col items-center not-data-files:justify-center overflow-hidden rounded-none border border-dashed border-border/40 p-3 transition-colors data-[dragging=true]:bg-accent/50"
 										data-dragging={isDragging || undefined}
@@ -414,7 +451,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 							</div>
 						);
 					}}
-				</form.Field>
+				/>
 				{uploadErrors.length > 0 && (
 					<div
 						className="flex items-center gap-1 text-destructive text-[10px] font-black uppercase tracking-widest mt-1.5"
@@ -435,19 +472,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 				>
 					Cancel
 				</Button>
-				<Button
-					type="submit"
-					disabled={isLoading || isUploading}
-					className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-primary/20"
-				>
-					{isUploading
-						? "Uploading..."
-						: isLoading
-							? "Saving..."
-							: initialValues?.name
-								? "Save Changes"
-								: "Create Product"}
-				</Button>
+				<form.Subscribe
+					selector={(state) => [state.canSubmit, state.isSubmitting]}
+					children={([canSubmit, isSubmitting]) => (
+						<Button
+							type="submit"
+							disabled={!canSubmit || isLoading || isUploading || isSubmitting}
+							className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-primary/20"
+						>
+							{isUploading || isSubmitting
+								? "Uploading..."
+								: isLoading
+									? "Saving..."
+									: initialValues?.name
+										? "Save Changes"
+										: "Create Product"}
+						</Button>
+					)}
+				/>
 			</div>
 		</form>
 	);

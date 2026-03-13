@@ -20,27 +20,27 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
 				<div className="flex flex-wrap items-center gap-3">
 					<div className="flex items-center gap-1.5 bg-muted/30 px-2 py-0.5 border border-border/10">
 						<Eye className="w-3 h-3 text-muted-foreground" />
-						<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
+						<span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.18em]">
 							{service.views || 0} Views
 						</span>
 					</div>
 					<div className="flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 border border-primary/10">
 						<History className="w-3 h-3 text-primary" />
-						<span className="text-[9px] font-black text-primary uppercase tracking-widest">
+						<span className="text-[10px] font-semibold text-primary uppercase tracking-[0.18em]">
 							{service.totalRequests || 0} Requests
 						</span>
 					</div>
 					{service.company?.isVerified && (
 						<div className="flex items-center gap-1.5 bg-success/5 px-2 py-0.5 border border-success/10">
 							<ShieldCheck className="w-3 h-3 text-success" />
-							<span className="text-[9px] font-black text-success uppercase tracking-widest">
+							<span className="text-[10px] font-semibold text-success uppercase tracking-[0.18em]">
 								Certified
 							</span>
 						</div>
 					)}
 				</div>
 
-				<h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-black uppercase text-foreground tracking-tight leading-tight">
+				<h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-black text-foreground tracking-tight leading-[1.05]">
 					{service.name}
 				</h1>
 			</div>
@@ -48,7 +48,7 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
 			{/* Price Section - Prominent & Simple */}
 			<div className="py-6 border-y border-border/40">
 				<div className="flex flex-col gap-1">
-					<span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+					<span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.2em]">
 						{service.priceType === "NEGOTIABLE"
 							? "Service Quotation"
 							: "Active Engagement Rate"}
@@ -69,7 +69,7 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
 							)}
 						</span>
 						{service.priceType !== "NEGOTIABLE" && service.duration && (
-							<span className="text-xs text-muted-foreground font-black uppercase tracking-widest">
+							<span className="text-xs text-muted-foreground font-semibold uppercase tracking-[0.2em]">
 								/ {service.duration}
 							</span>
 						)}
@@ -81,7 +81,7 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
 			<div className="space-y-4">
 				<div className="flex items-center gap-2 text-muted-foreground">
 					<div className="w-6 h-px bg-border" />
-					<span className="text-[9px] font-black uppercase tracking-[0.3em]">
+					<span className="text-[10px] font-semibold uppercase tracking-[0.2em]">
 						Professional Brief
 					</span>
 				</div>

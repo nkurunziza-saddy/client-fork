@@ -1,10 +1,10 @@
 import {
 	RiArrowLeftSLine,
-	RiLoader2Line,
 	RiMoneyDollarCircleLine,
 	RiPagesLine,
 	RiSaveLine,
 } from "@remixicon/react";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -93,11 +93,7 @@ export function AdminEditProductPage() {
 	};
 
 	if (isLoadingData) {
-		return (
-			<div className="flex min-h-screen items-center justify-center bg-background">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!product || !supplier) {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import type { CatalogFilters, ListingType } from "@/types";
-import { useMarketplaceParams } from "./use-marketplace-params";
 
 const DEFAULT_PRICE_MAX = 1_000_000;
 
@@ -9,87 +9,97 @@ export function useMarketplaceFilters(
 	_initialType: ListingType = "all",
 	onTypeChange?: (type: ListingType) => void,
 ) {
-	const [filters, setFilters] = useMarketplaceParams();
+	const search = useSearch({ strict: false }) as any;
+	const navigate = useNavigate();
 
-	const [searchInput, setSearchInput] = useState(filters.searchQuery);
+	const [searchInput, setSearchInput] = useState(search.searchQuery || "");
 	const [priceRange, setPriceRange] = useState<[number, number]>([
-		filters.minPrice ? Number(filters.minPrice) : 0,
-		filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
+		search.minPrice ? Number(search.minPrice) : 0,
+		search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
 	]);
 
 	// Sync state if filters change (e.g. from URL or reset)
 	useEffect(() => {
-		setSearchInput(filters.searchQuery);
-	}, [filters.searchQuery]);
+		setSearchInput(search.searchQuery || "");
+	}, [search.searchQuery]);
 
 	useEffect(() => {
 		setPriceRange([
-			filters.minPrice ? Number(filters.minPrice) : 0,
-			filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
+			search.minPrice ? Number(search.minPrice) : 0,
+			search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
 		]);
-	}, [filters.minPrice, filters.maxPrice]);
+	}, [search.minPrice, search.maxPrice]);
 
 	const patchFilters = useCallback(
 		(patch: Partial<CatalogFilters>) => {
-			setFilters((prev) => {
-				const next = { ...prev, ...patch };
-				if (patch.type != null && patch.type !== prev.type) {
-					onTypeChange?.(patch.type as ListingType);
-				}
-				return next;
-			});
+			navigate({
+				search: (prev: any) => {
+					const next = { ...prev, ...patch };
+					if (patch.type != null && patch.type !== prev.type) {
+						onTypeChange?.(patch.type as ListingType);
+					}
+					return next;
+				},
+			} as any);
 		},
-		[setFilters, onTypeChange],
+		[navigate, onTypeChange],
 	);
 
 	const resetFilters = useCallback(() => {
-		setFilters({
-			searchQuery: "",
-			categoryId: "all",
-			type: "all",
-			district: "",
-			minPrice: "",
-			maxPrice: "",
-			onlyInStock: false,
-			companyType: "all",
-			sortBy: "createdAt",
-			sortOrder: "DESC",
-			page: 1,
-		});
+		navigate({
+			search: (prev: any) => ({
+				...prev,
+				searchQuery: "",
+				categoryId: "all",
+				type: "all",
+				district: "",
+				minPrice: undefined,
+				maxPrice: undefined,
+				onlyInStock: false,
+				companyType: "all",
+				sortBy: "createdAt",
+				sortOrder: "DESC",
+				page: 1,
+			}),
+		} as any);
 		onTypeChange?.("all");
-	}, [setFilters, onTypeChange]);
+	}, [navigate, onTypeChange]);
 
 	const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
 	useEffect(() => {
-		if (searchInput === filters.searchQuery) return; // Skip if already synced
+		if (searchInput === (search.searchQuery || "")) return;
 
 		clearTimeout(searchDebounce.current);
 		searchDebounce.current = setTimeout(() => {
-			setFilters({ searchQuery: searchInput, page: 1 });
+			navigate({
+				search: (prev: any) => ({ ...prev, searchQuery: searchInput, page: 1 }),
+			} as any);
 		}, 400);
 		return () => clearTimeout(searchDebounce.current);
-	}, [searchInput, filters.searchQuery, setFilters]);
+	}, [searchInput, search.searchQuery, navigate]);
 
 	const commitPrice = useCallback(() => {
-		setFilters({
-			minPrice: priceRange[0].toString(),
-			maxPrice: priceRange[1].toString(),
-			page: 1,
-		});
-	}, [priceRange, setFilters]);
+		navigate({
+			search: (prev: any) => ({
+				...prev,
+				minPrice: priceRange[0],
+				maxPrice: priceRange[1],
+				page: 1,
+			}),
+		} as any);
+	}, [priceRange, navigate]);
 
 	const hasActiveFilters =
-		filters.categoryId !== "all" ||
-		filters.type !== "all" ||
-		filters.companyType !== "all" ||
-		!!filters.district ||
-		!!filters.minPrice ||
-		!!filters.maxPrice ||
-		filters.onlyInStock;
+		search.categoryId !== "all" ||
+		search.type !== "all" ||
+		search.companyType !== "all" ||
+		!!search.district ||
+		!!search.minPrice ||
+		!!search.maxPrice ||
+		search.onlyInStock;
 
 	return {
-		filters,
-		setFilters,
+		filters: search as CatalogFilters,
 		patchFilters,
 		resetFilters,
 		searchInput,

@@ -2,6 +2,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
+import { setupListeners } from "@reduxjs/toolkit/query";
 import { PersistGate } from "redux-persist/integration/react";
 import { ErrorBoundary } from "@/components/layout/error-boundary";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -33,6 +34,7 @@ const rootElement = document.getElementById("root")!;
 
 if (!rootElement.innerHTML) {
 	const root = createRoot(rootElement);
+	setupListeners(store.dispatch);
 	root.render(
 		<StrictMode>
 			<Provider store={store}>

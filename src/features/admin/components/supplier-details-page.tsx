@@ -3,12 +3,12 @@ import {
 	RiCalendarLine,
 	RiDeleteBinLine,
 	RiEditLine,
-	RiLoader2Line,
 	RiMapPinLine,
 	RiShieldCheckLine,
 	RiStore2Line,
 	RiUserLine,
 } from "@remixicon/react";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -23,6 +23,13 @@ import {
 import { useGetProductsQuery } from "@/services/api/products";
 import { useGetServicesQuery } from "@/services/api/services";
 import { ConfirmationModal } from "@/shared/components/confirmation-modal";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { Card } from "./card";
 import { PageHeader } from "./page-header";
 import { StatCard } from "./stat-card";
@@ -89,11 +96,7 @@ export function AdminSupplierDetailsPage() {
 	};
 
 	if (loading) {
-		return (
-			<div className="flex items-center justify-center p-24">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!company) {
@@ -274,9 +277,19 @@ export function AdminSupplierDetailsPage() {
 
 					<TabsContent value="products" className="m-0 p-4">
 						{products.length === 0 ? (
-							<div className="rounded-sm border border-dashed border-border py-12 text-center text-muted-foreground">
-								No products found for this supplier.
-							</div>
+							<Empty className="py-12 border border-dashed border-border rounded-none">
+								<EmptyHeader>
+									<EmptyMedia variant="icon">
+										<RiStore2Line className="w-4 h-4 text-primary" />
+									</EmptyMedia>
+									<EmptyTitle className="text-xl font-display font-black uppercase">
+										No products found
+									</EmptyTitle>
+									<EmptyDescription className="uppercase tracking-widest text-[10px]">
+										This supplier hasn't listed any products yet.
+									</EmptyDescription>
+								</EmptyHeader>
+							</Empty>
 						) : (
 							<div className="overflow-x-auto">
 								<table className="w-full text-sm">
@@ -329,9 +342,19 @@ export function AdminSupplierDetailsPage() {
 
 					<TabsContent value="services" className="m-0 p-4">
 						{services.length === 0 ? (
-							<div className="rounded-sm border border-dashed border-border py-12 text-center text-muted-foreground">
-								No services found for this supplier.
-							</div>
+							<Empty className="py-12 border border-dashed border-border rounded-none">
+								<EmptyHeader>
+									<EmptyMedia variant="icon">
+										<RiStore2Line className="w-4 h-4 text-primary" />
+									</EmptyMedia>
+									<EmptyTitle className="text-xl font-display font-black uppercase">
+										No services found
+									</EmptyTitle>
+									<EmptyDescription className="uppercase tracking-widest text-[10px]">
+										This supplier hasn't listed any services yet.
+									</EmptyDescription>
+								</EmptyHeader>
+							</Empty>
 						) : (
 							<div className="overflow-x-auto">
 								<table className="w-full text-sm">

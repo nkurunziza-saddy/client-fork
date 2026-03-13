@@ -20,14 +20,24 @@ const authPersistConfig = {
 	whitelist: ["isAuthenticated", "user", "token"],
 };
 
+const apiPersistConfig = {
+	key: "api",
+	storage,
+};
+
 export const persistedAuthReducer = persistReducer(
 	authPersistConfig,
 	authReducer,
 );
 
+export const persistedApiReducer = persistReducer(
+	apiPersistConfig,
+	apiSlice.reducer,
+);
+
 const rootReducer = combineReducers({
 	auth: persistedAuthReducer,
-	[apiSlice.reducerPath]: apiSlice.reducer,
+	[apiSlice.reducerPath]: persistedApiReducer,
 });
 
 export const store = configureStore({
@@ -36,6 +46,10 @@ export const store = configureStore({
 		getDefaultMiddleware({
 			serializableCheck: {
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+				warnAfter: 256,
+			},
+			immutableCheck: {
+				warnAfter: 256,
 			},
 		}).concat(apiSlice.middleware),
 });

@@ -54,6 +54,7 @@ export function ConfirmationModal({
 						{cancelText}
 					</AlertDialogCancel>
 					<AlertDialogAction
+						data-testid="confirm-button"
 						onClick={(e) => {
 							e.preventDefault();
 							onConfirm();

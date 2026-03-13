@@ -70,6 +70,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
 						</div>
 						{onToggleWishlist && (
 							<Button
+								data-testid="wishlist-button"
 								variant="ghost"
 								size="icon"
 								onClick={(e) => {
@@ -121,6 +122,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({
 
 				{onToggleWishlist && (
 					<Button
+						data-testid="wishlist-button"
 						variant="outline"
 						size="icon"
 						className={cn(

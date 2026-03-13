@@ -13,10 +13,17 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useForm } from "@tanstack/react-form";
+import { z } from "zod";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn, handleRtkQueryError } from "@/lib/utils";
+import {
+	Empty,
+	EmptyHeader,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import {
 	useGetChatHistoryQuery,
 	useGetConversationsQuery,
@@ -28,10 +35,15 @@ interface MessageCenterProps {
 	role: "user" | "provider";
 }
 
+const messageSchema = z.object({
+	content: z.string().min(1, "Message cannot be empty"),
+});
+
+type MessageFormValues = z.infer<typeof messageSchema>;
+
 const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 	const user = useSelector((state: RootState) => state.auth.user);
 	const [activeChatId, setActiveChatId] = useState<string | null>(null);
-	const [messageText, setMessageText] = useState("");
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	const { data: conversations, isLoading: isLoadingConversations } =
@@ -45,6 +57,27 @@ const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 
 	const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
 
+	const form = useForm({
+		defaultValues: {
+			content: "",
+		} as MessageFormValues,
+		validators: {
+			onChange: messageSchema,
+		},
+		onSubmit: async ({ value, formApi }) => {
+			if (!activeChatId || isSending) return;
+			try {
+				await sendMessage({
+					receiverId: activeChatId,
+					content: value.content,
+				}).unwrap();
+				formApi.reset();
+			} catch (err) {
+				handleRtkQueryError(err, "Failed to send message");
+			}
+		},
+	});
+
 	const activeChat = conversations?.find((c) => c.partner.id === activeChatId);
 
 	const scrollToBottom = () => {
@@ -55,24 +88,7 @@ const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 		if (chatHistory?.items) {
 			scrollToBottom();
 		}
-	}, [chatHistory?.items, scrollToBottom]);
-
-	const handleSendMessage = async (e: React.FormEvent) => {
-		e.preventDefault();
-		if (!messageText.trim() || !activeChatId || isSending) return;
-
-		try {
-			const text = messageText;
-			setMessageText(""); // Clear immediately for UX
-			await sendMessage({
-				receiverId: activeChatId,
-				content: text,
-			}).unwrap();
-		} catch (err) {
-			setMessageText(messageText); // Restore on error
-			handleRtkQueryError(err, "Failed to send message");
-		}
-	};
+	}, [chatHistory?.items]);
 
 	return (
 		<div className="flex h-full bg-background border border-border rounded-sm overflow-hidden shadow-2xl">
@@ -102,12 +118,16 @@ const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 							<Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
 						</div>
 					) : conversations?.length === 0 ? (
-						<div className="p-8 text-center text-muted-foreground uppercase text-[10px] font-bold tracking-widest">
-							No messages found
-						</div>
+						<Empty className="p-8 rounded-none border-none">
+							<EmptyHeader>
+								<EmptyTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+									No messages found
+								</EmptyTitle>
+							</EmptyHeader>
+						</Empty>
 					) : (
 						conversations?.map((conv) => (
-							<button
+							<button type="button"
 								key={conv.partner.id}
 								onClick={() => setActiveChatId(conv.partner.id)}
 								className={cn(
@@ -266,7 +286,11 @@ const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 						<div className="p-6 border-t-2 border-border bg-background shrink-0">
 							<form
 								className="flex items-center gap-3"
-								onSubmit={handleSendMessage}
+								onSubmit={(e) => {
+									e.preventDefault();
+									e.stopPropagation();
+									form.handleSubmit();
+								}}
 							>
 								<Button
 									type="button"
@@ -277,18 +301,26 @@ const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 									<Paperclip className="w-5 h-5 text-muted-foreground" />
 								</Button>
 								<div className="relative flex-1">
-									<Input
-										value={messageText}
-										onChange={(e) => setMessageText(e.target.value)}
-										onKeyDown={(e) => {
-											if (e.key === "Enter" && !e.shiftKey) {
-												e.preventDefault();
-												handleSendMessage(e);
-											}
-										}}
-										placeholder="Write a message..."
-										className="h-12 bg-muted/10 border border-border rounded-sm px-4 pr-12 font-bold uppercase text-xs tracking-wider shadow-none focus:bg-background"
-										disabled={isSending}
+									<form.Field
+										name="content"
+										children={(field) => (
+											<Input
+												id={field.name}
+												name={field.name}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												onKeyDown={(e) => {
+													if (e.key === "Enter" && !e.shiftKey) {
+														e.preventDefault();
+														form.handleSubmit();
+													}
+												}}
+												placeholder="Write a message..."
+												className="h-12 bg-muted/10 border border-border rounded-sm px-4 pr-12 font-bold uppercase text-xs tracking-wider shadow-none focus:bg-background"
+												disabled={isSending}
+											/>
+										)}
 									/>
 									<button
 										type="button"
@@ -297,17 +329,23 @@ const MessageCenter: React.FC<MessageCenterProps> = ({ role: _role }) => {
 										<Smile className="w-5 h-5" />
 									</button>
 								</div>
-								<Button
-									className="h-12 px-6 rounded-sm font-heading font-bold uppercase tracking-widest shadow-lg shadow-primary/20 shrink-0"
-									disabled={isSending || !messageText.trim()}
-								>
-									{isSending ? (
-										<Loader2 className="w-4 h-4 mr-2 animate-spin" />
-									) : (
-										<Send className="w-4 h-4 mr-2" />
+								<form.Subscribe
+									selector={(state) => [state.canSubmit, state.isSubmitting]}
+									children={([canSubmit, isSubmitting]) => (
+										<Button
+											type="submit"
+											className="h-12 px-6 rounded-sm font-heading font-bold uppercase tracking-widest shadow-lg shadow-primary/20 shrink-0"
+											disabled={!canSubmit || isSending || isSubmitting}
+										>
+											{isSending || isSubmitting ? (
+												<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+											) : (
+												<Send className="w-4 h-4 mr-2" />
+											)}
+											Send
+										</Button>
 									)}
-									Send
-								</Button>
+								/>
 							</form>
 						</div>
 					</>

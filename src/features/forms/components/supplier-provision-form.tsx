@@ -6,6 +6,10 @@ import {
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
 import { Button } from "@/components/ui/button";
+import {
+	supplierProvisionSchema,
+	type SupplierProvisionValues,
+} from "@/shared/schemas/business";
 import { AgentStep } from "./supplier-provision/agent-step";
 import { IdentityStep } from "./supplier-provision/identity-step";
 import { ReviewStep } from "./supplier-provision/review-step";
@@ -13,9 +17,9 @@ import { ReviewStep } from "./supplier-provision/review-step";
 interface SupplierProvisionFormProps {
 	currentStep: number;
 	onStepChange: (step: number) => void;
-	onSubmit: (values: any) => void;
+	onSubmit: (values: SupplierProvisionValues) => void;
 	onCancel: () => void;
-	initialValues?: any;
+	initialValues?: Partial<SupplierProvisionValues>;
 	mode?: "add" | "edit";
 }
 
@@ -28,18 +32,21 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
 	mode = "add",
 }) => {
 	const form = useForm({
-		defaultValues: initialValues || {
-			companyName: "",
-			industry: "",
-			registrationId: "",
-			location: "",
-			district: "",
-			sectorAddress: "",
-			fullName: "",
-			email: "",
-			phoneNumber: "",
-			position: "",
-			nationalId: "",
+		defaultValues: {
+			companyName: initialValues?.companyName || "",
+			industry: initialValues?.industry || "",
+			registrationId: initialValues?.registrationId || "",
+			location: initialValues?.location || "",
+			district: initialValues?.district || "",
+			sectorAddress: initialValues?.sectorAddress || "",
+			fullName: initialValues?.fullName || "",
+			email: initialValues?.email || "",
+			phoneNumber: initialValues?.phoneNumber || "",
+			position: initialValues?.position || "",
+			nationalId: initialValues?.nationalId || "",
+		} as SupplierProvisionValues,
+		validators: {
+			onChange: supplierProvisionSchema,
 		},
 		onSubmit: async ({ value }) => {
 			onSubmit(value);
@@ -87,23 +94,32 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
 						{currentStep === 1 ? "Cancel" : "Back"}
 					</Button>
 
-					{currentStep < 3 ? (
-						<Button
-							type="submit"
-							className="flex-[2] items-center gap-2 px-6 h-12 rounded-sm shadow-none bg-primary text-primary-foreground hover:bg-primary/90 font-heading font-bold uppercase text-xs tracking-widest"
-						>
-							Next Step
-							<RiArrowRightLine size={16} />
-						</Button>
-					) : (
-						<Button
-							type="submit"
-							className="flex-[2] items-center gap-2 px-6 h-12 bg-success hover:bg-success/90 text-success-foreground border-none rounded-sm font-heading font-bold uppercase text-xs tracking-widest shadow-none"
-						>
-							<RiSaveLine size={16} />
-							Register Company
-						</Button>
-					)}
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
+						children={([canSubmit, isSubmitting]) => {
+							if (currentStep < 3) {
+								return (
+									<Button
+										type="submit"
+										className="flex-[2] items-center gap-2 px-6 h-12 rounded-sm shadow-none bg-primary text-primary-foreground hover:bg-primary/90 font-heading font-bold uppercase text-xs tracking-widest"
+									>
+										Next Step
+										<RiArrowRightLine size={16} />
+									</Button>
+								);
+							}
+							return (
+								<Button
+									type="submit"
+									disabled={!canSubmit || isSubmitting}
+									className="flex-[2] items-center gap-2 px-6 h-12 bg-success hover:bg-success/90 text-success-foreground border-none rounded-sm font-heading font-bold uppercase text-xs tracking-widest shadow-none"
+								>
+									<RiSaveLine size={16} />
+									{isSubmitting ? "Registering..." : "Register Company"}
+								</Button>
+							);
+						}}
+					/>
 				</div>
 			)}
 		</form>

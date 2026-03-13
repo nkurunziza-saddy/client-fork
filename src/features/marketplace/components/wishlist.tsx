@@ -22,6 +22,13 @@ import type { RootState } from "@/store";
 import type { MarketplaceItem, WishlistItem } from "@/types";
 import { ProductCard } from "./catalog/product-card";
 import { ServiceCard } from "./catalog/service-card";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 
 interface WishlistProps {
 	onBack: () => void;
@@ -187,12 +194,19 @@ const Wishlist: React.FC<WishlistProps> = ({
 				{activeTab === "products" && (
 					<div>
 						{products.length === 0 ? (
-							<div className="text-center py-32 border border-dashed border-border/20">
-								<RiPackageLine className="w-12 h-12 text-muted-foreground/20 mx-auto mb-6" />
-								<h3 className="text-sm font-display font-bold uppercase tracking-widest text-muted-foreground/40">
-									No products in wishlist
-								</h3>
-							</div>
+							<Empty className="py-32 border border-dashed border-border/20 rounded-none">
+								<EmptyHeader>
+									<EmptyMedia variant="icon">
+										<RiPackageLine className="w-4 h-4 text-primary" />
+									</EmptyMedia>
+									<EmptyTitle className="text-xl font-display font-black uppercase">
+										No products in wishlist
+									</EmptyTitle>
+									<EmptyDescription className="uppercase tracking-widest text-[10px]">
+										You haven't saved any products to your wishlist yet.
+									</EmptyDescription>
+								</EmptyHeader>
+							</Empty>
 						) : (
 							<div
 								className={`grid gap-6 ${
@@ -225,12 +239,19 @@ const Wishlist: React.FC<WishlistProps> = ({
 				{activeTab === "services" && (
 					<div>
 						{services.length === 0 ? (
-							<div className="text-center py-32 border border-dashed border-border/20">
-								<RiServiceLine className="w-12 h-12 text-muted-foreground/20 mx-auto mb-6" />
-								<h3 className="text-sm font-display font-bold uppercase tracking-widest text-muted-foreground/40">
-									No services in wishlist
-								</h3>
-							</div>
+							<Empty className="py-32 border border-dashed border-border/20 rounded-none">
+								<EmptyHeader>
+									<EmptyMedia variant="icon">
+										<RiServiceLine className="w-4 h-4 text-primary" />
+									</EmptyMedia>
+									<EmptyTitle className="text-xl font-display font-black uppercase">
+										No services in wishlist
+									</EmptyTitle>
+									<EmptyDescription className="uppercase tracking-widest text-[10px]">
+										You haven't saved any services to your wishlist yet.
+									</EmptyDescription>
+								</EmptyHeader>
+							</Empty>
 						) : (
 							<div
 								className={`grid gap-6 ${
@@ -263,15 +284,19 @@ const Wishlist: React.FC<WishlistProps> = ({
 				{activeTab === "suppliers" && (
 					<div>
 						{companies.length === 0 ? (
-							<div className="text-center py-32 border border-dashed border-border/20">
-								<RiUserLine className="w-12 h-12 text-muted-foreground/20 mx-auto mb-6" />
-								<h3 className="text-sm font-display font-bold uppercase tracking-widest text-muted-foreground/40">
-									No saved suppliers yet
-								</h3>
-								<p className="text-xs text-muted-foreground/30 mt-2">
-									Visit a supplier page and click "Save to Favorites"
-								</p>
-							</div>
+							<Empty className="py-32 border border-dashed border-border/20 rounded-none">
+								<EmptyHeader>
+									<EmptyMedia variant="icon">
+										<RiUserLine className="w-4 h-4 text-primary" />
+									</EmptyMedia>
+									<EmptyTitle className="text-xl font-display font-black uppercase">
+										No saved suppliers yet
+									</EmptyTitle>
+									<EmptyDescription className="uppercase tracking-widest text-[10px]">
+										Visit a supplier page and click "Save to Favorites"
+									</EmptyDescription>
+								</EmptyHeader>
+							</Empty>
 						) : (
 							<div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 								{companies.map((item) => (

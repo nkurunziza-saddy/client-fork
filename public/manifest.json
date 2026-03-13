@@ -1,6 +1,6 @@
 {
-  "name": "AfrikaMarket",
-  "short_name": "AfrikaMarket",
+  "name": "Karibu",
+  "short_name": "Karibu",
   "description": "Africa's premier wholesale marketplace connecting verified suppliers with retailers. Discover quality products from trusted importers across the continent.",
   "start_url": "/",
   "display": "standalone",
@@ -21,10 +21,7 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": [
-    "productivity",
-    "utilities"
-  ],
+  "categories": ["productivity", "utilities"],
   "lang": "en",
   "dir": "ltr"
 }

@@ -1,3 +1,4 @@
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import {
 	RiArrowLeftSLine,
 	RiBuilding2Line,
@@ -5,7 +6,6 @@ import {
 	RiDeleteBinLine,
 	RiEditLine,
 	RiEyeLine,
-	RiLoader2Line,
 	RiPriceTagLine,
 	RiStockLine,
 } from "@remixicon/react";
@@ -82,11 +82,7 @@ export function AdminProductDetailsPage() {
 	};
 
 	if (isLoading) {
-		return (
-			<div className="flex min-h-screen items-center justify-center bg-background">
-				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <AdminPageSkeleton />;
 	}
 
 	if (!product || !supplier) {
@@ -100,7 +96,7 @@ export function AdminProductDetailsPage() {
 						onClick={() =>
 							navigate({ to: `/admin/suppliers/${supplierId}` as any })
 						}
-						className="h-11 w-full rounded-sm"
+						className="h-11 w-full rounded-sm font-heading font-bold uppercase text-xs tracking-wider"
 					>
 						Back to Supplier
 					</Button>
@@ -156,7 +152,7 @@ export function AdminProductDetailsPage() {
 						{images.length > 1 && (
 							<div className="grid grid-cols-5 gap-2 border-t border-border p-3">
 								{images.map((image, index) => (
-									<button
+									<button type="button"
 										key={`${image}-${index}`}
 										onClick={() => setSelectedImageIndex(index)}
 										className={`aspect-square overflow-hidden rounded-sm border ${

@@ -1,75 +1,85 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAuctionsParams } from "./use-auctions-params";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 const DEFAULT_PRICE_MAX = 100_000_000;
 
 export function useAuctionsFilters() {
-	const [filters, setFilters] = useAuctionsParams();
+	const search = useSearch({ strict: false }) as any;
+	const navigate = useNavigate();
 
-	const [searchInput, setSearchInput] = useState(filters.q);
+	const [searchInput, setSearchInput] = useState(search.q || "");
 	const [priceRange, setPriceRange] = useState<[number, number]>([
-		filters.minPrice ? Number(filters.minPrice) : 0,
-		filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
+		search.minPrice ? Number(search.minPrice) : 0,
+		search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
 	]);
 
 	// Sync state if filters change (e.g. from URL or reset)
 	useEffect(() => {
-		setSearchInput(filters.q);
-	}, [filters.q]);
+		setSearchInput(search.q || "");
+	}, [search.q]);
 
 	useEffect(() => {
 		setPriceRange([
-			filters.minPrice ? Number(filters.minPrice) : 0,
-			filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
+			search.minPrice ? Number(search.minPrice) : 0,
+			search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
 		]);
-	}, [filters.minPrice, filters.maxPrice]);
+	}, [search.minPrice, search.maxPrice]);
 
 	const patchFilters = useCallback(
-		(patch: Partial<typeof filters>) => {
-			setFilters({ ...filters, ...patch });
+		(patch: Partial<any>) => {
+			navigate({
+				search: (prev: any) => ({ ...prev, ...patch }),
+			} as any);
 		},
-		[filters, setFilters],
+		[navigate],
 	);
 
 	const resetFilters = useCallback(() => {
-		setFilters({
-			q: "",
-			minPrice: "",
-			maxPrice: "",
-			sortBy: "createdAt",
-			sortOrder: "DESC",
-			page: 1,
-		});
-	}, [setFilters]);
+		navigate({
+			search: (prev: any) => ({
+				...prev,
+				q: "",
+				minPrice: "",
+				maxPrice: "",
+				sortBy: "createdAt",
+				sortOrder: "DESC",
+				page: 1,
+			}),
+		} as any);
+	}, [navigate]);
 
 	const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
 	useEffect(() => {
-		if (searchInput === filters.q) return; // Skip if already synced
+		if (searchInput === (search.q || "")) return;
 
 		clearTimeout(searchDebounce.current);
 		searchDebounce.current = setTimeout(() => {
-			setFilters({ q: searchInput, page: 1 });
+			navigate({
+				search: (prev: any) => ({ ...prev, q: searchInput, page: 1 }),
+			} as any);
 		}, 400);
 		return () => clearTimeout(searchDebounce.current);
-	}, [searchInput, filters.q, setFilters]);
+	}, [searchInput, search.q, navigate]);
 
 	const commitPrice = useCallback(() => {
-		setFilters({
-			minPrice: priceRange[0].toString(),
-			maxPrice: priceRange[1].toString(),
-			page: 1,
-		});
-	}, [priceRange, setFilters]);
+		navigate({
+			search: (prev: any) => ({
+				...prev,
+				minPrice: priceRange[0].toString(),
+				maxPrice: priceRange[1].toString(),
+				page: 1,
+			}),
+		} as any);
+	}, [priceRange, navigate]);
 
 	const hasActiveFilters =
-		!!filters.q ||
-		!!filters.minPrice ||
-		!!filters.maxPrice ||
-		filters.sortBy !== "createdAt";
+		!!search.q ||
+		!!search.minPrice ||
+		!!search.maxPrice ||
+		search.sortBy !== "createdAt";
 
 	return {
-		filters,
-		setFilters,
+		filters: search,
 		patchFilters,
 		resetFilters,
 		searchInput,

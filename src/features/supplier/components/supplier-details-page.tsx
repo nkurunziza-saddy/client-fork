@@ -30,7 +30,7 @@ export function SupplierDetailsPage() {
 					<h2 className="text-2xl font-display font-black uppercase text-foreground mb-4 tracking-tight">
 						Supplier Not Found
 					</h2>
-					<button
+					<button type="button"
 						onClick={handleBack}
 						className="text-[10px] font-black text-primary uppercase tracking-[0.3em] hover:underline"
 					>
