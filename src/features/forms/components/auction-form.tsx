@@ -4,14 +4,15 @@ import type React from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getFormFieldErrors } from "@/lib/utils";
-import { auctionOptions, type AuctionFormValues } from "@/shared/schemas/business";
 import { Textarea } from "@/components/ui/textarea";
+import { getFormFieldErrors } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { FormField } from "@/shared/components/form-field";
 import { useFileUpload } from "@/shared/hooks/use-file-upload";
-
-
+import {
+	type AuctionFormValues,
+	auctionOptions,
+} from "@/shared/schemas/business";
 
 interface AuctionFormProps {
 	onSubmit: (
@@ -265,7 +266,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 														onClick={() =>
 															field.handleChange(
 																existingImages.filter(
-																	(_: any, index: number) => index !== i,
+																	(_: string, index: number) => index !== i,
 																),
 															)
 														}

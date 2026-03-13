@@ -8,11 +8,11 @@ import {
 	useGetProductsQuery,
 } from "@/services/api/products";
 import { ActionModal } from "@/shared/components/action-modal";
-import type { ProductRow } from "@/types";
-import { getProductColumns } from "../columns/products-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
 import { ResourceManagementLayout } from "@/shared/components/layouts/resource-management-layout";
 import { formatDate } from "@/shared/utils/format";
+import type { ProductRow } from "@/types";
+import { getProductColumns } from "../columns/products-columns";
 
 export function AdminProductsPage() {
 	const navigate = useNavigate();
@@ -68,15 +68,16 @@ export function AdminProductsPage() {
 					navigate({
 						to: "/suppliers/$supplierId",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onViewDetails: (id) =>
 					navigate({
 						to: "/products/$productId",
 						params: { productId: id },
-					} as any),
+					}),
 				onEdit: (supplierId, productId) =>
 					navigate({
-						to: `/admin/suppliers/${supplierId}/product/${productId}/edit` as any,
+						to: "/admin/suppliers/$supplierId/product/$productId/edit",
+						params: { supplierId, productId },
 					}),
 				onDelete: (p) =>
 					setDeleteModal({

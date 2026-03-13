@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ServiceDetailsPage } from "@/features/marketplace/components/service-details-page";
 import { servicesApi } from "@/services/api/services";
-import { store } from "@/store";
+import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
 import { RouteLoading } from "@/shared/components/route-loading";
-import { NotFound } from "@/shared/components/not-found";
+import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/services/$serviceId")({
 	staleTime: 60_000,

@@ -1,10 +1,10 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { AuthLayout } from "@/components/layout/auth-layout";
-import { store } from "@/store";
-import { RouteLoading } from "@/shared/components/route-loading";
 import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
+import { RouteLoading } from "@/shared/components/route-loading";
+import { store } from "@/store";
 
 export const Route = createFileRoute("/auth")({
 	validateSearch: z.object({

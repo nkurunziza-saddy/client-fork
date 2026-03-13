@@ -11,13 +11,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { getFormFieldErrors } from "@/lib/utils";
+import type { FileWithPreview } from "@/types/ui";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { useGetServiceCategoriesQuery } from "@/services/api/service-categories";
 import { FormField } from "@/shared/components/form-field";
-import { getFormFieldErrors } from "@/lib/utils";
-import { serviceOptions, type ServiceFormValues } from "@/shared/schemas/business";
-import { ResourceFormLayout } from "@/shared/components/forms/resource-form-layout";
 import { ImageUploadSection } from "@/shared/components/forms/image-upload-section";
+import { ResourceFormLayout } from "@/shared/components/forms/resource-form-layout";
+import {
+  type ServiceFormValues,
+  serviceOptions,
+} from "@/shared/schemas/business";
 
 interface ServiceFormProps {
   onSubmit: (values: ServiceFormValues) => void;
@@ -37,27 +41,20 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
   const { data: categoriesData } = useGetServiceCategoriesQuery({ limit: 100 });
   const categories = categoriesData?.data ?? [];
   const [uploadMedia, { isLoading: isUploading }] = useUploadMediaMutation();
-  const [newFiles, setNewFiles] = useState<any[]>([]);
+  const [newFiles, setNewFiles] = useState<FileWithPreview[]>([]);
 
   const form = useForm({
     ...serviceOptions,
     defaultValues: {
       ...serviceOptions.defaultValues,
-      name: initialValues?.name ?? "",
-      categoryId: initialValues?.categoryId ?? "",
-      description: initialValues?.description ?? "",
-      price: initialValues?.price ?? "0",
-      priceType: initialValues?.priceType ?? "FIXED",
-      duration: initialValues?.duration ?? "",
-      discount: initialValues?.discount?.toString() ?? "0",
-      imageUrls: initialValues?.imageUrls ?? [],
-    },
+      ...initialValues,
+    } as ServiceFormValues,
     onSubmit: async ({ value }) => {
       let newUploadedUrls: string[] = [];
       const filesToUpload = newFiles
         .map((f) => f.file)
         .filter((f): f is File => f instanceof File);
-      
+
       if (filesToUpload.length > 0) {
         const formData = new FormData();
         for (const f of filesToUpload) {
@@ -128,7 +125,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                   value={field.state.value}
                   onValueChange={(val) => field.handleChange(val ?? "")}
                 >
-                  <SelectTrigger 
+                  <SelectTrigger
                     aria-label="Select Category"
                     className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
                   >
@@ -169,7 +166,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                         );
                     }}
                   >
-                    <SelectTrigger 
+                    <SelectTrigger
                       aria-label="Select Pricing Type"
                       className="h-11 bg-background rounded-none border-border/40 focus:ring-0"
                     >
@@ -298,10 +295,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
             name="imageUrls"
             mode="array"
             children={(field) => (
-              <ImageUploadSection 
-                field={field} 
-                folder="services" 
-                onFilesChange={setNewFiles} 
+              <ImageUploadSection
+                field={field}
+                folder="services"
+                onFilesChange={setNewFiles}
               />
             )}
           />

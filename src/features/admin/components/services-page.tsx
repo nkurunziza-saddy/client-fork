@@ -8,13 +8,13 @@ import {
 	useGetServicesQuery,
 } from "@/services/api/services";
 import { ActionModal } from "@/shared/components/action-modal";
-import { PageContainer } from "@/shared/components/page-container";
-import type { ServiceRow } from "@/types";
-import { getServiceColumns } from "../columns/services-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
 import { Card } from "@/shared/components/admin/card";
 import { PageHeader } from "@/shared/components/admin/page-header";
+import { PageContainer } from "@/shared/components/page-container";
 import { formatDate } from "@/shared/utils/format";
+import type { ServiceRow } from "@/types";
+import { getServiceColumns } from "../columns/services-columns";
 
 export function AdminServicesPage() {
 	const navigate = useNavigate();
@@ -70,17 +70,17 @@ export function AdminServicesPage() {
 					navigate({
 						to: "/services/$serviceId",
 						params: { serviceId: id },
-					} as any),
+					}),
 				onViewProvider: (id) =>
 					navigate({
 						to: "/suppliers/$supplierId",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onEdit: (id) =>
 					navigate({
 						to: "/admin/suppliers/$supplierId/edit",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onDelete: (s) =>
 					setDeleteModal({
 						isOpen: true,

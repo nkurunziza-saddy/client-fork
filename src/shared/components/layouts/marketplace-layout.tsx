@@ -1,5 +1,5 @@
-import * as React from "react";
 import { SlidersHorizontal } from "lucide-react";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Drawer,
@@ -105,9 +105,7 @@ export function MarketplaceLayout({
 									</Button>
 								)}
 							</div>
-							<div className="pr-4">
-								{sidebar}
-							</div>
+							<div className="pr-4">{sidebar}</div>
 						</aside>
 					)}
 
@@ -116,10 +114,8 @@ export function MarketplaceLayout({
 						<div className="flex flex-col gap-4 mb-8">
 							{/* Toolbar with integrated mobile filter trigger */}
 							<div className="flex items-center gap-2">
-								<div className="flex-1">
-									{toolbar}
-								</div>
-								
+								<div className="flex-1">{toolbar}</div>
+
 								{/* Mobile Filter Trigger (passed through Toolbar usually, but handled here for consistency) */}
 								<div className="lg:hidden">
 									<Drawer

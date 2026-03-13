@@ -1,6 +1,4 @@
-import {
-	Building2,
-} from "lucide-react";
+import { Building2 } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,16 +10,19 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
+import { MarketplaceToolbar } from "@/features/marketplace/components/marketplace-toolbar";
 import { useSupplierFilters } from "@/hooks/use-supplier-filters";
 import { useGetCompaniesQuery } from "@/services/api/companies";
 import { useGetCompanyCategoriesQuery } from "@/services/api/company-categories";
+import {
+	ActiveFilterBadges,
+	type FilterBadgeItem,
+} from "@/shared/components/active-filter-badges";
+import { MarketplaceLayout } from "@/shared/components/layouts/marketplace-layout";
 import type { Company } from "@/types";
-import { MarketplaceToolbar } from "@/features/marketplace/components/marketplace-toolbar";
 import { SupplierCard } from "./listing/supplier-card";
 import { SupplierFilterPanel } from "./listing/supplier-filter-panel";
-import { Skeleton } from "@/components/ui/skeleton";
-import { MarketplaceLayout } from "@/shared/components/layouts/marketplace-layout";
-import { ActiveFilterBadges, type FilterBadgeItem } from "@/shared/components/active-filter-badges";
 
 interface SupplierListingProps {
 	onSupplierClick?: (supplierId: string) => void;
@@ -72,7 +73,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 		if (filters.categoryId !== "all") {
 			items.push({
 				id: "category",
-				label: categories.find((c) => c.id === filters.categoryId)?.name || "Category",
+				label:
+					categories.find((c) => c.id === filters.categoryId)?.name ||
+					"Category",
 				onRemove: () => handleFiltersChange({ categoryId: "all" }),
 			});
 		}
@@ -80,7 +83,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 		if (filters.type !== "all") {
 			items.push({
 				id: "type",
-				label: COMPANY_TYPES.find((t) => t.value === filters.type)?.label || filters.type,
+				label:
+					COMPANY_TYPES.find((t) => t.value === filters.type)?.label ||
+					filters.type,
 				onRemove: () => handleFiltersChange({ type: "all" }),
 			});
 		}
@@ -136,9 +141,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 					viewMode={viewMode}
 					onViewModeChange={setViewMode}
 					searchQuery={filters.searchQuery}
-					onSearchChange={(val) =>
-						handleFiltersChange({ searchQuery: val })
-					}
+					onSearchChange={(val) => handleFiltersChange({ searchQuery: val })}
 					searchPlaceholder="SEARCH SUPPLIERS..."
 					onToggleFilters={() => setShowFilters(!showFilters)}
 					showFilters={showFilters}
@@ -166,8 +169,8 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 									No Suppliers Found
 								</EmptyTitle>
 								<EmptyDescription className="uppercase tracking-widest text-[10px]">
-									We couldn't find any suppliers matching your current
-									filters. Try adjusting your search.
+									We couldn't find any suppliers matching your current filters.
+									Try adjusting your search.
 								</EmptyDescription>
 							</EmptyHeader>
 							<EmptyContent>
@@ -199,16 +202,15 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 				)
 			}
 			pagination={
-				meta && meta.totalPages > 1 && (
+				meta &&
+				meta.totalPages > 1 && (
 					<div className="flex justify-center items-center gap-2 sm:gap-4 mt-12 pt-8 border-t border-border/20">
 						<Button
 							variant="outline"
 							size="sm"
 							className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
 							disabled={filters.page <= 1}
-							onClick={() =>
-								handleFiltersChange({ page: filters.page - 1 })
-							}
+							onClick={() => handleFiltersChange({ page: filters.page - 1 })}
 						>
 							Prev
 						</Button>
@@ -220,9 +222,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 							size="sm"
 							className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
 							disabled={filters.page >= meta.totalPages}
-							onClick={() =>
-								handleFiltersChange({ page: filters.page + 1 })
-							}
+							onClick={() => handleFiltersChange({ page: filters.page + 1 })}
 						>
 							Next
 						</Button>

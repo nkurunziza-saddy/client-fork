@@ -1,11 +1,14 @@
-import type React from "react";
 import { useForm } from "@tanstack/react-form";
+import type React from "react";
 import { Button } from "@/components/ui/button";
-import { getFormFieldErrors } from "@/lib/utils";
-import { contactSchema, type ContactFormValues } from "@/shared/schemas/business";
 import { Textarea } from "@/components/ui/textarea";
+import { getFormFieldErrors } from "@/lib/utils";
 import { FormField } from "@/shared/components/form-field";
 import { ResponsiveModal } from "@/shared/components/responsive-modal";
+import {
+	type ContactFormValues,
+	contactSchema,
+} from "@/shared/schemas/business";
 
 interface ResourceInquiryModalProps {
 	isOpen: boolean;

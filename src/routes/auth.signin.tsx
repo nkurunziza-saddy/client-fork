@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { SignInPage } from "@/features/auth/components/sign-in-page";
-import { RouteLoading } from "@/shared/components/route-loading";
 import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
+import { RouteLoading } from "@/shared/components/route-loading";
 
 export const Route = createFileRoute("/auth/signin")({
 	validateSearch: z.object({

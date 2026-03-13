@@ -4,14 +4,14 @@ import type { RootState } from "@/store";
 import { DashboardSidebar } from "./dashboard/dashboard-sidebar";
 
 export const DashboardLayout = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
+	const { user } = useSelector((state: RootState) => state.auth);
 
-  return (
-    <SidebarLayout
-      sidebar={<DashboardSidebar user={user} />}
-      user={user}
-      title="Karibu"
-      subtitle="Supplier Dashboard"
-    />
-  );
+	return (
+		<SidebarLayout
+			sidebar={<DashboardSidebar user={user} />}
+			user={user}
+			title="Karibu"
+			subtitle="Supplier Dashboard"
+		/>
+	);
 };

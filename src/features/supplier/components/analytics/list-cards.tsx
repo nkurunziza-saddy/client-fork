@@ -1,8 +1,24 @@
 import { BarChart3, Clock } from "lucide-react";
 import type React from "react";
 
+interface Product {
+  name: string;
+  image: string;
+  views: number;
+  inquiries: number;
+  conversionRate: number;
+  revenue: number;
+}
+
+interface Activity {
+  message: string;
+  time: string;
+  icon: React.ElementType;
+  color: string;
+}
+
 interface TopProductsCardProps {
-  products: any[];
+  products: Product[];
 }
 
 export const TopProductsCard: React.FC<TopProductsCardProps> = ({
@@ -77,7 +93,7 @@ export const TopProductsCard: React.FC<TopProductsCardProps> = ({
 };
 
 interface RecentActivitiesCardProps {
-  activities: any[];
+  activities: Activity[];
 }
 
 export const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({

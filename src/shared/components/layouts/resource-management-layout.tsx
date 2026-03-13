@@ -1,8 +1,8 @@
 import type * as React from "react";
-import { PageContainer } from "@/shared/components/page-container";
-import { PageHeader } from "@/shared/components/admin/page-header";
-import { Card } from "@/shared/components/admin/card";
 import { cn } from "@/lib/utils";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { PageContainer } from "@/shared/components/page-container";
 
 interface ResourceManagementLayoutProps {
 	// slots
@@ -41,27 +41,21 @@ export function ResourceManagementLayout({
 	return (
 		<PageContainer isFluid className={cn("space-y-6", className)}>
 			{header || (
-				<PageHeader 
-					title={title} 
-					subtitle={subtitle} 
-					actions={headerActions}
-				/>
+				<PageHeader title={title} subtitle={subtitle} actions={headerActions} />
 			)}
 
 			{stats && <div className="space-y-6">{stats}</div>}
 
-			<Card
-				title={cardTitle}
-				subtitle={cardSubtitle}
-				noPadding
-			>
+			<Card title={cardTitle} subtitle={cardSubtitle} noPadding>
 				{isLoading ? (
 					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
 						{loadingText}
 					</div>
 				) : (
 					<div className="flex flex-col">
-						{toolbar && <div className="border-b border-border/40">{toolbar}</div>}
+						{toolbar && (
+							<div className="border-b border-border/40">{toolbar}</div>
+						)}
 						{content}
 					</div>
 				)}

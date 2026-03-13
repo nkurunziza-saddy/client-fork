@@ -1,9 +1,6 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
+import { Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ServiceView from "@/features/marketplace/components/service-view";
-import { useGetServiceByIdQuery } from "@/services/api/services";
-import { ROUTES } from "@/shared/constants/routes";
-import { DetailPageSkeleton } from "@/shared/components/skeletons";
 import {
   Empty,
   EmptyContent,
@@ -12,7 +9,10 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Building2 } from "lucide-react";
+import ServiceView from "@/features/marketplace/components/service-view";
+import { useGetServiceByIdQuery } from "@/services/api/services";
+import { DetailPageSkeleton } from "@/shared/components/skeletons";
+import { ROUTES } from "@/shared/constants/routes";
 
 function serviceAgeYears(dateLike?: string) {
   if (!dateLike) return "N/A";
@@ -84,7 +84,7 @@ export function ServiceDetailsPage() {
 
   return (
     <ServiceView
-      service={service as any}
+      service={service}
       onBack={() => navigate({ to: ROUTES.PUBLIC.SERVICES })}
     />
   );

@@ -4,15 +4,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/shared/components/admin/card";
-import { PageHeader } from "@/shared/components/admin/page-header";
-import { StatCard } from "@/shared/components/admin/stat-card";
-import {
-	useDeleteAuctionMutation,
-	useGetAuctionsQuery,
-} from "@/services/api/auctions";
-import { useGetMyCompanyQuery } from "@/services/api/companies";
-import { ConfirmationModal } from "@/shared/components/confirmation-modal";
 import {
 	Empty,
 	EmptyContent,
@@ -21,6 +12,15 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
+import {
+	useDeleteAuctionMutation,
+	useGetAuctionsQuery,
+} from "@/services/api/auctions";
+import { useGetMyCompanyQuery } from "@/services/api/companies";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import { StatCard } from "@/shared/components/admin/stat-card";
+import { ConfirmationModal } from "@/shared/components/confirmation-modal";
 
 export const Route = createFileRoute("/dashboard/auctions/")({
 	component: SupplierAuctionsPage,

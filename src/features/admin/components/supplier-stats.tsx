@@ -1,4 +1,4 @@
-import { RiStore2Line, RiUserLine, RiShieldCheckLine } from "@remixicon/react";
+import { RiShieldCheckLine, RiStore2Line, RiUserLine } from "@remixicon/react";
 import { StatCard } from "@/shared/components/admin/stat-card";
 
 interface SupplierStatsProps {

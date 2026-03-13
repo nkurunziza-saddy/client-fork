@@ -330,8 +330,7 @@ export const useFileUpload = (
         accept: props.accept || accept,
         multiple: props.multiple !== undefined ? props.multiple : multiple,
         onChange: handleFileChange,
-        // biome-ignore lint/suspicious/noExplicitAny: Intentional cast for ref compatibility
-        ref: inputRef as any,
+        ref: inputRef,
         type: "file" as const,
       };
     },

@@ -8,8 +8,6 @@ import {
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card as AdminCard } from "@/shared/components/admin/card";
-
 import {
 	Empty,
 	EmptyDescription,
@@ -17,6 +15,7 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 
 interface Report {
 	id: string;

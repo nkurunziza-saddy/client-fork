@@ -13,7 +13,9 @@ interface SupplierServicesTableProps {
 	services: Service[];
 }
 
-export function SupplierServicesTable({ services }: SupplierServicesTableProps) {
+export function SupplierServicesTable({
+	services,
+}: SupplierServicesTableProps) {
 	if (services.length === 0) {
 		return (
 			<Empty className="py-12 border border-dashed border-border rounded-none">

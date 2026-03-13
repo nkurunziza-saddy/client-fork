@@ -44,10 +44,12 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 			variant={viewMode === "grid" ? "outline" : "ghost"}
 			size="icon"
 			className={cn(
-				viewMode === "grid" 
-					? "absolute top-1.5 right-1.5 shadow-2xl bg-background/80 md:backdrop-blur-md border-border/20 rounded-none w-7 h-7 sm:w-8 sm:h-8 z-10" 
+				viewMode === "grid"
+					? "absolute top-1.5 right-1.5 shadow-2xl bg-background/80 md:backdrop-blur-md border-border/20 rounded-none w-7 h-7 sm:w-8 sm:h-8 z-10"
 					: "",
-				viewMode === "grid" && !isInWishlist && "opacity-0 group-hover:opacity-100 transition-opacity",
+				viewMode === "grid" &&
+					!isInWishlist &&
+					"opacity-0 group-hover:opacity-100 transition-opacity",
 			)}
 			onClick={(e) => {
 				e.stopPropagation();
@@ -76,7 +78,12 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 			>
 				<div className="absolute top-0 left-0 w-1 h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
 
-				<div className={cn("relative w-52 aspect-video shrink-0 overflow-hidden rounded-none bg-muted/30 border border-border/10", imageClassName)}>
+				<div
+					className={cn(
+						"relative w-52 aspect-video shrink-0 overflow-hidden rounded-none bg-muted/30 border border-border/10",
+						imageClassName,
+					)}
+				>
 					<ImageWithFallback
 						src={image || undefined}
 						alt={name}
@@ -119,7 +126,12 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 		>
 			<div className="absolute top-0 left-0 w-full h-px transition-all duration-500 z-20 bg-primary/0 group-hover:bg-primary/40" />
 
-			<div className={cn("relative aspect-[4/3] sm:aspect-4/3 overflow-hidden bg-muted/10", imageClassName)}>
+			<div
+				className={cn(
+					"relative aspect-[4/3] sm:aspect-4/3 overflow-hidden bg-muted/10",
+					imageClassName,
+				)}
+			>
 				<ImageWithFallback
 					src={image || undefined}
 					alt={name}
@@ -149,9 +161,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 						</div>
 					)}
 					{topRight && wishlistButton && (
-						<div className="scale-75 -mr-2">
-							{wishlistButton}
-						</div>
+						<div className="scale-75 -mr-2">{wishlistButton}</div>
 					)}
 				</div>
 				<h3 className="text-[11px] sm:text-xs md:text-[13px] font-display font-extrabold text-foreground tracking-tight leading-tight line-clamp-2 min-h-[1.75rem] sm:min-h-10 group-hover:text-primary transition-colors uppercase">

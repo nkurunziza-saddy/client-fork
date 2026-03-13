@@ -1,8 +1,11 @@
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import {
+	installFetchMock,
+	jsonResponse,
+} from "@/services/api/__tests__/test-utils";
 import { renderWithProviders } from "@/test/test-utils";
 import { AuctionForm } from "../components/auction-form";
-import { installFetchMock, jsonResponse } from "@/services/api/__tests__/test-utils";
 
 describe("AuctionForm Integration", () => {
 	it("allows submitting a new auction", async () => {
@@ -12,7 +15,7 @@ describe("AuctionForm Integration", () => {
 		installFetchMock(async () => jsonResponse({ data: [] }));
 
 		renderWithProviders(
-			<AuctionForm onSubmit={onSubmit} onCancel={onCancel} />
+			<AuctionForm onSubmit={onSubmit} onCancel={onCancel} />,
 		);
 
 		// Fill out the form
@@ -29,18 +32,24 @@ describe("AuctionForm Integration", () => {
 		fireEvent.change(endDateInput, { target: { value: "2026-03-15T10:00" } });
 
 		const descriptionInput = screen.getByPlaceholderText(/Detail the item/i);
-		fireEvent.change(descriptionInput, { target: { value: "A very rare tractor." } });
+		fireEvent.change(descriptionInput, {
+			target: { value: "A very rare tractor." },
+		});
 
-		const submitButton = screen.getByRole("button", { name: /Create Auction/i });
-		
+		const submitButton = screen.getByRole("button", {
+			name: /Create Auction/i,
+		});
+
 		fireEvent.click(submitButton);
 
 		await waitFor(() => {
-			expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({
-				title: "Rare Tractor",
-				startingPrice: 1000000,
-				description: "A very rare tractor.",
-			}));
+			expect(onSubmit).toHaveBeenCalledWith(
+				expect.objectContaining({
+					title: "Rare Tractor",
+					startingPrice: 1000000,
+					description: "A very rare tractor.",
+				}),
+			);
 		});
 	});
 });

@@ -10,6 +10,7 @@ import {
 	useGetWishlistQuery,
 	useRemoveFromWishlistMutation,
 } from "@/services/api/wishlist";
+import { MarketplaceLayout } from "@/shared/components/layouts/marketplace-layout";
 import type { RootState } from "@/store";
 import type { CatalogFilters, MarketplaceItem } from "@/types";
 import { ActiveFilters } from "./active-filters";
@@ -18,7 +19,6 @@ import { FilterPanel } from "./filter-panel";
 import { MarketplaceToolbar } from "./marketplace-toolbar";
 import { ProductListingView } from "./product-listing-view";
 import { ServiceListingView } from "./service-listing-view";
-import { MarketplaceLayout } from "@/shared/components/layouts/marketplace-layout";
 
 interface MarketplaceGridProps {
 	onSupplierClick?: (supplierId: string) => void;

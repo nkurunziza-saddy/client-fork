@@ -1,6 +1,6 @@
-import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { useAdminProfile } from "@/hooks/use-admin-profile";
 import { PageHeader } from "@/shared/components/admin/page-header";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { ActivityLogsCard } from "./settings/activity-logs-card";
 import { NotificationSettingsCard } from "./settings/notification-settings-card";
 import { ProfileInfoCard } from "./settings/profile-info-card";

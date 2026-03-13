@@ -140,7 +140,8 @@ export const authApi = apiSlice.injectEndpoints({
 		}),
 
 		checkRegistrationUniqueness: builder.query<{ available: boolean }, string>({
-			query: (regId) => `/auth/check-registration?id=${encodeURIComponent(regId)}`,
+			query: (regId) =>
+				`/auth/check-registration?id=${encodeURIComponent(regId)}`,
 		}),
 	}),
 });

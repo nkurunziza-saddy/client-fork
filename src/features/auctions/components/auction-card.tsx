@@ -56,7 +56,7 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
 			name={auction.title}
 			image={auction.images?.[0]}
 			categoryName="Live Auction"
-			onClick={() => navigate({ to: `/auctions/${auction.id}` as any })}
+			onClick={() => navigate({ to: `/auctions/${auction.id}` })}
 			badges={badges}
 			topRight={topRight}
 			footer={footer}
@@ -71,7 +71,7 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
 						Starting Bid
 					</span>
 					<span className="font-mono text-sm font-bold text-primary">
-						{formatCurrency(auction.startingPrice, 'RWF')}
+						{formatCurrency(auction.startingPrice, "RWF")}
 					</span>
 				</div>
 			</div>

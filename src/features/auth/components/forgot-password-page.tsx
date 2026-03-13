@@ -6,9 +6,9 @@ import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getFormFieldErrors } from "@/lib/utils";
 import { useForgetPasswordMutation } from "@/services/api/auth";
 import { FormField } from "@/shared/components";
-import { getFormFieldErrors } from "@/lib/utils";
 import { forgotPasswordSchema } from "@/shared/schemas/auth";
 
 export function ForgotPasswordPage() {

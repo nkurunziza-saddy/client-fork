@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AuctionDetailsPage } from "@/features/auctions/components/auction-details-page";
 import { auctionsApi } from "@/services/api/auctions";
-import { store } from "@/store";
+import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
 import { RouteLoading } from "@/shared/components/route-loading";
-import { NotFound } from "@/shared/components/not-found";
+import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/auctions/$auctionId")({
 	staleTime: 30_000,

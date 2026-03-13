@@ -5,11 +5,11 @@ import {
 	RiHomeLine,
 	RiRefreshLine,
 } from "@remixicon/react";
+import { Link } from "@tanstack/react-router";
 import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
 
 interface RouteErrorProps {
 	error: Error;
@@ -103,7 +103,7 @@ export const RouteError: React.FC<RouteErrorProps> = ({ error, reset }) => {
 							<RiFileCopyLine size={16} className="mr-2" />
 							{copyFeedback ? "Copied" : "Copy Report"}
 						</Button>
-						
+
 						<Button
 							onClick={() => reset()}
 							className="rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 shadow-none"

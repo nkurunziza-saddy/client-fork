@@ -6,49 +6,49 @@ import { SectionHeader } from "@/features/home/components/section-header";
 import { useGetProductsQuery } from "@/services/api/products";
 
 const TrendingProducts: React.FC = () => {
-	const { data, isLoading } = useGetProductsQuery({
-		limit: 10,
-		sortBy: "views",
-		sortOrder: "DESC",
-	});
-	const products = data?.data ?? [];
+  const { data, isLoading } = useGetProductsQuery({
+    limit: 10,
+    sortBy: "views",
+    sortOrder: "DESC",
+  });
+  const products = data?.data ?? [];
 
-	if (!isLoading && products.length === 0) return null;
+  if (!isLoading && products.length === 0) return null;
 
-	return (
-		<HomeSection
-			id="trending"
-			variant="white"
-			withGrid
-			borderTop
-			borderBottom
-			className="py-12 sm:py-16 lg:py-24"
-		>
-			<div className="space-y-8 sm:space-y-16">
-				<SectionHeader
-					title="Trending Products"
-					subtitle="Most viewed products currently available on the marketplace."
-					label="Popular"
-					viewAllHref="/products?sort=trending"
-					viewAllLabel="View Trending"
-					icon={<TrendingUp className="w-5 h-5" />}
-				/>
+  return (
+    <HomeSection
+      id="trending"
+      variant="white"
+      withGrid
+      borderTop
+      borderBottom
+      className="py-12 sm:py-16 lg:py-24"
+    >
+      <div className="space-y-8 sm:space-y-16">
+        <SectionHeader
+          title="Trending Products"
+          subtitle="Most viewed products currently available on the marketplace."
+          label="Popular"
+          viewAllHref="/products?sort=trending"
+          viewAllLabel="View Trending"
+          icon={<TrendingUp className="w-5 h-5" />}
+        />
 
-				{products.length === 0 ? (
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6">
-						{Array.from({ length: 5 }).map((_, i) => (
-							<div
-								key={`trending-skeleton-${i}`}
-								className="aspect-4/3 rounded-none border border-border/40 bg-muted/20 animate-pulse"
-							/>
-						))}
-					</div>
-				) : (
-					<ProductCarousel products={products as any} />
-				)}
-			</div>
-		</HomeSection>
-	);
+        {products.length === 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div
+                key={`trending-skeleton-${i}`}
+                className="aspect-4/3 rounded-none border border-border/40 bg-muted/20 animate-pulse"
+              />
+            ))}
+          </div>
+        ) : (
+          <ProductCarousel products={products} />
+        )}
+      </div>
+    </HomeSection>
+  );
 };
 
 export default TrendingProducts;

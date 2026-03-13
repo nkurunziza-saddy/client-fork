@@ -60,7 +60,7 @@ const PromoBanner: React.FC<PromoBannerProps> = ({
               </p>
             </div>
 
-            <Link to={ctaLink as any} className="w-full md:w-auto shrink-0">
+            <Link to={ctaLink} className="w-full md:w-auto shrink-0">
               <Button
                 size="lg"
                 className={`rounded-none h-12 md:h-16 lg:h-20 px-6 md:px-12 text-[9px] md:text-xs font-black uppercase tracking-[0.3em] transition-all active:scale-95 group shrink-0 w-full md:w-auto border-none shadow-2xl ${

@@ -1,8 +1,11 @@
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import {
+	installFetchMock,
+	jsonResponse,
+} from "@/services/api/__tests__/test-utils";
 import { renderWithProviders } from "@/test/test-utils";
 import { SignInPage } from "../components/sign-in-page";
-import { installFetchMock, jsonResponse } from "@/services/api/__tests__/test-utils";
 
 // Mock TanStack Router
 vi.mock("@tanstack/react-router", async () => {
@@ -12,7 +15,9 @@ vi.mock("@tanstack/react-router", async () => {
 		useNavigate: () => vi.fn(),
 		useSearch: vi.fn().mockReturnValue({ from: "/" }),
 		useParams: () => ({}),
-		Link: ({ children, to }: any) => <a href={to}>{children}</a>,
+		Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
+			<a href={to}>{children}</a>
+		),
 	};
 });
 
@@ -69,10 +74,7 @@ describe("SignIn Integration", () => {
 
 	it("shows an error message when sign in fails", async () => {
 		installFetchMock(async () => {
-			return jsonResponse(
-				{ message: "Invalid credentials" },
-				{ status: 401 }
-			);
+			return jsonResponse({ message: "Invalid credentials" }, { status: 401 });
 		});
 
 		renderWithProviders(<SignInPage />);

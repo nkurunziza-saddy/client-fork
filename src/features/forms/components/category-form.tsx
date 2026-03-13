@@ -3,10 +3,13 @@ import type React from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getFormFieldErrors } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { getFormFieldErrors } from "@/lib/utils";
 import { FormField } from "@/shared/components";
-import { categoryOptions, type CategoryFormValues } from "@/shared/schemas/business";
+import {
+	type CategoryFormValues,
+	categoryOptions,
+} from "@/shared/schemas/business";
 
 interface CategoryFormProps {
 	onSubmit: (values: CategoryFormValues) => void;

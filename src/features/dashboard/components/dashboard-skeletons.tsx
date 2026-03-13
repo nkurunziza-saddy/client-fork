@@ -45,7 +45,10 @@ export function UserDashboardSkeleton() {
 			{/* stats */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border/40 border border-border/40">
 				{Array.from({ length: 3 }).map((_, i) => (
-					<Skeleton key={i} className="h-40 w-full rounded-none bg-background" />
+					<Skeleton
+						key={i}
+						className="h-40 w-full rounded-none bg-background"
+					/>
 				))}
 			</div>
 

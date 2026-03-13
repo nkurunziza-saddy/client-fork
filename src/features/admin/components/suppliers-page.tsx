@@ -15,12 +15,12 @@ import {
 	useUpdateCompanyMutation,
 } from "@/services/api/companies";
 import { ActionModal } from "@/shared/components/action-modal";
-import { StatsGrid } from "@/shared/components/stats-grid";
-import type { SupplierRow } from "@/types";
-import { getSuppliersColumns } from "../columns/suppliers-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
 import { StatCard } from "@/shared/components/admin/stat-card";
 import { ResourceManagementLayout } from "@/shared/components/layouts/resource-management-layout";
+import { StatsGrid } from "@/shared/components/stats-grid";
+import type { SupplierRow } from "@/types";
+import { getSuppliersColumns } from "../columns/suppliers-columns";
 
 export function AdminSuppliersPage() {
 	const navigate = useNavigate();
@@ -96,12 +96,12 @@ export function AdminSuppliersPage() {
 					navigate({
 						to: "/admin/suppliers/$supplierId",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onEdit: (id) =>
 					navigate({
 						to: "/admin/suppliers/$supplierId/edit",
 						params: { supplierId: id },
-					} as any),
+					}),
 				onSuspend: (id, name) =>
 					setSuspendModal({ isOpen: true, supplierId: id, supplierName: name }),
 				onDelete: (id, name) =>
@@ -189,7 +189,11 @@ export function AdminSuppliersPage() {
 						type="delete"
 						onConfirm={handleConfirmDelete}
 						onCancel={() =>
-							setDeleteModal({ isOpen: false, supplierId: "", supplierName: "" })
+							setDeleteModal({
+								isOpen: false,
+								supplierId: "",
+								supplierName: "",
+							})
 						}
 						isLoading={deleting}
 					/>
@@ -197,21 +201,25 @@ export function AdminSuppliersPage() {
 					<ActionModal
 						isOpen={suspendModal.isOpen}
 						title={
-							suppliers.find((s) => s.id === suspendModal.supplierId)?.status ===
-							"active"
+							suppliers.find((s) => s.id === suspendModal.supplierId)
+								?.status === "active"
 								? "Suspend Supplier"
 								: "Activate Supplier"
 						}
 						description={`Are you sure you want to ${suppliers.find((s) => s.id === suspendModal.supplierId)?.status === "active" ? "suspend" : "activate"} "${suspendModal.supplierName}"?`}
 						type={
-							suppliers.find((s) => s.id === suspendModal.supplierId)?.status ===
-							"active"
+							suppliers.find((s) => s.id === suspendModal.supplierId)
+								?.status === "active"
 								? "suspend"
 								: "info"
 						}
 						onConfirm={handleConfirmSuspend}
 						onCancel={() =>
-							setSuspendModal({ isOpen: false, supplierId: "", supplierName: "" })
+							setSuspendModal({
+								isOpen: false,
+								supplierId: "",
+								supplierName: "",
+							})
 						}
 						isLoading={suspending}
 					/>

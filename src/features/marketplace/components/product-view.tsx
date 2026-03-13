@@ -1,15 +1,7 @@
 import { useRouter } from "@tanstack/react-router";
+import { Building2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useProductActions } from "@/hooks/use-product-actions";
-import { useGetProductByIdQuery } from "@/services/api/products";
-import { MobileActions } from "./product/mobile-actions";
-import { ProductGallery } from "./product/product-gallery";
-import { ProductInfo } from "./product/product-info";
-import { ProductSidebar } from "./product/product-sidebar";
-import { ProductTabsContent } from "./product/product-tabs-content";
-import { DetailPageSkeleton } from "@/shared/components/skeletons";
 import {
   Empty,
   EmptyContent,
@@ -18,9 +10,17 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Building2 } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProductActions } from "@/hooks/use-product-actions";
+import { useGetProductByIdQuery } from "@/services/api/products";
 import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
 import { ResourceInquiryModal } from "@/shared/components/modals/resource-inquiry-modal";
+import { DetailPageSkeleton } from "@/shared/components/skeletons";
+import { MobileActions } from "./product/mobile-actions";
+import { ProductGallery } from "./product/product-gallery";
+import { ProductInfo } from "./product/product-info";
+import { ProductSidebar } from "./product/product-sidebar";
+import { ProductTabsContent } from "./product/product-tabs-content";
 
 interface ProductViewProps {
   productId: string;
@@ -67,7 +67,7 @@ export default function ProductView({
       { label: "ID", value: product.id },
       { label: "Category", value: product.category?.name || "General" },
     ];
-    const sku = (product as any).sku || product.variants?.[0]?.sku;
+    const sku = product.variants?.[0]?.sku || product.id.substring(0, 8);
     if (sku) facts.push({ label: "SKU", value: sku });
     return facts;
   }, [product]);

@@ -1,7 +1,7 @@
-import * as React from "react";
 import { RiArrowLeftSLine } from "@remixicon/react";
-import { Button } from "@/components/ui/button";
+import * as React from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface DetailsPageLayoutProps {
@@ -37,7 +37,12 @@ export function DetailsPageLayout({
 	className,
 }: DetailsPageLayoutProps) {
 	return (
-		<div className={cn("min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24", className)}>
+		<div
+			className={cn(
+				"min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24",
+				className,
+			)}
+		>
 			{mobileActions}
 
 			{/* Top Navigation Header */}
@@ -71,13 +76,9 @@ export function DetailsPageLayout({
 			<div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-12">
 				{/* Hero Section: Gallery and Primary Info */}
 				<div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-					<div className="lg:col-span-6 xl:col-span-5">
-						{gallery}
-					</div>
+					<div className="lg:col-span-6 xl:col-span-5">{gallery}</div>
 
-					<div className="lg:col-span-6 xl:col-span-7">
-						{info}
-					</div>
+					<div className="lg:col-span-6 xl:col-span-7">{info}</div>
 				</div>
 
 				{/* Secondary Section: Tabs and Sidebar */}
@@ -87,9 +88,7 @@ export function DetailsPageLayout({
 						{bottomContent}
 					</div>
 
-					<div className="lg:col-span-4 space-y-8">
-						{sidebar}
-					</div>
+					<div className="lg:col-span-4 space-y-8">{sidebar}</div>
 				</div>
 			</div>
 

@@ -1,5 +1,5 @@
-import { Skeleton } from "@/components/ui/skeleton";
 import type React from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const RouteLoading: React.FC = () => {
 	return (

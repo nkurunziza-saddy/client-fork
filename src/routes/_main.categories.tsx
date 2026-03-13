@@ -22,7 +22,7 @@ function CategoriesPageWrapper() {
         navigate({
           to: "/suppliers/$supplierId",
           params: { supplierId },
-        } as any)
+        })
       }
     />
   );

@@ -1,6 +1,9 @@
 import { memo, useMemo } from "react";
+import {
+	ActiveFilterBadges,
+	type FilterBadgeItem,
+} from "@/shared/components/active-filter-badges";
 import type { CatalogFilters } from "@/types";
-import { ActiveFilterBadges, type FilterBadgeItem } from "@/shared/components/active-filter-badges";
 
 const COMPANY_TYPES = [
 	{ value: "SUPPLIER_DEALER", label: "Dealer" },
@@ -27,7 +30,9 @@ export const ActiveFilters = memo<ActiveFiltersProps>(
 			if (filters.categoryId !== "all") {
 				items.push({
 					id: "category",
-					label: categories.find((c) => c.id === filters.categoryId)?.name ?? "Category",
+					label:
+						categories.find((c) => c.id === filters.categoryId)?.name ??
+						"Category",
 					onRemove: () => onFilterChange({ categoryId: "all", page: 1 }),
 				});
 			}
@@ -35,7 +40,9 @@ export const ActiveFilters = memo<ActiveFiltersProps>(
 			if (filters.companyType !== "all") {
 				items.push({
 					id: "companyType",
-					label: COMPANY_TYPES.find((t) => t.value === filters.companyType)?.label ?? filters.companyType,
+					label:
+						COMPANY_TYPES.find((t) => t.value === filters.companyType)?.label ??
+						filters.companyType,
 					onRemove: () => onFilterChange({ companyType: "all", page: 1 }),
 				});
 			}
@@ -62,7 +69,8 @@ export const ActiveFilters = memo<ActiveFiltersProps>(
 					label: `${Number(filters.minPrice || 0).toLocaleString()} – ${Number(
 						filters.maxPrice || DEFAULT_PRICE_MAX,
 					).toLocaleString()} RWF`,
-					onRemove: () => onFilterChange({ minPrice: "", maxPrice: "", page: 1 }),
+					onRemove: () =>
+						onFilterChange({ minPrice: "", maxPrice: "", page: 1 }),
 				});
 			}
 

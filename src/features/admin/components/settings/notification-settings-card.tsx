@@ -3,7 +3,7 @@ import type React from "react";
 import { Card as AdminCard } from "@/shared/components/admin/card";
 
 interface NotificationSettingsCardProps {
-	notifications: any;
+	notifications: Record<string, boolean>;
 	onToggle: (
 		key:
 			| "emailNotifications"
@@ -68,7 +68,8 @@ export const NotificationSettingsCard: React.FC<
 								{description}
 							</p>
 						</div>
-						<button type="button"
+						<button
+							type="button"
 							onClick={() => onToggle(key)}
 							className={`relative w-12 h-6 rounded-sm transition-all border ${
 								notifications[key]

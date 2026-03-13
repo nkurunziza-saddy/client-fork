@@ -61,21 +61,24 @@ export function useProductActions(productId: string) {
 		removeFromWishlist,
 	]);
 
-	const handleSubmitInquiry = useCallback(async (message: string) => {
-		if (!message.trim()) return;
-		try {
-			await startProductChat({
-				productId,
-				content: message.trim(),
-			}).unwrap();
-			toast.success("Inquiry sent successfully!");
-			setMessageOpen(false);
-			navigate({ to: "/messages" });
-		} catch (error) {
-			console.error(error);
-			toast.error("Inquiry delivery failed.");
-		}
-	}, [productId, startProductChat, navigate]);
+	const handleSubmitInquiry = useCallback(
+		async (message: string) => {
+			if (!message.trim()) return;
+			try {
+				await startProductChat({
+					productId,
+					content: message.trim(),
+				}).unwrap();
+				toast.success("Inquiry sent successfully!");
+				setMessageOpen(false);
+				navigate({ to: "/messages" });
+			} catch (error) {
+				console.error(error);
+				toast.error("Inquiry delivery failed.");
+			}
+		},
+		[productId, startProductChat, navigate],
+	);
 
 	return {
 		messageOpen,

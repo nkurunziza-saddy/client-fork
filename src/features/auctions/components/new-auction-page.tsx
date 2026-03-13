@@ -1,18 +1,23 @@
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Card } from "@/shared/components/admin/card";
-import { PageHeader } from "@/shared/components/admin/page-header";
 import { AuctionForm } from "@/features/forms/components/auction-form";
 import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useCreateAuctionMutation } from "@/services/api/auctions";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
+import { Card } from "@/shared/components/admin/card";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import type { AuctionFormValues } from "@/shared/schemas/business";
 
 export function NewAuctionPage() {
 	const navigate = useNavigate();
 	const [createAuction, { isLoading, error }] = useCreateAuctionMutation();
 	const { data: company } = useGetMyCompanyQuery();
 
-	const handleSubmit = async (values: any) => {
+	const handleSubmit = async (
+		values: Omit<AuctionFormValues, "startingPrice"> & {
+			startingPrice: number;
+		},
+	) => {
 		if (!company?.id) {
 			toast.error("Company not found. Ensure you are linked to a company.");
 			return;

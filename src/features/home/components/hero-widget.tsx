@@ -164,8 +164,8 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
                 </Link>
               ) : (
                 <Link
-                  to={linkTarget.to as any}
-                  params={linkTarget.params as any}
+                  to={linkTarget.to ?? ""}
+                  params={linkTarget.params}
                   className="flex gap-3 p-2 bg-muted/5 border border-border/10 rounded-none hover:bg-muted/15 hover:border-primary/40 transition-all group/link relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 w-6 h-6 opacity-0 group-hover/link:opacity-100 transition-opacity">

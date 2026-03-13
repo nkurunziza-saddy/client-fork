@@ -1,10 +1,16 @@
-import {
-	RiFilter3Line,
-	RiSettings2Line,
-} from "@remixicon/react";
+import { RiFilter3Line, RiSettings2Line } from "@remixicon/react";
 import type { Table } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useDataTable } from "@/components/ui/data-table";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle,
+	DrawerTrigger,
+} from "@/components/ui/drawer";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -14,14 +20,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-	Drawer,
-	DrawerContent,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-	DrawerTrigger,
-} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -31,7 +29,6 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useDataTable } from "@/components/ui/data-table";
 
 type StatusOption = {
 	label: string;
@@ -66,8 +63,7 @@ export function AdminTableToolbar<TData>({
 		? table.getColumn(statusColumn)
 		: undefined;
 
-	const searchValue =
-		(searchColumnInstance?.getFilterValue() as string) ?? "";
+	const searchValue = (searchColumnInstance?.getFilterValue() as string) ?? "";
 	const statusValue =
 		(statusColumnInstance?.getFilterValue() as string) ?? "all";
 

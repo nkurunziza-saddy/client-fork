@@ -8,12 +8,12 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { useGetUsersQuery } from "@/services/api/users";
-import { type BuyerRow, buyerColumns } from "../columns/buyers-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
 import { Card } from "@/shared/components/admin/card";
 import { PageHeader } from "@/shared/components/admin/page-header";
 import { StatCard } from "@/shared/components/admin/stat-card";
 import { formatDate } from "@/shared/utils/format";
+import { type BuyerRow, buyerColumns } from "../columns/buyers-columns";
 
 export function AdminBuyersPage() {
 	const [pagination, setPagination] = useState({

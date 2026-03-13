@@ -21,8 +21,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Card as AdminCard } from "@/shared/components/admin/card";
 import {
 	Empty,
 	EmptyContent,
@@ -31,7 +29,11 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
-import { ProductForm, type ProductFormValues } from "@/features/forms/components/product-form";
+import { Input } from "@/components/ui/input";
+import {
+	ProductForm,
+	type ProductFormValues,
+} from "@/features/forms/components/product-form";
 import { cn } from "@/lib/utils";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
 import {
@@ -39,6 +41,7 @@ import {
 	useDeleteProductMutation,
 	useGetProductsQuery,
 } from "@/services/api/products";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 import type { Product } from "@/types";
 
 const ProductManagement: React.FC = () => {
@@ -91,7 +94,6 @@ const ProductManagement: React.FC = () => {
 			toast.error("Failed to create product");
 		}
 	};
-
 
 	const handleDelete = async (id: string) => {
 		try {

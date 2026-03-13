@@ -48,9 +48,7 @@ export function ResourceFormLayout({
 				</Alert>
 			)}
 
-			<div className="space-y-5">
-				{children}
-			</div>
+			<div className="space-y-5">{children}</div>
 
 			<div className="flex gap-3 pt-2">
 				<Button
@@ -66,9 +64,7 @@ export function ResourceFormLayout({
 					disabled={!canSubmit || isLoading || isSubmitting}
 					className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-primary/20"
 				>
-					{isSubmitting || isLoading
-						? submittingLabel
-						: submitLabel}
+					{isSubmitting || isLoading ? submittingLabel : submitLabel}
 				</Button>
 			</div>
 		</form>

@@ -21,7 +21,13 @@ export const FormField: React.FC<FormFieldProps> = ({
 	required,
 	headerActions,
 }) => {
-	const errors = isTouched ? (Array.isArray(error) ? error : error ? [error] : []) : [];
+	const errors = isTouched
+		? Array.isArray(error)
+			? error
+			: error
+				? [error]
+				: []
+		: [];
 
 	return (
 		<div className={cn("space-y-2", className)}>

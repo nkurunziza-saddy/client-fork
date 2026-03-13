@@ -255,14 +255,14 @@ export function ProviderListingEditPage() {
     );
   }
 
-  const handleUpdateProduct = async (values: any) => {
+  const handleUpdateProduct = async (values: Record<string, unknown>) => {
     try {
       const { imageUrls, price, stock, ...rest } = values;
       const sanitizedData = {
         ...rest,
         price: price ? Number(price) : undefined,
         stock: stock ? Number(stock) : undefined,
-        images: imageUrls,
+        images: imageUrls as string[],
       };
       await updateProduct({ id: listingId, data: sanitizedData }).unwrap();
       toast.success("Product updated successfully");
@@ -273,14 +273,14 @@ export function ProviderListingEditPage() {
     }
   };
 
-  const handleUpdateService = async (values: any) => {
+  const handleUpdateService = async (values: Record<string, unknown>) => {
     try {
       const { imageUrls, price, discount, ...rest } = values;
       const sanitizedData = {
         ...rest,
         price: price ? Number(price) : undefined,
         discount: discount ? Number(discount) : undefined,
-        images: imageUrls,
+        images: imageUrls as string[],
       };
       await updateService({ id: listingId, data: sanitizedData }).unwrap();
       toast.success("Service updated successfully");
@@ -320,7 +320,7 @@ export function ProviderListingEditPage() {
               Variants
             </h2>
             <ul className="space-y-3 mb-4">
-              {(product.variants ?? []).map((v: any) => (
+              {(product.variants ?? []).map((v) => (
                 <li
                   key={v.id}
                   className="flex items-center justify-between p-3 rounded-sm border border-border bg-card"

@@ -7,7 +7,7 @@ import { DashboardSidebar } from "@/components/layout/admin/dashboard-sidebar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RouteLoading } from "@/shared/components/route-loading";
-import type { DashboardTab } from "@/types";
+import type { Company, DashboardTab } from "@/types";
 
 const AnalyticsDashboard = lazy(() => import("./analytics-dashboard"));
 const MessageCenter = lazy(() => import("./message-center"));
@@ -16,7 +16,7 @@ const ProfileSettings = lazy(() => import("./profile-settings"));
 
 interface SupplierDashboardProps {
   onLogout: () => void;
-  supplierData: any;
+  supplierData: Company | null;
 }
 
 const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
@@ -51,7 +51,8 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
         {/* Dashboard Header */}
         <header className="bg-background border-b border-border h-16 shrink-0 px-4 md:px-8 flex items-center justify-between z-30 sticky top-0">
           <div className="flex items-center gap-3">
-            <button type="button"
+            <button
+              type="button"
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -89,7 +90,8 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
               </div>
               <div className="w-9 h-9 bg-muted rounded-none overflow-hidden border border-border/40">
                 <img
-                  src={supplierData?.avatar || "/logo.svg"}
+                  // biome-ignore lint/suspicious/noExplicitAny: bypass generic property
+                  src={(supplierData as any)?.avatar || "/logo.svg"}
                   className="w-full h-full object-cover"
                   alt=""
                   onError={(e) => {

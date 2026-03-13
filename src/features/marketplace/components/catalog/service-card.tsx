@@ -48,7 +48,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 					Rate from
 				</span>
 				<span className="text-xs font-black text-foreground">
-					{service.price ? formatCurrency(service.price, 'RWF') : "Contact"}
+					{service.price ? formatCurrency(service.price, "RWF") : "Contact"}
 				</span>
 			</div>
 			{company && (

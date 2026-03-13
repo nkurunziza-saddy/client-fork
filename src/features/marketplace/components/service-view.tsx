@@ -9,14 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useServiceActions } from "@/hooks/use-service-actions";
 import { ImageWithFallback } from "@/shared/components/image-with-fallback";
+import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
+import { ResourceInquiryModal } from "@/shared/components/modals/resource-inquiry-modal";
 import type { Service } from "@/types";
 import { MobileActions } from "./service/mobile-actions";
 import { ServiceHeader } from "./service/service-header";
 import { ServiceInfo } from "./service/service-info";
 import { ServiceSidebar } from "./service/service-sidebar";
 import { ServiceTabsContent } from "./service/service-tabs-content";
-import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
-import { ResourceInquiryModal } from "@/shared/components/modals/resource-inquiry-modal";
 
 interface ServiceViewProps {
   service: Service;
@@ -171,28 +171,28 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
               <ServiceTabsContent
                 service={service}
                 activeTab="overview"
-                trackAndNavigate={trackAndNavigate}
+                trackAndNavigate={trackAndNavigate as never}
               />
             </TabsContent>
             <TabsContent value="products">
               <ServiceTabsContent
                 service={service}
                 activeTab="products"
-                trackAndNavigate={trackAndNavigate}
+                trackAndNavigate={trackAndNavigate as never}
               />
             </TabsContent>
             <TabsContent value="reviews">
               <ServiceTabsContent
                 service={service}
                 activeTab="reviews"
-                trackAndNavigate={trackAndNavigate}
+                trackAndNavigate={trackAndNavigate as never}
               />
             </TabsContent>
             <TabsContent value="contact">
               <ServiceTabsContent
                 service={service}
                 activeTab="contact"
-                trackAndNavigate={trackAndNavigate}
+                trackAndNavigate={trackAndNavigate as never}
               />
             </TabsContent>
           </div>

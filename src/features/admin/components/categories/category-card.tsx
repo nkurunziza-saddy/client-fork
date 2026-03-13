@@ -1,4 +1,5 @@
 import {
+  type RemixiconComponentType,
   RiCarLine,
   RiDeleteBinLine,
   RiEditLine,
@@ -13,15 +14,13 @@ import {
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card as AdminCard } from "@/shared/components/admin/card";
+import { type ProductCategory } from "@/types";
 
-interface Category {
-  id: string;
-  name: string;
-  description?: string;
-  icon: string;
-  productCount: number;
-  subcategories?: any[];
-  status: string;
+interface Category extends ProductCategory {
+  icon?: string;
+  productCount?: number;
+  subcategories?: ProductCategory[];
+  status?: string;
 }
 
 interface CategoryCardProps {
@@ -30,7 +29,7 @@ interface CategoryCardProps {
   onDelete: (category: Category) => void;
 }
 
-const iconMap: { [key: string]: any } = {
+const iconMap: Record<string, RemixiconComponentType> = {
   Smartphone: RiSmartphoneLine,
   Shirt: RiTShirtLine,
   Home: RiHomeLine,
@@ -44,14 +43,17 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const IconComponent = iconMap[category.icon] || RiFolderOpenLine;
+  const IconComponent =
+    category.icon && iconMap[category.icon]
+      ? iconMap[category.icon]
+      : RiFolderOpenLine;
 
   return (
     <AdminCard
       noPadding
       className="hover:border-primary/40 transition-all duration-500 flex flex-col group/card shadow-sm hover:shadow-2xl rounded-none overflow-hidden relative"
     >
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-primary/0 group-hover/card:bg-primary/40 transition-all duration-500" />
+      <div className="absolute top-0 left-0 w-full h-px bg-primary/0 group-hover/card:bg-primary/40 transition-all duration-500" />
       <div className="p-5 border-b border-border/40 bg-muted/5">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">

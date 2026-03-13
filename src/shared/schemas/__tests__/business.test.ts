@@ -76,12 +76,18 @@ describe("Business Schemas Comprehensive Tests", () => {
 		});
 
 		it("fails on 100.1% discount", () => {
-			const result = serviceSchema.safeParse({ ...validBase, discount: "100.1" });
+			const result = serviceSchema.safeParse({
+				...validBase,
+				discount: "100.1",
+			});
 			expect(result.success).toBe(false);
 		});
 
 		it("fails on too short description", () => {
-			const result = serviceSchema.safeParse({ ...validBase, description: "Short" });
+			const result = serviceSchema.safeParse({
+				...validBase,
+				description: "Short",
+			});
 			expect(result.success).toBe(false);
 		});
 	});
@@ -109,7 +115,9 @@ describe("Business Schemas Comprehensive Tests", () => {
 			const result = auctionSchema.safeParse(data);
 			expect(result.success).toBe(false);
 			if (!result.success) {
-				expect(result.error.issues[0].message).toBe("End date must be after start date");
+				expect(result.error.issues[0].message).toBe(
+					"End date must be after start date",
+				);
 			}
 		});
 
@@ -223,7 +231,9 @@ describe("Business Schemas Comprehensive Tests", () => {
 
 	describe("contactSchema", () => {
 		it("validates correct message length", () => {
-			const result = contactSchema.safeParse({ message: "This is a long enough message." });
+			const result = contactSchema.safeParse({
+				message: "This is a long enough message.",
+			});
 			expect(result.success).toBe(true);
 		});
 

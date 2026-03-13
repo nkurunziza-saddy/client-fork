@@ -1,9 +1,9 @@
-import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
-import { z } from "zod";
+import { useNavigate } from "@tanstack/react-router";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
 import { ArrowRight, Search } from "lucide-react";
 import React from "react";
+import { z } from "zod";
 import {
 	Carousel,
 	CarouselContent,
@@ -16,29 +16,29 @@ import {
 	InputGroupInput,
 } from "@/components/ui/input-group";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
 } from "@/components/ui/select";
 import { useGetCompaniesQuery } from "@/services/api/companies";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
 import { useGetProductsQuery } from "@/services/api/products";
 import { useGetServicesQuery } from "@/services/api/services";
 import { useGetMarketplaceStatsQuery } from "@/services/api/stats";
-import type { HeroWidgetItem } from "@/types";
-import { HeroWidget } from "./hero-widget";
-import { FeaturedProductCard } from "./featured-product-card";
 import {
-  type HeroFeaturedProduct,
-  mapCompanyToWidgetItem,
-  mapProductToHeroFeaturedProduct,
-  mapProductToWidgetItem,
-  mapServiceToWidgetItem,
+	type HeroFeaturedProduct,
+	mapCompanyToWidgetItem,
+	mapProductToHeroFeaturedProduct,
+	mapProductToWidgetItem,
+	mapServiceToWidgetItem,
 } from "@/shared/utils/transformers";
+import type { HeroWidgetItem } from "@/types";
+import { FeaturedProductCard } from "./featured-product-card";
+import { HeroWidget } from "./hero-widget";
 
 const DEFAULT_SEARCH_CATEGORY = "All Categories";
 
@@ -67,104 +67,105 @@ const Hero: React.FC = () => {
 		},
 	});
 
-	const [carouselApi, setCarouselApi] = React.useState<UseEmblaCarouselType[1]>(undefined);
+	const [carouselApi, setCarouselApi] =
+		React.useState<UseEmblaCarouselType[1]>(undefined);
 	const [carouselIndex, setCarouselIndex] = React.useState(0);
 	const [carouselCount, setCarouselCount] = React.useState(0);
-  const { data: featuredProductsResult } = useGetProductsQuery({
-    limit: 3,
-    isFeatured: true,
-    sortBy: "createdAt",
-    sortOrder: "DESC",
-  });
-  const { data: latestProductsResult } = useGetProductsQuery({
-    limit: 3,
-    sortBy: "createdAt",
-    sortOrder: "DESC",
-  });
-  const { data: productCategoriesResult } = useGetProductCategoriesQuery({
-    limit: 8,
-  });
-  const { data: marketplaceStats } = useGetMarketplaceStatsQuery();
-  const { data: companiesResult } = useGetCompaniesQuery({
-    limit: 6,
-    isVerified: true,
-    sortBy: "averageRating",
-    sortOrder: "DESC",
-  });
-  const { data: servicesResult } = useGetServicesQuery({
-    limit: 3,
-    sortBy: "createdAt",
-    sortOrder: "DESC",
-  });
+	const { data: featuredProductsResult } = useGetProductsQuery({
+		limit: 3,
+		isFeatured: true,
+		sortBy: "createdAt",
+		sortOrder: "DESC",
+	});
+	const { data: latestProductsResult } = useGetProductsQuery({
+		limit: 3,
+		sortBy: "createdAt",
+		sortOrder: "DESC",
+	});
+	const { data: productCategoriesResult } = useGetProductCategoriesQuery({
+		limit: 8,
+	});
+	const { data: marketplaceStats } = useGetMarketplaceStatsQuery();
+	const { data: companiesResult } = useGetCompaniesQuery({
+		limit: 6,
+		isVerified: true,
+		sortBy: "averageRating",
+		sortOrder: "DESC",
+	});
+	const { data: servicesResult } = useGetServicesQuery({
+		limit: 3,
+		sortBy: "createdAt",
+		sortOrder: "DESC",
+	});
 
-  const featuredProducts = React.useMemo(() => {
-    const preferred = featuredProductsResult?.data ?? [];
-    const fallback = latestProductsResult?.data ?? [];
-    const source = preferred.length > 0 ? preferred : fallback;
-    return source.slice(0, 3).map(mapProductToHeroFeaturedProduct);
-  }, [featuredProductsResult?.data, latestProductsResult?.data]);
+	const featuredProducts = React.useMemo(() => {
+		const preferred = featuredProductsResult?.data ?? [];
+		const fallback = latestProductsResult?.data ?? [];
+		const source = preferred.length > 0 ? preferred : fallback;
+		return source.slice(0, 3).map(mapProductToHeroFeaturedProduct);
+	}, [featuredProductsResult?.data, latestProductsResult?.data]);
 
-  const searchCategories = React.useMemo(
-    () => [
-      DEFAULT_SEARCH_CATEGORY,
-      ...(productCategoriesResult?.data.map(
-        (category: { name: string }) => category.name,
-      ) ?? []),
-    ],
-    [productCategoriesResult?.data],
-  );
+	const searchCategories = React.useMemo(
+		() => [
+			DEFAULT_SEARCH_CATEGORY,
+			...(productCategoriesResult?.data.map(
+				(category: { name: string }) => category.name,
+			) ?? []),
+		],
+		[productCategoriesResult?.data],
+	);
 
-  const manufacturerItems = React.useMemo<HeroWidgetItem[]>(() => {
-    const companies = (companiesResult?.data ?? []).slice(0, 3);
-    return [
-      {
-        id: "manufacturers-stat",
-        type: "stat",
-        stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
-        statDesc: "Direct",
-      },
-      ...companies.map(mapCompanyToWidgetItem),
-    ];
-  }, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
+	const manufacturerItems = React.useMemo<HeroWidgetItem[]>(() => {
+		const companies = (companiesResult?.data ?? []).slice(0, 3);
+		return [
+			{
+				id: "manufacturers-stat",
+				type: "stat",
+				stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
+				statDesc: "Direct",
+			},
+			...companies.map(mapCompanyToWidgetItem),
+		];
+	}, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
 
-  const productItems = React.useMemo<HeroWidgetItem[]>(() => {
-    const products = featuredProductsResult?.data?.slice(0, 3) ?? [];
-    return [
-      {
-        id: "products-stat",
-        type: "stat",
-        stat: `${marketplaceStats?.productsListed ?? 0}+`,
-        statDesc: "Available",
-      },
-      ...products.map(mapProductToWidgetItem),
-    ];
-  }, [featuredProductsResult?.data, marketplaceStats?.productsListed]);
+	const productItems = React.useMemo<HeroWidgetItem[]>(() => {
+		const products = featuredProductsResult?.data?.slice(0, 3) ?? [];
+		return [
+			{
+				id: "products-stat",
+				type: "stat",
+				stat: `${marketplaceStats?.productsListed ?? 0}+`,
+				statDesc: "Available",
+			},
+			...products.map(mapProductToWidgetItem),
+		];
+	}, [featuredProductsResult?.data, marketplaceStats?.productsListed]);
 
-  const supplierItems = React.useMemo<HeroWidgetItem[]>(() => {
-    const companies = (companiesResult?.data ?? []).slice(3, 6);
-    return [
-      {
-        id: "suppliers-stat",
-        type: "stat",
-        stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
-        statDesc: "Verified",
-      },
-      ...companies.map(mapCompanyToWidgetItem),
-    ];
-  }, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
+	const supplierItems = React.useMemo<HeroWidgetItem[]>(() => {
+		const companies = (companiesResult?.data ?? []).slice(3, 6);
+		return [
+			{
+				id: "suppliers-stat",
+				type: "stat",
+				stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
+				statDesc: "Verified",
+			},
+			...companies.map(mapCompanyToWidgetItem),
+		];
+	}, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
 
-  const serviceItems = React.useMemo<HeroWidgetItem[]>(() => {
-    const services = servicesResult?.data?.slice(0, 3) ?? [];
-    return [
-      {
-        id: "services-stat",
-        type: "stat",
-        stat: `${marketplaceStats?.activeContractors ?? 0}+`,
-        statDesc: "Active",
-      },
-      ...services.map(mapServiceToWidgetItem),
-    ];
-  }, [marketplaceStats?.activeContractors, servicesResult?.data]);
+	const serviceItems = React.useMemo<HeroWidgetItem[]>(() => {
+		const services = servicesResult?.data?.slice(0, 3) ?? [];
+		return [
+			{
+				id: "services-stat",
+				type: "stat",
+				stat: `${marketplaceStats?.activeContractors ?? 0}+`,
+				statDesc: "Active",
+			},
+			...services.map(mapServiceToWidgetItem),
+		];
+	}, [marketplaceStats?.activeContractors, servicesResult?.data]);
 
 	React.useEffect(() => {
 		if (!carouselApi) return;
@@ -181,35 +182,37 @@ const Hero: React.FC = () => {
 		};
 	}, [carouselApi]);
 
-  return (
-    <section className="relative pt-2 md:pt-4 pb-4 md:pb-6 bg-background industrial-grain">
-      <div className="max-w-[1800px] mx-auto px-0 md:px-6">
-        <div className="relative overflow-hidden border-y md:border border-border/20 shadow-xl mb-2 md:mb-3 bg-industrial flex flex-col md:flex-row shadow-primary/5 min-h-[340px] md:min-h-[380px]">
-          <div
-            className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none"
-            style={{ maskImage: "linear-gradient(to bottom right, black, transparent)" }}
-          />
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,var(--color-primary)_0%,transparent_40%)] opacity-[0.08] pointer-events-none" />
+	return (
+		<section className="relative pt-2 md:pt-4 pb-4 md:pb-6 bg-background industrial-grain">
+			<div className="max-w-[1800px] mx-auto px-0 md:px-6">
+				<div className="relative overflow-hidden border-y md:border border-border/20 shadow-xl mb-2 md:mb-3 bg-industrial flex flex-col md:flex-row shadow-primary/5 min-h-[340px] md:min-h-[380px]">
+					<div
+						className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none"
+						style={{
+							maskImage: "linear-gradient(to bottom right, black, transparent)",
+						}}
+					/>
+					<div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,var(--color-primary)_0%,transparent_40%)] opacity-[0.08] pointer-events-none" />
 
-          <div className="relative z-20 flex flex-col justify-center px-6 py-7 md:px-10 md:py-7 flex-1 md:max-w-[55%]">
-            <div className="flex items-center gap-4 mb-3 md:mb-4 relative">
-              <span className="inline-flex items-center gap-3 text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">
-                <div className="w-8 md:w-16 h-px bg-primary" />
-                Construction Marketplace
-              </span>
-            </div>
+					<div className="relative z-20 flex flex-col justify-center px-6 py-7 md:px-10 md:py-7 flex-1 md:max-w-[55%]">
+						<div className="flex items-center gap-4 mb-3 md:mb-4 relative">
+							<span className="inline-flex items-center gap-3 text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">
+								<div className="w-8 md:w-16 h-px bg-primary" />
+								Construction Marketplace
+							</span>
+						</div>
 
-            <h1 className="text-display font-black text-white leading-[0.9] mb-4 md:mb-5 relative tracking-tighter">
-              <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl uppercase">
-                FIND EVERY
-              </span>
-              <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl text-primary italic -skew-x-12 inline-block translate-x-1 sm:translate-x-6">
-                MATERIAL & SERVICE
-              </span>
-              <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl uppercase">
-                IN RWANDA.
-              </span>
-            </h1>
+						<h1 className="text-display font-black text-white leading-[0.9] mb-4 md:mb-5 relative tracking-tighter">
+							<span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl uppercase">
+								FIND EVERY
+							</span>
+							<span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl text-primary italic -skew-x-12 inline-block translate-x-1 sm:translate-x-6">
+								MATERIAL & SERVICE
+							</span>
+							<span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl uppercase">
+								IN RWANDA.
+							</span>
+						</h1>
 						<form
 							onSubmit={(e) => {
 								e.preventDefault();
@@ -291,9 +294,13 @@ const Hero: React.FC = () => {
 								</InputGroupButton>
 							</InputGroup>
 						</form>
-          </div>
+					</div>
 					<div className="relative md:w-[45%] min-h-[240px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
-						<Carousel setApi={setCarouselApi} opts={{ loop: true }} className="h-full">
+						<Carousel
+							setApi={setCarouselApi}
+							opts={{ loop: true }}
+							className="h-full"
+						>
 							<CarouselContent className="ml-0 h-full">
 								{featuredProducts.map((product: HeroFeaturedProduct) => (
 									<CarouselItem key={product.id} className="pl-0 h-full">
@@ -323,41 +330,41 @@ const Hero: React.FC = () => {
 							</div>
 						)}
 					</div>
-        </div>
+				</div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 px-4 md:px-0 relative z-20 pb-3 md:pb-0">
-          <HeroWidget
-            title="Top Manufacturers"
-            subtitle="Direct access"
-            items={manufacturerItems}
-            href="/suppliers?type=manufacturer"
-            variant="default"
-          />
-          <HeroWidget
-            title="Top Products"
-            subtitle="Trending now"
-            items={productItems}
-            href="/products?sort=popular"
-            variant="blue"
-          />
-          <HeroWidget
-            title="Top Suppliers"
-            subtitle="Trusted partners"
-            items={supplierItems}
-            href="/suppliers"
-            variant="emerald"
-          />
-          <HeroWidget
-            title="Top Services"
-            subtitle="Expert solutions"
-            items={serviceItems}
-            href="/services"
-            variant="orange"
-          />
-        </div>
-      </div>
-    </section>
-  );
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 px-4 md:px-0 relative z-20 pb-3 md:pb-0">
+					<HeroWidget
+						title="Top Manufacturers"
+						subtitle="Direct access"
+						items={manufacturerItems}
+						href="/suppliers?type=manufacturer"
+						variant="default"
+					/>
+					<HeroWidget
+						title="Top Products"
+						subtitle="Trending now"
+						items={productItems}
+						href="/products?sort=popular"
+						variant="blue"
+					/>
+					<HeroWidget
+						title="Top Suppliers"
+						subtitle="Trusted partners"
+						items={supplierItems}
+						href="/suppliers"
+						variant="emerald"
+					/>
+					<HeroWidget
+						title="Top Services"
+						subtitle="Expert solutions"
+						items={serviceItems}
+						href="/services"
+						variant="orange"
+					/>
+				</div>
+			</div>
+		</section>
+	);
 };
 
 export default Hero;

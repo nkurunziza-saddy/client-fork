@@ -1,5 +1,5 @@
-import type * as React from "react";
 import { RiCloseLine } from "@remixicon/react";
+import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -76,11 +76,7 @@ export function ResponsiveModal({
 								</div>
 								{showCloseButton && (
 									<DrawerClose asChild>
-										<Button
-											variant="ghost"
-											size="icon-sm"
-											className="mt-1"
-										>
+										<Button variant="ghost" size="icon-sm" className="mt-1">
 											<RiCloseLine />
 											<span className="sr-only">Close</span>
 										</Button>
@@ -91,9 +87,7 @@ export function ResponsiveModal({
 					)}
 					{children}
 					{footer && (
-						<div className="mt-6 border-t border-border/30 pt-4">
-							{footer}
-						</div>
+						<div className="mt-6 border-t border-border/30 pt-4">{footer}</div>
 					)}
 				</DrawerContent>
 			</Drawer>
@@ -127,9 +121,7 @@ export function ResponsiveModal({
 				)}
 				{children}
 				{footer && (
-					<div className="mt-6 border-t border-border/30 pt-4">
-						{footer}
-					</div>
+					<div className="mt-6 border-t border-border/30 pt-4">{footer}</div>
 				)}
 			</DialogContent>
 		</Dialog>

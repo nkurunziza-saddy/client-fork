@@ -2,12 +2,12 @@ import { useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { useGetServicesQuery } from "@/services/api/services";
-import type { AssignmentRow } from "@/types";
-import { getAssignmentColumns } from "../columns/assignments-columns";
 import { AdminTableToolbar } from "@/shared/components/admin/admin-table-toolbar";
 import { Card } from "@/shared/components/admin/card";
 import { PageHeader } from "@/shared/components/admin/page-header";
 import { formatDate } from "@/shared/utils/format";
+import type { AssignmentRow } from "@/types";
+import { getAssignmentColumns } from "../columns/assignments-columns";
 
 export function AdminAssignmentsPage() {
 	const navigate = useNavigate();
@@ -38,8 +38,16 @@ export function AdminAssignmentsPage() {
 	const columns = useMemo(
 		() =>
 			getAssignmentColumns({
-				onViewSupplier: (id) => navigate({ to: `/suppliers/${id}` as any }),
-				onViewService: (id) => navigate({ to: `/services/${id}` as any }),
+				onViewSupplier: (id) =>
+					navigate({
+						to: "/suppliers/$supplierId",
+						params: { supplierId: id },
+					}),
+				onViewService: (id) =>
+					navigate({
+						to: "/services/$serviceId",
+						params: { serviceId: id },
+					}),
 			}),
 		[navigate],
 	);

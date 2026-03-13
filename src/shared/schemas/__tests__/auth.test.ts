@@ -18,13 +18,19 @@ describe("Auth Schemas Comprehensive Tests", () => {
 		it("fails on invalid email format", () => {
 			const invalidEmails = ["test", "test@", "@example.com", "test.com"];
 			for (const email of invalidEmails) {
-				const result = signInSchema.safeParse({ email, password: "password123" });
+				const result = signInSchema.safeParse({
+					email,
+					password: "password123",
+				});
 				expect(result.success).toBe(false);
 			}
 		});
 
 		it("fails on empty password", () => {
-			const result = signInSchema.safeParse({ email: "test@example.com", password: "" });
+			const result = signInSchema.safeParse({
+				email: "test@example.com",
+				password: "",
+			});
 			expect(result.success).toBe(false);
 		});
 	});
@@ -69,7 +75,9 @@ describe("Auth Schemas Comprehensive Tests", () => {
 
 	describe("forgotPasswordSchema", () => {
 		it("validates correct email", () => {
-			const result = forgotPasswordSchema.safeParse({ email: "test@example.com" });
+			const result = forgotPasswordSchema.safeParse({
+				email: "test@example.com",
+			});
 			expect(result.success).toBe(true);
 		});
 
@@ -131,7 +139,11 @@ describe("Auth Schemas Comprehensive Tests", () => {
 		});
 
 		it("accepts empty optional fields", () => {
-			const result = profileSchema.safeParse({ name: "Jane Doe", phoneNumber: "", image: "" });
+			const result = profileSchema.safeParse({
+				name: "Jane Doe",
+				phoneNumber: "",
+				image: "",
+			});
 			expect(result.success).toBe(true);
 		});
 	});

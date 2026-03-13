@@ -1,5 +1,4 @@
 import { RiAddLine } from "@remixicon/react";
-import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -12,25 +11,29 @@ import {
 } from "@/services/api/companies";
 import { useGetProductsQuery } from "@/services/api/products";
 import { useGetServicesQuery } from "@/services/api/services";
-import { ConfirmationModal } from "@/shared/components/confirmation-modal";
 import { Card } from "@/shared/components/admin/card";
 import { PageHeader } from "@/shared/components/admin/page-header";
-import { SupplierProfile } from "./supplier-profile";
-import { SupplierStats } from "./supplier-stats";
-import { SupplierProductsTable } from "./supplier-products-table";
-import { SupplierServicesTable } from "./supplier-services-table";
+import { ConfirmationModal } from "@/shared/components/confirmation-modal";
+import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { formatDate } from "@/shared/utils/format";
+import { SupplierProductsTable } from "./supplier-products-table";
+import { SupplierProfile } from "./supplier-profile";
+import { SupplierServicesTable } from "./supplier-services-table";
+import { SupplierStats } from "./supplier-stats";
 
 export function AdminSupplierDetailsPage() {
 	const { supplierId } = useParams({ from: "/admin/suppliers/$supplierId/" });
 	const navigate = useNavigate();
 	const [deleteOpen, setDeleteOpen] = useState(false);
 	const [suspendOpen, setSuspendOpen] = useState(false);
-	
-	const { data: company, isLoading: loadingCompany } = useGetCompanyByIdQuery(supplierId);
-	const { data: productsResult, isLoading: loadingProducts } = useGetProductsQuery({ companyId: supplierId, limit: 100 });
-	const { data: servicesResult, isLoading: loadingServices } = useGetServicesQuery({ companyId: supplierId, limit: 100 });
-	
+
+	const { data: company, isLoading: loadingCompany } =
+		useGetCompanyByIdQuery(supplierId);
+	const { data: productsResult, isLoading: loadingProducts } =
+		useGetProductsQuery({ companyId: supplierId, limit: 100 });
+	const { data: servicesResult, isLoading: loadingServices } =
+		useGetServicesQuery({ companyId: supplierId, limit: 100 });
+
 	const [deleteCompany, { isLoading: deleting }] = useDeleteCompanyMutation();
 	const [updateCompany, { isLoading: suspending }] = useUpdateCompanyMutation();
 
@@ -116,10 +119,10 @@ export function AdminSupplierDetailsPage() {
 				</Button>
 			</div>
 
-			<SupplierProfile 
-				company={company} 
-				onSuspendClick={() => setSuspendOpen(true)} 
-				onDeleteClick={() => setDeleteOpen(true)} 
+			<SupplierProfile
+				company={company}
+				onSuspendClick={() => setSuspendOpen(true)}
+				onDeleteClick={() => setDeleteOpen(true)}
 			/>
 
 			<SupplierStats stats={supplierStats} />
@@ -138,7 +141,10 @@ export function AdminSupplierDetailsPage() {
 					</div>
 
 					<TabsContent value="products" className="m-0 p-4">
-						<SupplierProductsTable products={products} supplierId={supplierId} />
+						<SupplierProductsTable
+							products={products}
+							supplierId={supplierId}
+						/>
 					</TabsContent>
 
 					<TabsContent value="services" className="m-0 p-4">

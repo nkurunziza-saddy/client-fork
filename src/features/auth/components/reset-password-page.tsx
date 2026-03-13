@@ -11,10 +11,9 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFormFieldErrors } from "@/lib/utils";
-import { resetPasswordSchema } from "@/shared/schemas/auth";
 import { useResetPasswordMutation } from "@/services/api/auth";
 import { FormField } from "@/shared/components";
-
+import { resetPasswordSchema } from "@/shared/schemas/auth";
 
 export function ResetPasswordPage() {
 	const navigate = useNavigate();

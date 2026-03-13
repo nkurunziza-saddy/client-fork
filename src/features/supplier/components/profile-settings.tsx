@@ -3,26 +3,32 @@ import { Lock, Save, User } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card as AdminCard } from "@/shared/components/admin/card";
 import { cn } from "@/lib/utils";
-import { ProfileInfoSection } from "./settings/profile-info-section";
+import { Card as AdminCard } from "@/shared/components/admin/card";
 import { CompanyInfoSection } from "./settings/company-info-section";
-import { SecuritySection } from "./settings/security-section";
 import { NotificationsSection } from "./settings/notifications-section";
+import { ProfileInfoSection } from "./settings/profile-info-section";
+import { SecuritySection } from "./settings/security-section";
+import type { Company } from "@/types";
 
 interface ProfileSettingsProps {
-  supplierData: any;
+  supplierData: Company | null;
 }
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
   const [activeTab, setActiveTab] = useState("profile");
 
   const [profileData, setProfileData] = useState({
-    fullName: supplierData?.contactPerson || "John Habimana",
+    fullName:
+      (supplierData as unknown as { contactPerson?: string })?.contactPerson ||
+      "John Habimana",
     email: supplierData?.email || "john@karibu.com",
     phone: supplierData?.phone || "+250 788 123 456",
-    position: supplierData?.position || "Sales Manager",
-    avatar: supplierData?.avatar || "/logo.svg",
+    position:
+      (supplierData as unknown as { position?: string })?.position ||
+      "Sales Manager",
+    avatar:
+      (supplierData as unknown as { avatar?: string })?.avatar || "/logo.svg",
   });
 
   const [companyData] = useState({
@@ -31,15 +37,16 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
       supplierData?.description ||
       "Direct importer of construction hardware and specialized industrial components serving East Africa.",
     type: supplierData?.type || "MANUFACTURER_RWANDA",
-    location: supplierData?.location || "Kigali, Rwanda",
+    location:
+      (supplierData as unknown as { location?: string })?.location ||
+      "Kigali, Rwanda",
     address: "123 Business District, Kigali, Rwanda",
     website: "https://afri-market-rep.vercel.app",
-    coverImage: supplierData?.coverImage || "/logo.svg",
-    specialties: supplierData?.specialties || [
-      "Electronics",
-      "Mobile Phones",
-      "Computers",
-    ],
+    coverImage:
+      (supplierData as unknown as { coverImage?: string })?.coverImage ||
+      "/logo.svg",
+    specialties: (supplierData as unknown as { specialties?: string[] })
+      ?.specialties || ["Electronics", "Mobile Phones", "Computers"],
   });
 
   const tabs = [
@@ -93,17 +100,11 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
             <ProfileInfoSection data={profileData} onChange={setProfileData} />
           )}
 
-          {activeTab === "company" && (
-            <CompanyInfoSection data={companyData} />
-          )}
+          {activeTab === "company" && <CompanyInfoSection data={companyData} />}
 
-          {activeTab === "security" && (
-            <SecuritySection />
-          )}
+          {activeTab === "security" && <SecuritySection />}
 
-          {activeTab === "notifications" && (
-            <NotificationsSection />
-          )}
+          {activeTab === "notifications" && <NotificationsSection />}
         </AdminCard>
       </div>
     </div>

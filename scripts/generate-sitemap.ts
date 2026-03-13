@@ -32,6 +32,7 @@ async function getDynamicRoutes() {
     } else {
       const productsData = await productsRes.json();
       if (productsData.data) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         productsData.data.forEach((p: any) => {
           routes.push(`/products/${p.id}`);
         });
@@ -47,11 +48,13 @@ async function getDynamicRoutes() {
     } else {
       const suppliersData = await suppliersRes.json();
       if (suppliersData.data) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         suppliersData.data.forEach((s: any) => {
           routes.push(`/suppliers/${s.id}`);
         });
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.code === "ECONNREFUSED") {
       console.warn(

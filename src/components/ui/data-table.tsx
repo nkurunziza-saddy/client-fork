@@ -54,14 +54,14 @@ import { cn } from "@/lib/utils";
 
 // --- Context ---
 
-const DataTableContext = React.createContext<TableInstance<any> | null>(null);
+const DataTableContext = React.createContext<TableInstance<unknown> | null>(null);
 
-export function useDataTable() {
+export function useDataTable<TData = unknown>() {
 	const context = React.useContext(DataTableContext);
 	if (!context) {
 		throw new Error("useDataTable must be used within a DataTable");
 	}
-	return context;
+	return context as TableInstance<TData>;
 }
 
 // --- Components ---
@@ -127,7 +127,7 @@ export function DataTableRoot<TData, TValue>({
 	});
 
 	return (
-		<DataTableContext.Provider value={table as any}>
+		<DataTableContext.Provider value={table as unknown as TableInstance<unknown>}>
 			<div className={cn("space-y-4", className)}>{children}</div>
 		</DataTableContext.Provider>
 	);
@@ -136,7 +136,10 @@ export function DataTableRoot<TData, TValue>({
 function DataTableToolbar({
 	children,
 	className,
-}: { children: React.ReactNode; className?: string }) {
+}: {
+	children: React.ReactNode;
+	className?: string;
+}) {
 	return (
 		<div
 			className={cn(
@@ -153,7 +156,11 @@ function DataTableSearch({
 	column,
 	placeholder = "Filter...",
 	className,
-}: { column: string; placeholder?: string; className?: string }) {
+}: {
+	column: string;
+	placeholder?: string;
+	className?: string;
+}) {
 	const table = useDataTable();
 	const col = table.getColumn(column);
 

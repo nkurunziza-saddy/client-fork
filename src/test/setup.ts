@@ -1,9 +1,9 @@
-import { afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
+import { afterEach, vi } from "vitest";
 
 // Mock fetch globally
 const fetchMock = vi.fn();
-(globalThis as any).fetch = fetchMock;
+vi.stubGlobal("fetch", fetchMock);
 
 // Mock ResizeObserver
 globalThis.ResizeObserver = class ResizeObserver {

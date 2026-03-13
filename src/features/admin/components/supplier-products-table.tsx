@@ -15,7 +15,10 @@ interface SupplierProductsTableProps {
 	supplierId: string;
 }
 
-export function SupplierProductsTable({ products, supplierId }: SupplierProductsTableProps) {
+export function SupplierProductsTable({
+	products,
+	supplierId,
+}: SupplierProductsTableProps) {
 	const navigate = useNavigate();
 
 	if (products.length === 0) {
@@ -54,7 +57,8 @@ export function SupplierProductsTable({ products, supplierId }: SupplierProducts
 							key={product.id}
 							onClick={() =>
 								navigate({
-									to: `/admin/suppliers/${supplierId}/product/${product.id}` as any,
+									to: "/admin/suppliers/$supplierId/product/$productId",
+									params: { supplierId, productId: product.id },
 								})
 							}
 							className="cursor-pointer border-b border-border/50 hover:bg-muted/30"
@@ -66,9 +70,7 @@ export function SupplierProductsTable({ products, supplierId }: SupplierProducts
 							<td className="py-3">
 								RWF {(product.variants?.[0]?.price ?? 0).toLocaleString()}
 							</td>
-							<td className="py-3">
-								{product.variants?.[0]?.stock ?? 0}
-							</td>
+							<td className="py-3">{product.variants?.[0]?.stock ?? 0}</td>
 							<td className="py-3">
 								<Badge
 									variant={product.isActive ? "success" : "secondary"}
